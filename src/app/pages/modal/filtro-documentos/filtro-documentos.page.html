@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+        <ion-button color="primary" (click)="closeModal()">
+            <ion-icon name="close" color="light"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+    <ion-title>
+    	Filtro Certificados
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+	<ion-item>
+		<ion-label class="fw500" color="dark">Centros</ion-label>
+		<ion-select [(ngModel)]="filtro_idCentro" style="max-width: max-content;" placeholder="Nombre Centro">
+			<ion-select-option *ngFor="let centro of centros" [value]="centro.IdCentroTrabajo">{{centro.NombreCentroTrabajo}}</ion-select-option>
+		</ion-select>
+	</ion-item>
+
+	<ion-item>
+		<ion-label class="fw500" color="dark">DNI</ion-label>
+		<ion-input style="text-align: end !important;" placeholder="Introduzca DNI" [(ngModel)]="filtro_dni"></ion-input>
+	</ion-item>
+
+	<ion-item>
+		<ion-label class="fw500" color="dark">Trabajador</ion-label>
+		<ion-input style="text-align: end !important;" placeholder="Nombre Trabajador" [(ngModel)]="filtro_nombre"></ion-input>
+	</ion-item>
+
+	<ion-item>
+		<ion-label class="fw500" color="dark">Desde</ion-label>
+		<ion-datetime 	placeholder = "Desde"
+						value= "{{filtro_desde}}"
+						displayFormat="DD/MM/YYYY"
+						pickerFormat="DD MM YYYY" 
+						doneText="Ok" 
+						cancelText="Cancelar"
+						[(ngModel)]="filtro_desde">
+		</ion-datetime>
+	</ion-item>
+
+	<ion-item >
+		<ion-label class="fw500" color="dark">Hasta</ion-label>
+		<ion-datetime 	placeholder = "Hasta"
+                    	value= "{{filtro_hasta}}"
+                        displayFormat="DD/MM/YYYY"
+                    	pickerFormat="DD MM YYYY" 
+                    	doneText="Ok" 
+                    	cancelText="Cancelar"
+						[(ngModel)]="filtro_hasta">
+		</ion-datetime>
+	</ion-item>
+	<ion-item>
+	  <ion-label class="label" color="primary" >Mostrar Ultimo mes</ion-label>
+	  <ion-toggle [(ngModel)]="ultimoMes" (click)="ultimoMesF()"></ion-toggle>
+	</ion-item>
+	<ion-item>
+		<ion-label class="label" color="primary">Mostrar Ultimo trimestre</ion-label>
+		<ion-toggle [(ngModel)]="ultimoTrimestre" (click)="ultimoTrimestreF()"></ion-toggle>
+	</ion-item>
+	<ion-item>
+		<ion-label class="label" color="primary">Mostrar Año en curso</ion-label>
+		<ion-toggle [(ngModel)]="anioActual" (click)="anioActualF()"></ion-toggle>
+	</ion-item>
+	<ion-item>
+		<ion-label class="label" color="primary">Mostrar Año anterior</ion-label>
+		<ion-toggle [(ngModel)]="anioAnterior" (click)="anioAnteriorF()"></ion-toggle>
+	</ion-item>
+
+	<ion-button expand="full" color="primary" (click)="filtrar()">Filtrar</ion-button>
+</ion-content>

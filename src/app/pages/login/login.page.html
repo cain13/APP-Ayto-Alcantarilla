@@ -1,0 +1,120 @@
+<ion-content class="ion-padding animated fadeIn login auth-page">
+  <div class="theme-bg"></div>
+  <div class="auth-content">
+
+    <!-- Logo -->
+    <div class="animated fadeInDown ion-text-center ion-padding-horizontal">
+      <div class="logo"></div>
+      <h4 class="ion-no-margin">
+        <ion-text color="light" class="fw700">
+          <ion-text color="tertiary">{{ 'app.nameb' | translate }}</ion-text>
+          {{ 'app.version' | translate }}
+        </ion-text>
+      </h4>
+    </div>
+
+    <!-- Login form -->
+    <form [formGroup]="onLoginForm" class="list-form">
+      <ion-item class="ion-no-padding animated fadeInUp">
+        <ion-label position="floating">
+          <ion-icon name="mail" item-start></ion-icon>
+          Usuario
+        </ion-label>
+        <ion-input color="secondary" type="text" formControlName="usuario"></ion-input>
+      </ion-item>
+      <p ion-text class="text08" *ngIf="onLoginForm.get('usuario').touched && onLoginForm.get('usuario').hasError('required')">
+        <ion-text color="warning">
+          {{ 'app.label.errors.field' | translate }}
+        </ion-text>
+      </p>
+
+      <ion-item class="ion-no-padding animated fadeInUp">
+        <ion-label position="floating">
+          <ion-icon name="lock-closed-outline" item-start></ion-icon>
+          {{ 'app.label.password' | translate }}
+        </ion-label>
+        <ion-input color="secondary" [type]="mostrarContra? 'text' : 'password'" formControlName="password"></ion-input>
+        <ion-icon slot="end" [name]="passwordIcon2" (click)="mostrarContrase()" color="light"></ion-icon>
+
+
+      </ion-item>
+      <!-- <p ion-text color="warning" class="text08" *ngIf="onLoginForm.get('password').touched && onLoginForm.get('password').hasError('required')">
+        <ion-text color="warning">
+          {{ 'app.label.errors.field' | translate }}
+        </ion-text>
+      </p>
+ -->
+      <ion-row></ion-row>
+      <ion-item lines="none" *ngIf="!soportaFingerID">
+        <ion-label>¿Recordarme?</ion-label>
+        <ion-checkbox #botonRecordarme mode="ios" color="light" checked={{recordarme}} ></ion-checkbox>
+      </ion-item>
+
+      <ion-row></ion-row>
+<!--       <ion-item lines="none">
+        <a style="text-decoration: none;" (click)="mostrarTerminos()"><ion-label><strong><small>Aceptar Terminos y Condiciones</small></strong></ion-label></a>
+        <ion-checkbox #botonTerminos mode="ios" slot="end" color="light" checked={{terminos}} ></ion-checkbox>
+      </ion-item> -->
+
+      <ion-row></ion-row>
+        <ion-item style="width: max-content; text-align: center;" lines="none" *ngIf="soportaFingerID"> 
+          <ion-thumbnail slot="start">
+            <img src="assets/finger.png">
+          </ion-thumbnail>
+          <ion-label style="text-align: center;">¿Login por huella?</ion-label>
+          <ion-checkbox slot="end" #botonHuella mode="ios" color="light" checked={{loginFinger}} ></ion-checkbox>
+      </ion-item>
+
+      
+    </form>
+
+    <p tappable (click)="forgotPass()" class="ion-text-center paz">
+      <ion-text color="light">
+        <strong>{{ 'app.pages.login.label.forgot' | translate }}</strong>
+      </ion-text>
+    </p>
+
+    <div>
+      <ion-button icon-left size="medium" expand="full" shape="round" color="warning" (click)="getDatosLogin()" [disabled]="!onLoginForm.valid" tappable>
+        <ion-icon slot="start" name="log-in"></ion-icon>
+        {{ 'app.button.signin' | translate }}
+      </ion-button>
+      
+      <!-- <ion-button icon-left size="medium" expand="full" shape="round" color="danger" (click)="salirAPP()"tappable>
+        <ion-icon slot="start" name="chevron-back-circle-outline"></ion-icon>
+        Salir App
+      </ion-button> -->
+<!-- 
+    <ion-grid class="btn-group">
+        <ion-row>
+          <ion-col size="4">
+            <ion-button shape="round" expand="full" color="secondary">
+              <ion-icon slot="icon-only" name="logo-facebook"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button shape="round" expand="full" color="secondary">
+              <ion-icon slot="icon-only" name="logo-twitter"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button shape="round" expand="full" color="secondary">
+              <ion-icon slot="icon-only" name="logo-vimeo"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid> -->
+
+    </div>
+
+    <!-- Other links -->
+    <!-- <div class="ion-text-center ion-margin-top">
+      <span (click)="goToRegister()" class="paz" tappable>
+        <ion-text color="light">
+          ¿Eres nuevo? <strong>{{ 'app.button.signup' | translate }}</strong>
+        </ion-text>
+      </span>
+    </div> -->
+
+  </div>
+</ion-content>

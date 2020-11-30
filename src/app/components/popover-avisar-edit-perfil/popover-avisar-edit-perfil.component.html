@@ -1,0 +1,27 @@
+<ion-list class="ion-no-padding ion-no-margin">
+  <ion-list-header color="dark">
+    <ion-label class="fw700">Recordatorio</ion-label>
+  </ion-list-header>
+  <ion-item class="bg-white" lines="none" tappable >
+
+    <ion-label class="ion-text-wrap" color="secondary">
+      Para poder recibir notificaciones, rellene los datos en su perfil de usuario. <br />
+    </ion-label>     
+  </ion-item>
+
+  <ion-item class="bg-white" tappable lines="none">
+    <ion-label class="ion-no-padding ion-no-margin " color="primary"><small>No mostrar más este mensaje.</small></ion-label>
+    <ion-checkbox #CheckRespuesta [(ngModel)] = "valorCheck" name={{valorCheck}} slot="start" (click)="guardarCheck()"></ion-checkbox>
+  </ion-item>
+
+
+  <ion-button expand="full" color="primary" (click)="editarPerfil()" tappable class="ion-no-padding">
+    Editar Perfil
+  </ion-button>
+  <ion-button expand="full" color="primary" (click)="cerrarPopover()" tappable class="ion-no-padding">
+    Cerrar
+  </ion-button>
+
+
+  
+</ion-list>

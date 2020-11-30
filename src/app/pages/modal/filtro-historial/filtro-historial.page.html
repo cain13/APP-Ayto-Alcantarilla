@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+        <ion-button color="primary" (click)="closeModal()">
+            <ion-icon name="close" color="light"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+    <ion-title>
+    	Filtro Historial
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+	<ion-item>
+		<ion-label class="fw500" color="dark">Desde</ion-label>
+		<ion-datetime 	placeholder = "Desde"
+						value= "{{filtro_desde}}"
+						displayFormat="DD/MM/YYYY"
+						pickerFormat="DD MM YYYY" 
+						doneText="Ok" 
+						cancelText="Cancelar"
+						[(ngModel)]="filtro_desde">
+		</ion-datetime>
+	</ion-item>
+
+	<ion-item >
+		<ion-label class="fw500" color="dark">Hasta</ion-label>
+		<ion-datetime 	placeholder = "Hasta"
+                    	value= "{{filtro_hasta}}"
+                        displayFormat="DD/MM/YYYY"
+                    	pickerFormat="DD MM YYYY" 
+                    	doneText="Ok" 
+                    	cancelText="Cancelar"
+						[(ngModel)]="filtro_hasta">
+		</ion-datetime>
+	</ion-item>
+	<ion-item>
+	  <ion-label class="label" color="primary" >Todos</ion-label>
+	  <ion-toggle [(ngModel)]="ultimoMes" (click)="Todos()"></ion-toggle>
+	</ion-item>
+	<ion-item>
+		<ion-label class="label" color="primary">Mostrar Año en curso</ion-label>
+		<ion-toggle [(ngModel)]="anioActual" (click)="anioActualF()"></ion-toggle>
+	</ion-item>
+	<ion-item>
+		<ion-label class="label" color="primary">Mostrar Año anterior</ion-label>
+		<ion-toggle [(ngModel)]="anioAnterior" (click)="anioAnteriorF()"></ion-toggle>
+	</ion-item>
+
+	<ion-button expand="full" color="primary" (click)="filtrar()">Filtrar</ion-button>
+</ion-content>

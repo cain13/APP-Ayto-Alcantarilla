@@ -1,0 +1,35 @@
+<ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>{{ 'app.pages.message.title.header' | translate }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-content class="ion-padding animated fadeIn">
+
+    <ion-card class="ion-no-margin bg-white">
+      <ion-card-header>
+          <ion-card-subtitle>{{message.Fecha | date: 'dd/MM/yyyy HH:mm'}} ∙ por <strong>Grupo MPE</strong></ion-card-subtitle>
+          <ion-card-title>
+            <ion-text color="primary">
+              {{message.Titulo}}
+            </ion-text>
+          </ion-card-title>
+      </ion-card-header>
+        <ion-card-content>
+					<p class="ion-margin-top">
+            <ion-text color="primary">
+              {{message.Mensaje}}
+            </ion-text>
+          </p>
+          <p style="padding-top: 20px;">
+            <ion-text color="primary">
+              GRUPO MPE
+            </ion-text>
+          </p>
+        </ion-card-content>
+      </ion-card>
+
+</ion-content>

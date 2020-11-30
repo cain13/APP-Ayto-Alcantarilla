@@ -1,0 +1,29 @@
+<app-header></app-header>
+<ion-content class="bg-light ion-padding animated fadeIn fast">
+  <div class="theme-bg"></div>
+
+  <h2 class="ion-text-center">
+    <ion-text color="tertiary">{{ 'app.pages.homelocation.label.setlocation' | translate }}</ion-text>
+  </h2>
+  <h6 class="ion-text-center">
+    <ion-text color="tertiary">{{ 'app.pages.homelocation.label.descriptionlocation' | translate }}</ion-text>
+  </h6>
+  <ion-searchbar class="ion-no-padding" [(ngModel)]="setlocation" (ionInput)="getItems($event)" (ionCancel)="showItems = !showItems" color="light" showCancelButton="focus" autocomplete="on" search-icon="map" animated debounce="500" placeholder="Inserte una provincia..." cancelButtonText="Cancel"></ion-searchbar>
+
+  <ion-card class="ion-padding-vertical ion-no-margin bg-primary animated fadeIn" *ngIf="showItems">
+    <ion-item color="primary" *ngFor="let item of items" tappable (click)="goToHomeResults(item)">
+      <ion-icon name="pin" slot="start" color="tertiary"></ion-icon>
+      {{ item }}
+    </ion-item>
+  </ion-card>
+
+  <h4 class="ion-text-center">
+    <ion-text color="tertiary">{{ 'app.pages.homelocation.label.or' | translate }}</ion-text>
+  </h4>
+
+  <ion-button expand="block" color="secondary" (click)="goToCentrosMPE()">
+    <ion-icon slot="start" color="light" name="pin"></ion-icon>
+    <ion-text color="light">{{ 'app.pages.homelocation.label.mylocation' | translate }}</ion-text>
+  </ion-button>
+
+</ion-content>

@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+        <ion-text color="light"> Grupo MPE</ion-text>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="background-color: #eeeeee;">
+
+  <ion-list class="ion-no-padding" *ngIf="noticia.FechaFin !== null">
+    <ion-list-header color="danger" mode="md">
+      <ion-text color="light" style="font-size: large;">Promociones valida hasta {{noticia.FechaFin | date: 'dd/MM/yyyy'}}</ion-text>
+    </ion-list-header>
+  </ion-list>
+
+  <ion-card  *ngIf="noticia.URLYoutube === null || noticia.URLYoutube === undefined" >
+    <img src="{{noticia.PathImagen}}" />
+  </ion-card>
+
+  <ion-card *ngIf="noticia.URLYoutube !== null && noticia.URLYoutube !== undefined ">
+    <iframe  width="100%" height="100%" [src]="trustedVideoUrl" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </ion-card>
+
+  <ion-card >
+    <ion-card-header>
+      <ion-card-title>{{noticia.Titulo}}</ion-card-title>
+      <ion-card-subtitle>{{noticia.FechaInicio | date: 'dd/MM/yyyy'}}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      {{noticia.Descripcion}}
+      <label> </label>
+      <ion-button *ngIf="noticia.Url !== undefined && noticia.FechaFin !== null && noticia.Url.length > 0" color="primary" expand="block" (click)="vistarWeb()" > 
+        <ion-icon slot="start" name="earth-outline"></ion-icon>
+        Vistar Web
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

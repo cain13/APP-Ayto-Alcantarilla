@@ -1,0 +1,74 @@
+:host {
+  ion-content {
+    --background: linear-gradient(135deg, var(--ion-color-dark), var(--ion-color-primary));
+  }
+    ion-list {
+        &.list-md {
+            padding: 0;
+        }
+    } 
+}
+
+.theme-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+  opacity: .2;
+  background-image: url("/assets/img/ionproperty2-bg.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.booking-card {
+    margin: -20px -20px 40px;
+    padding: 20px;
+    height: 60px;
+    ion-card {
+        width: 100%;
+        background-color: #fff;
+        margin: 0 0 20px;
+        // &:last-of-type {
+        //   ion-margin-bottom: 86px;
+        // }
+        &.searchcard {
+          ion-item {
+            &::shadow {
+              --inner-border-width: 0;
+            }
+          }
+        }
+    }
+  
+    ion-searchbar {
+      border-bottom: 1px solid rgba(79,36,172, .1);
+    }
+    .br {
+      border-right: 1px solid rgba(79,36,172, .1);
+    }
+    .bb {
+      border-bottom: 1px solid rgba(79,36,172, .1);
+    }
+    .adjust-qts {
+      margin: 0 -20px 0;
+    }
+    .searchbar {
+      z-index: 1000;
+    }
+    .searchbar-results {
+      position: absolute;
+      top: 50px;
+      left: 12px;
+      right: 12px;
+      z-index: 999;
+      padding-top: 12px;
+      border-radius: 12px;
+      box-shadow: 0 0 1px rgba(79,36,172, .06), 0 2px 4px rgba(79,36,172, .1), 0 0 100rem rgba(79,36,172,.85);
+      .item {
+        color: rgba(79,36,172, .85);
+      }
+    }
+  }

@@ -1,0 +1,185 @@
+<!-- <ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button size="small" shape="round" (click)="favorite(property)">
+        <ion-icon name="heart"></ion-icon>
+      </ion-button>
+      <ion-button size="small" shape="round" (click)="share()">
+          <ion-icon name="share"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center" >
+        <ion-text color="light">
+          Centro MPE
+        </ion-text>
+    </ion-title>
+    <ion-buttons slot="end" *ngIf="usuario !== undefined">
+
+      <ion-button *ngIf="isCentroFav" size="small" shape="round" (click)="borrarFavorite(centro)">
+        <ion-icon name="heart"></ion-icon>
+      </ion-button>
+
+      <ion-button *ngIf="!isCentroFav" size="small" shape="round" (click)="favorite(centro)">
+        <ion-icon name="heart-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+ <!--  <ion-toolbar color="dark">
+      <ion-searchbar [(ngModel)]="searchKey" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)"></ion-searchbar>
+      <ion-buttons slot="end">
+        <ion-button size="small" shape="round" color="medium" (click)="searchFilter()">
+          <ion-icon name="options"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar> -->
+    
+</ion-header>
+
+<ion-content color="#eeeeee">
+ <!--  <span class="card-img-status fw500 text-white" [ngClass]="{'closed': property.label === 'cerrado', 'open': property.label === 'abierto'}">
+    {{ property.label }}
+  </span> -->
+
+  <!-- <ion-slides pager="true" class="ion-margin-bottom">
+    <ion-slide *ngFor="let image of property.images" (click)="presentImage(image)">
+      <img [src]="image">
+      <div class="shadow"></div>
+    </ion-slide>
+  </ion-slides> -->
+
+  <ion-card class="bg-white">
+    <img src="{{this.centro.Imagen}}" />
+    <ion-card-content>
+      <h1 class="ion-text-center fw700">
+          <ion-text color="dark">{{centro.Provincia}}</ion-text>
+     	</h1>
+      <h2 class="ion-text-center fw700">
+        <ion-text color="primary">{{centro.Direccion}}</ion-text>
+<!--         <ion-text color="primary"><sup *ngIf="property.period">{{property.address}}, {{property.zip}}, {{property.city}}</sup></ion-text>
+ -->  </h2>
+
+      <div class="ion-text-center">
+        <ion-chip color="primary" outline="true" class="ion-text-center ion-margin-top">
+          <ion-icon name="time-outline"></ion-icon>
+  <!--         <ion-label>{{ centro.Horario }}</ion-label>
+  -->      
+          <ion-label>9:00h - 14:00h / 16:00h - 19:00h</ion-label>
+        </ion-chip>
+      </div>
+      
+      <div class="ion-text-center">
+
+        <ion-chip color="primary" outline="true">
+          <ion-icon name="call-outline"></ion-icon>
+          <ion-label>{{centro.Telefono}}</ion-label>
+        </ion-chip>
+
+        <ion-chip color="primary" outline="true">
+          <ion-icon name="mail-outline"></ion-icon>
+<!--           <ion-label>{{ centro.Email }}</ion-label>
+ -->        
+          <ion-label>madrid@grupompe.es</ion-label>
+        </ion-chip>        
+      </div>
+      
+    </ion-card-content>
+  </ion-card>
+
+<!--   <ion-card class="bg-white">
+    <ion-item class="ion-no-padding" lines="none" tappable routerLink="/broker-detail/{{property.broker.id}}">
+      <ion-thumbnail class="ion-margin" slot="start">
+          <img [src]="property.broker.picture">
+        </ion-thumbnail>
+      <ion-label>
+        <h2 class="fw700 text08">
+          <ion-text color="dark">{{property.broker.name}}</ion-text>
+        </h2>
+        <p>
+          <ion-text color="primary">{{ property.broker.title }}</ion-text>
+        </p>
+      </ion-label>
+      <ion-badge color="success">
+        <ion-text color="light">Pedir Cita</ion-text>
+      </ion-badge>
+    </ion-item>
+  </ion-card> -->
+
+	<ion-grid class="ion-no-padding">
+      <ion-row class="ion-no-padding" >
+        <ion-col>
+          <ion-segment  [(ngModel)]="propertyopts" class="ion-padding-horizontal" style="background-color: #6b90b8;">
+            <!-- <ion-segment-button value="description">
+              Descripción
+            </ion-segment-button> -->
+            <ion-segment-button value="location" style="color: aliceblue;">
+              Localización
+            </ion-segment-button>
+          </ion-segment>
+  
+          <div [ngSwitch]="propertyopts" class="ion-padding-horizontal">
+            <!-- <div *ngSwitchCase="'description'">
+              <ion-card class="ion-no-margin bg-white">
+                <ion-card-content>
+                  <p>
+                    <ion-text color="primary">{{property.description}}</ion-text>
+                  </p>
+                </ion-card-content>
+              </ion-card>
+
+              <br><br><br><br>
+  
+            </div> -->
+
+            <div *ngSwitchCase="'location'" class="ion-margin-top">
+
+              <ion-card class="ion-no-margin bg-white">
+                <agm-map [latitude]="centro.Latitud" [longitude]="centro.Longitud" [zoom]="12">
+                  <agm-marker [latitude]="centro.Latitud" [longitude]="centro.Longitud">
+                  </agm-marker>
+                </agm-map>
+
+                <ion-card-content >
+                  <h2 class="ion-text-center">
+                    <ion-text color="primary">{{centro.Provincia}} • {{centro.Direccion}}, {{centro.CodigoPostal}}</ion-text>
+                  </h2>
+                  
+<!--                   <hr class="ion-margin-bottom bg-tertiary">
+ -->      
+                  <!-- <h2 class="fw700">
+                    <ion-text color="dark">Horario de visita</ion-text>
+                  </h2>
+                  <p class="ion-margin-bottom">
+                    <ion-text color="primary">Mañana 9:00 a 14:00 • Tardes 15:30 a 18:00</ion-text>
+                  </p> -->
+
+                </ion-card-content>
+              </ion-card>
+
+              <br><br><br><br>
+
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  <!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button color="dark" (click)="openCart()">
+      <ion-icon name="cart"></ion-icon>
+    </ion-fab-button>
+  </ion-fab> -->
+
+</ion-content>

@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Perfil Usuario</ion-title>
+    <ion-buttons slot="end" color="dark" >
+      <ion-button icon-left color="light" (click)="Borrardatos()">
+        <ion-icon name="log-out-outline" ></ion-icon> 
+        Salir
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="profile">
+  <ion-card class="ion-no-margin">
+    <ion-card-content class="bg-profile">
+      <img src="assets/img/brokers/michael_drukov.jpg" class="user-avatar"  >
+      <h1 class="fw500">{{Nombre}}</h1>
+      <h1 class="fw500" >{{usuario.UserName}}</h1>
+    </ion-card-content>
+  
+    <ion-grid fixed class="ion-no-padding">
+      <ion-row>
+        <ion-col size="12" class="ion-padding">
+
+          <ion-list class="ion-margin-bottom">
+            <ion-list-header color="light">
+              <ion-label class="fw700">{{ 'app.label.userdata' | translate }}</ion-label>
+            </ion-list-header>
+            <form [formGroup]="editProfileForm">
+
+              <ion-item >
+                <ion-label color="dark" position="stacked">Nombre:</ion-label>
+                <ion-input color="dark" type="text" formControlName="nombre" disabled></ion-input>
+              </ion-item>
+            
+              <ion-item >
+                <ion-label color="dark" position="stacked">DNI:</ion-label>
+                <ion-input color="dark" type="text" formControlName="DNI" disabled></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label color="dark" position="stacked">Móvil:</ion-label>
+                <ion-input color="dark" type="text" formControlName="movil"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label color="dark" position="stacked">Email:</ion-label>
+                <ion-input color="dark" type="text" formControlName="email"></ion-input>
+              </ion-item>
+
+            </form>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+        
+  </ion-card>
+  <ion-button  icon-left expand="full" color="primary" (click)="guardarCambios()" tappable class="ion-no-padding">
+    <ion-icon slot="start" name="save-outline"></ion-icon>
+    Guardar Cambios
+  </ion-button>
+  <ion-button icon-left expand="full" color="primary" (click)="cambiarPassword()" tappable class="ion-no-padding">
+    <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+    Cambiar Contraseña
+  </ion-button>
+  <ion-button icon-left expand="full" color="primary" (click)="cambiarUsuario()" tappable class="ion-no-padding">
+    <ion-icon slot="start" name="person-add-outline"></ion-icon>
+    Cambiar Usuario
+  </ion-button>
+  
+  
+</ion-content>
+

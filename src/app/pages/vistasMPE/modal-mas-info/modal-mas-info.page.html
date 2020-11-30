@@ -1,0 +1,72 @@
+<ion-list class="ion-no-margin ion-no-padding">
+  <ion-list-header color="dark" mode="md">
+    <ion-label class="fw700">Certificado Aptitud</ion-label>
+  </ion-list-header>
+
+  <ion-item tappable (click)="close()">
+    <ion-label>
+      <h2 class="fw700 text-white">
+        <ion-text color="primary">Nombre:</ion-text>
+      </h2>
+      <p class = "ion-text-wrap" style="color:#6b90b8 !important;">
+        {{nombre}}
+      </p>
+    </ion-label>    
+  </ion-item>
+
+  <ion-item tappable (click)="close()">
+    <ion-label>
+      <h2 class="fw700 text-white">
+        <ion-text color="primary">DNI:</ion-text>
+      </h2>
+      <p class = "text-light">
+        <ion-text color="dark">{{dni}}</ion-text>
+      </p>
+    </ion-label>    
+  </ion-item>
+
+  <ion-item tappable (click)="close()">
+    <ion-label>
+      <h2 class="fw700 text-white">
+        <ion-text color="primary">Fecha Documento:</ion-text>
+      </h2>
+      <p class = "text-light">
+        <ion-text color="dark">{{fecha}}</ion-text>
+      </p>
+    </ion-label>    
+  </ion-item>
+
+  <ion-item tappable (click)="close()">
+    <ion-label>
+      <h2 class="fw700 text-white">
+        <ion-text color="primary">Centro de Trabajo:</ion-text>
+      </h2>
+      <p class = "ion-text-wrap" style="color:#6b90b8 !important;">
+        {{centroTrabajo}}
+      </p>
+    </ion-label>    
+  </ion-item>
+
+  <ion-item tappable (click)="close()">
+    <ion-label>
+      <h2 class="fw700 text-white">
+        <ion-text color="primary">Domicilio del Centro:</ion-text>
+      </h2>
+      <p class = "ion-text-wrap" style="color:#6b90b8 !important;">
+        {{domicilio}}
+      </p>
+    </ion-label>    
+  </ion-item>
+<!-- 
+  <ion-item tappable (click)="close()">
+    <ion-label>
+      <h2 class="fw700 text-white">
+        <ion-text color="primary">Tipo del Centro:</ion-text>
+      </h2>
+      <p class = "text-light">
+        <ion-text color="dark">{{tipoCentro}}</ion-text>
+      </p>
+    </ion-label>    
+  </ion-item> -->
+
+</ion-list>

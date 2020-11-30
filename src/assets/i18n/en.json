@@ -1,0 +1,134 @@
+{
+    "app.name": "Ayuntamiento Alcantarilla",
+    "app.namea": "Alcantarilla",
+    "app.nameb": "Ayto. Alcantarilla",
+    "app.version": "",
+    "app.description": "Ayuntamiento Alcantarilla| Gestión",
+
+    "app.button.search": "Buscar",
+    "app.button.checkout": "Marcar",
+    "app.button.moreresults": "Más Resultados",
+    "app.button.callus": "Llamanos",
+    "app.button.fav": "Favorito",
+    "app.button.share": "Share",
+    "app.button.signin": "Entrar",
+    "app.button.signup": "Registrarse",
+    "app.button.nearby": "Nearby",
+    "app.button.bycategory": "Category",
+    "app.button.invoices": "Documentos",
+
+    "app.label.booked": "Booked",
+    "app.label.book": "Book",
+    "app.label.resultsf": "Results Found!",
+    "app.label.cc": "Credit Card",
+    "app.label.ch": "Card Holder",
+    "app.label.cn": "Card Number",
+    "app.label.pp": "Paypal",
+    "app.label.freecancel": "free cancellation",
+    "app.label.average": "Average",
+    "app.label.averageprice": "average price",
+    "app.label.totalvat": "Total + VAT",
+    "app.label.total": "Total",
+    "app.label.voucher": "Voucher",
+    "app.label.description": "Descripción",
+    "app.label.location": "Localizaciónon",
+
+    "app.label.userdata": "Datos Usuario",
+    "app.label.usertype": "Tipo Usuario",
+    "app.label.edit": "Editar",
+    "app.label.insertavatar": "Insertar Avatar",
+    "app.label.name": "Nombre",
+    "app.label.fullname": "Nombre Completo",
+    "app.label.address": "Dirección",
+    "app.label.city": "Ciudad",
+    "app.label.state": "Provincia",
+    "app.label.email": "Email",
+    "app.label.password": "Contraseña",
+    "app.label.details": "Detalles",
+    "app.label.rating": "Radio",
+    "app.label.about": "Acerca de",
+    "app.label.amenities": "Amenities",
+    "app.label.features": "Destacados",
+    "app.label.selectlocal": "Seleccionar Local",
+
+    "app.label.errors.field": "Este campo es obligatorio",
+
+    "app.pages.extras.title.header": "Extras pages",
+    "app.pages.extras.profileone.title.header": "Profile One",
+    "app.pages.extras.profiletwo.title.header": "Profile Two",
+    "app.pages.extras.timeline.title.header": "Timeline",
+    "app.pages.extras.auth.title.header": "Authentication",
+    "app.pages.extras.popupmenu.title.header": "Popup menu",
+    "app.pages.extras.charts.title.header": "Charts",
+    "app.pages.extras.post.title.header": "Blog Post",
+
+    "app.pages.menu.home": "Inicio",
+    "app.pages.menu.booking": "Booking List",
+    "app.pages.menu.favorites": "Favoritos",
+    "app.pages.menu.rentacar": "Cursos",
+    "app.pages.menu.activities": "Actividades de viaje",
+    "app.pages.menu.activitiestab": "Actividades",
+    "app.pages.menu.logout": "Salir",
+    "app.pages.menu.editprofile": "Editar Perfil",
+    "app.pages.menu.weather": "Local Clima",
+    "app.pages.menu.about": "Acerca de la App",
+    "app.pages.menu.settings": "Opciones",
+    "app.pages.menu.support": "Suporte",
+
+
+    "app.pages.about.title.header": "Sobre nosotros",
+    "app.pages.support.title.header": "Suporte",
+
+    "app.pages.editprofile.title.header": "Editar Perfil",
+    "app.pages.editprofile.avail.text": "¿Disponible para chat?",
+
+    "app.pages.favorites.title.header": "Favoritos",
+    "app.pages.favorites.title.nores": "No tiene un centro favorito",
+
+    "app.pages.login.label.forgot": "¿Ha olvidado la contraseña?",
+    "app.pages.login.text.forgot": "Inserta tu email para enviarte un link para recuperar tu contraseña",
+    "app.pages.login.text.sended": "Email was sended successfully.",
+
+    "app.pages.register.title.header": "Registrar",
+    "app.pages.register.label.ihave": "Tengo una cuenta!",
+
+    "app.pages.homelocation.label.setlocation": "Centros MPE",
+    "app.pages.homelocation.label.descriptionlocation": "Busque su centro más cercano",
+    "app.pages.homelocation.label.or": "O",
+    "app.pages.homelocation.label.mylocation": "Localización actual",
+
+    "app.pages.homeresults.label.rnear": "Centros cerca de ti",
+    "app.pages.homeresults.label.or": "O",
+    "app.pages.homeresults.label.mylocation": "Localización actual",
+
+    "app.pages.bycategory.title.header": "Centros por Categoría",
+    "app.pages.nearby.title.header": "Nearby Properties",
+
+    "app.pages.message.title.header": "Mensaje",
+    "app.pages.messages.title.header": "Mensajes",
+    "app.pages.messages.label.error": "No tiene mensajes.",
+
+    "app.pages.settings.title.header": "Opciones App",
+
+    "app.pages.propertylist.title.header": "Centros MPE",
+    "app.pages.propertylist.label.type": "Centros",
+
+    "app.pages.broker.title.header": "Broker",
+    "app.pages.brokerlist.title.header": "Broker List",
+
+    "app.pages.favoriteproperties.title.header": "Favorite Properties",
+
+    "app.pages.schedule.title.header": "Calendario visitas",
+    "app.pages.schedule.title.text": "Calendario",
+
+    "app.pages.chat.title.header": "Chat con empleado",
+    "app.pages.chat.title.text": "Chat",
+
+    "app.pages.checkout.title.header": "Checkout",
+
+
+    "app.pages.invoices.title.header": "Documentos",
+
+    "app.pages.certificadoAptitud.title.header": "Certificado Aptitud"
+
+}

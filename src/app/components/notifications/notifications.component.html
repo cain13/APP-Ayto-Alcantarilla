@@ -1,0 +1,16 @@
+<ion-list class="ion-no-margin ion-no-padding" style="Position:absolute !important">
+    <ion-list-header color="dark">
+      <ion-label class="fw700">Notificaciones</ion-label>
+    </ion-list-header>
+      <ion-item class="bg-white ion-no-padding ion-no-margin"  *ngFor="let NotificacionesMensajes of listaMensajes"  tappable>
+        <ion-icon style="margin: 0px !important; padding: 10px;" slot="start" [name]="NotificacionesMensajes.Icono" color="danger"></ion-icon>
+        <ion-label (click)="close(NotificacionesMensajes.IdNotificacion,NotificacionesMensajes.Ruta)">
+          <h2>
+            <ion-text color="dark"><strong>{{NotificacionesMensajes.Mensaje}}</strong></ion-text>
+          </h2>
+          <p class="text-12x">
+            <ion-text color="secondary">{{NotificacionesMensajes.Fecha | date: "dd/MM/yyyy"}}</ion-text>
+          </p>
+        </ion-label>
+      </ion-item>
+  </ion-list>
