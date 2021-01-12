@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { MessageService } from '../../providers/message/message.service';
-import { NotificacionesService } from '../../services/notificaciones.service';
-import { Notificacion } from 'src/app/interfaces/usuario-interfaces';
 import { DatabaseService } from '../../services/database.service';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-message',

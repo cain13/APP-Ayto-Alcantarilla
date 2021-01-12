@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SQLiteObject, SQLite } from '@ionic-native/sqlite/ngx';
 import { BehaviorSubject } from 'rxjs';
-import { Platform, IonItemSliding } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
-import { UsuarioLogin, Notificacion, UsuarioLoginApi } from '../interfaces/usuario-interfaces';
-import { NotificacionesService } from './notificaciones.service';
-import { CentroAPI } from '../interfaces/centros-interfaces';
+import { Notificacion, UsuarioLoginApi } from '../interfaces/usuario-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +51,7 @@ export class DatabaseService {
 
       if (this.isDbReady.getValue()) {
 
-        resolve();
+        resolve(true);
 
       } else {
 
@@ -61,7 +59,7 @@ export class DatabaseService {
 
           if (ready) {
 
-            resolve();
+            resolve(ready);
 
           }
 
@@ -224,73 +222,6 @@ export class DatabaseService {
   }
 
 
-  // CENTROS FAVORITOS
-
-  async addCentroFav(centro: CentroAPI) {
-
-    await this.estadoBD().then(async () => {
-        const data = [centro.Id, centro.Direccion, centro.DireccionCompleto, centro.Nombre, centro.Localidad, centro.Provincia, centro.CodigoPostal,
-                      centro.Telefono, centro.Email, centro.Imagen, centro.Latitud, centro.Longitud, centro.Distancia, centro.Horario];
-        // tslint:disable-next-line: max-line-length
-        const respuesta = await this.storage.executeSql('INSERT INTO centrosFavoritos (Id, Direccion, DireccionCompleto, Nombre, Localidad, Provincia, CodigoPostal, Telefono, Email, Imagen, Latitud, Longitud, Distancia, Horario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', data).then(() => {
-          console.log('DB: CentroFav añadido');
-
-
-        });
-        console.log('DB: Respuesta CentroFav', respuesta);
-    }).catch( error => {
-
-      console.log('DataBaseService, error al insertar CentroFAV: ', error);
-
-    });
-  }
-
-
-
-  async borrarCentroFav(id: number) {
-    // La siguiente sentencia SQL borra todo el contenido de la tabla:
-    await this.estadoBD().then(async () => {
-      console.log('DB: Borramos CentroFav BD...');
-        this.storage.executeSql('DELETE FROM centrosFavoritos WHERE Id=' + id).then(() => {
-          console.log('DB: CentroFav Borrada'); }).catch(error => { console.log('DB: ERROR AL BORRAR CENTRO'); });
-    });
-  }
-
-  async obtenerCentrosFavAll() {
-
-    try {
-      const response = await this.storage.executeSql('SELECT * FROM centrosFavoritos', []);
-      console.log('Response: ', response);
-      const centros = [];
-      for (let index = 0; index < response.rows.length; index++) {
-        centros.push(response.rows.item(index));
-      }
-      console.log('CENTROOOOOOS: ', response);
-
-
-      return Promise.resolve<CentroAPI[]>(centros);
-    } catch (error) {
-      Promise.reject(error);
-    }
-
-  }
-
-  async obtenerCentroFav(id): Promise<Notificacion> {
-    const res =  await this.storage.executeSql('SELECT * FROM centrosFavoritos WHERE Id=?', [id]);
-    if (res.rows.length !== 0) {
-      return {
-        IdNotificacion: res.rows.item(0).IdNotificacion,
-        Titulo: res.rows.item(0).Titulo,
-        Mensaje: res.rows.item(0).Mensaje,
-        TipoDocumento: res.rows.item(0).TipoDocumento,
-        Leido: res.rows.item(0).Leido,
-        Fecha: res.rows.item(0).Fecha,
-        Ruta: res.rows.item(0).Ruta,
-        Icono: res.rows.item(0).Icono,
-      };
-    } else { return null; }
-
-  }
   async obtenerTodasSinLeerNotificacion() {
 
     /*     const sql = 'SELECT * FROM notificacion WHERE Leido = ?';

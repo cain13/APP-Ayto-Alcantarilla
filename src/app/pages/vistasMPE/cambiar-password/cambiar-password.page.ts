@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController, Platform } from '@ionic/angular';
 import { UsuarioService } from '../../../services/usuario.service';
-import * as moment from 'moment';
-import { CambiarPassword, UsuarioLogin } from '../../../interfaces/usuario-interfaces';
+import { CambiarPassword } from '../../../interfaces/usuario-interfaces';
 import { NgxXml2jsonService } from 'ngx-xml2json';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CambioPassword } from 'src/app/interfaces/interfaces-grupo-mpe';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-cambiar-password',

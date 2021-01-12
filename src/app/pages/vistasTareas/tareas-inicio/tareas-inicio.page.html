@@ -1,0 +1,89 @@
+<ion-header>
+  <app-header></app-header>
+  <ion-toolbar color="grisAyto">
+    <ion-searchbar style="margin-top: 2mm; margin-bottom: 2mm;" [(ngModel)]="searchKey" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)" placeholder="Buscar Certificado"></ion-searchbar>
+    <ion-buttons slot="end" > 
+      <ion-button size="small" shape="round" color="primary" (click)="actualizar()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+</ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-no-padding">
+
+  <!-- <ion-list mode="md">
+    <ion-list-header color="primary" >
+      <div class="ion-align-items-center" (click)="abirFiltros()">
+        <h5 class="ion-align-items-center" style="text-transform: uppercase;">
+          <ion-icon [hidden]="!isOpenFiltros" name="chevron-down-outline"></ion-icon>
+          <ion-icon [hidden]="isOpenFiltros" name="chevron-forward-outline"></ion-icon>
+          <strong> Filtro Tareas</strong>
+        </h5>
+      </div>
+    </ion-list-header>
+    <ion-card-content [ngClass]="this.isOpenFiltros ? 'active' : 'inactive'">
+      <ion-item>
+        <ion-label>Cliente</ion-label>
+        <ion-select [(ngModel)]="visitaSeleccionada">
+          <ion-select-option *ngFor="let tarea of tareasTodas" [value]=tarea.IdPersonaAsistida>{{tarea.Nombre}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Estado Tarea</ion-label>
+        <ion-select  [(ngModel)]="estadoTareaSelec">
+          <ion-select-option *ngFor="let estado of estadosTarea" [value]=estado.IdEstadoTarea>{{estado.Nombre}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+        <ion-button mode="ios" expand="full" color="primary" (click)="filtrar()">
+          <ion-icon slot="start" color="light" name="search"> </ion-icon>
+          <ion-label>Filtrar</ion-label>
+        </ion-button>
+    </ion-card-content>
+   </ion-list > -->
+
+
+    <ion-list mode="md" #lista class="ion-no-padding">
+      <!-- <ion-list-header color="primary" >
+        <ion-title alig><strong>Lista Tareas:</strong></ion-title>
+        <ion-button (click)="actualizar()">
+          <ion-icon color="light" slot="icon-only" name="refresh-outline"></ion-icon>
+        </ion-button>
+      </ion-list-header> -->
+
+      <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+
+      <ion-item-sliding *ngFor="let tarea of tareas; let i = index">
+        <!-- 
+        <ion-item-options side="start" *ngIf="tarea.IdEstado!==2">
+          <ion-item-option color="primary"(click)="editar(i)">
+              <ion-icon slot="icon-only" name="create-outline" (click)="editar(i)"></ion-icon>
+          </ion-item-option>
+        </ion-item-options> -->
+
+        <ion-item tappable [class]="tarea.IdEstado === 1? 'cardEstadoEnCurso' : ( tarea.IdEstado === 0? 'cardEstadoTerminada' : 'cardEstadoAbierta')"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-label>
+            <h2>
+              <ion-text color="dark"><strong>{{tarea.Nombre}}</strong></ion-text>
+            </h2>
+            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;" color="secondary">{{tarea.Descripcion}} <br /> <strong>Inicio: {{tarea.HoraInicio}}h · Fin: {{tarea.HoraFin}}</strong></ion-text>
+          </ion-label>
+         <ion-icon slot="end" name="chevron-forward-outline" color="primary" (click)="masInformacion(tarea)"></ion-icon>
+        </ion-item>        
+
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="addIncidencia(i)">
+            <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+
+      </ion-item-sliding>
+      
+  </ion-list>
+
+  
+</ion-content>
+

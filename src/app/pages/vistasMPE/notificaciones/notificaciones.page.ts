@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Notificaciones, Notificacion, UsuarioLoginApi } from 'src/app/interfaces/usuario-interfaces';
 import { MessageService } from 'src/app/providers';
-import { NavController, ModalController, ToastController } from '@ionic/angular';
+import { NavController, ModalController } from '@ionic/angular';
 
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { DatabaseService } from 'src/app/services/database.service';
-import { async } from 'rxjs/internal/scheduler/async';
 import * as moment from 'moment';
-import { UsuarioLogin } from '../../../interfaces/usuario-interfaces';
 import { NotificacionesService } from '../../../services/notificaciones.service';
 
 @Component({

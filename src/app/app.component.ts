@@ -1,4 +1,4 @@
-import { Component, ViewChild, ɵCodegenComponentFactoryResolver } from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 // import { Router } from '@angular/router';
 
 import { Platform, MenuController, NavController, IonRouterOutlet, ActionSheetController, PopoverController, ViewDidLeave, AlertController } from '@ionic/angular';
@@ -13,14 +13,11 @@ import { Pages } from './interfaces/pages';
 import { UsuarioService } from './services/usuario.service';
 import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 import { DatabaseService } from './services/database.service';
-import { Notificacion, UsuarioLogin, UsuarioLoginApi } from './interfaces/usuario-interfaces';
+import { Notificacion, UsuarioLoginApi } from './interfaces/usuario-interfaces';
 import { NotificacionesService } from './services/notificaciones.service';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { Tests } from './interfaces/interfaces-grupo-mpe';
-import { TestService } from './services/test.service';
 import * as moment from 'moment';
-import { ELocalNotificationTriggerUnit, LocalNotifications } from '@ionic-native/local-notifications/ngx';
-import { on } from 'process';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 
 
@@ -41,8 +38,6 @@ export class AppComponent {
   private HayModal = false;
   public appPagesGuardiaCivil: Array<Pages>;
   private textoCompartirAPP = 'Disfrute de la App de GrupoMPE para la gestión laboral, puede descargarla pinchando en el siguiente enlace!!';
-/*   private urlCompartirAPP = 'http://onelink.to/ept9em';
- */
   private urlCompartirAPP = 'https://mpeprevencion.com/qr-appmpe.html';
   public Version = 'Versión 1.0.0';
 
@@ -63,7 +58,6 @@ export class AppComponent {
     public actionSheetController: ActionSheetController,
     private socialSharing: SocialSharing,
     private popoverController: PopoverController,
-    private testService: TestService,
     private alertCtrl: AlertController,
     private localNotifications: LocalNotifications
     // public router: Router
@@ -79,7 +73,7 @@ export class AppComponent {
       },
       {
         title: 'Tareas',
-        url: '/construccion',
+        url: '/tareas-inicio',
         direct: 'forward',
         icon: 'document-outline'
       },
@@ -589,18 +583,7 @@ export class AppComponent {
       await this.CerrarPopoOvr();
       if (this.routerOutlet.canGoBack()) {
         console.log('Vista Fichar');
-        if (this.testService.getTest() !== null && this.testService.getTest() !== undefined && this.testService.getTest().Preguntas !== null && this.testService.getTest().Preguntas !== undefined) {
-          console.log('this.testService.respuestasMarcadas out ', this.testService.respuestasMarcadas);
-          console.log('this.testService.getTest().Preguntas.PreguntaInfo.length out ', this.testService.getTest().Preguntas.PreguntaInfo.length);
-          if (this.testService.respuestasMarcadas < this.testService.getTest().Preguntas.PreguntaInfo.length) {
-            console.log('this.testService.respuestasMarcadas in ', this.testService.respuestasMarcadas);
-            console.log('this.testService.getTest().Preguntas.PreguntaInfo.length in ', this.testService.getTest().Preguntas.PreguntaInfo.length);
-            this.presentAlertSalirTest('Atención!', '', 'Si sale perdera las respuesta del test');
-          }
-        } else {
-          this.navCtrl.navigateRoot('tab-inicio');
-        }
-
+        this.navCtrl.navigateRoot('/inicio');
       } else {
         await this.CerrarPopoOvr();
         if (this.HayModal === false && Date.now() - this.lastBack > 500) {
@@ -629,142 +612,17 @@ export class AppComponent {
   }
 
   inicioMenu() {
-    this.navCtrl.navigateRoot('tab-inicio');
+    this.navCtrl.navigateRoot('inicio');
   }
 
-  async presentAlertSalirAppTest(titulo: string, subtitulo: string, mensaje: string): Promise<boolean>  {
-    console.log('presentAlert');
-    const alerta = await this.alertCtrl.create({
-      header: titulo,
-      subHeader: subtitulo,
-      message: mensaje,
-      backdropDismiss: false,
-      buttons: [
-        {
-          text: 'Continuar',
-          handler: (blah) => {
-            console.log('Lanzamos NO');
-
-          }
-        }, {
-          text: 'Salir',
-          handler: () => {
-            const navTransition = alerta.dismiss();
-
-            this.someAsyncOperation().then(() => {
-              console.log('someAsyncOperation');
-              navTransition.then(() => {
-                console.log('navTransition.then');
-                this.testService.testSelec = null;
-                this.testService.respuestasMarcadas = 0;
-                this.navCtrl.navigateRoot('tab-inicio');
-              });
-            });
-            return false;
-          }
-        }
-      ]
-    });
-
-    await alerta.present();
-    return null;
-  }
-
-  async presentAlertSalirTest(titulo: string, subtitulo: string, mensaje: string): Promise<boolean>  {
-    console.log('presentAlert');
-    const alerta = await this.alertCtrl.create({
-      header: titulo,
-      subHeader: subtitulo,
-      message: mensaje,
-      backdropDismiss: false,
-      buttons: [
-        {
-          text: 'Continuar',
-          handler: (blah) => {
-            console.log('Lanzamos NO');
-
-          }
-        }, {
-          text: 'Salir',
-          handler: () => {
-            const navTransition = alerta.dismiss();
-
-            this.someAsyncOperation().then(() => {
-              console.log('someAsyncOperation');
-              navTransition.then(() => {
-                console.log('navTransition.then');
-                this.testService.testSelec = null;
-                this.testService.respuestasMarcadas = 0;
-                this.navCtrl.navigateRoot('tab-inicio');
-              });
-            });
-            return false;
-          }
-        }
-      ]
-    });
-
-    await alerta.present();
-    return null;
-  }
+  
   async someAsyncOperation() {
     // await this.navController.navigateForward("/test");
   }
 
 
 
-  /* async presentAlertTestMantoux(titulo: string, subtitulo: string, mensaje: string): Promise<boolean>  {
-    console.log('presentAlert');
-    const cerrar = false;
-    const alerta = await this.alertCtrl.create({
-      header: titulo,
-      subHeader: subtitulo,
-      message: mensaje,
-      backdropDismiss: false,
-      buttons: [
-        {
-          text: 'Ver más tarde',
-          handler: (blah) => {
-            console.log('Lanzamos ver mas tarde');
 
-          }
-        }, {
-          text: 'Ver ahora',
-          handler: () => {
-            const navTransition = alerta.dismiss();
-            if (this.usuario !== undefined && this.usuario != null && this.usuario.RequiereMantoux !== undefined && this.usuario.RequiereMantoux != null ) {
-              this.usuario.HacerMantoux = true;
-              this.usuario.FechaMantoux = moment(this.notificacion.Fecha).locale('es').format().toString();
-              console.log('FECHA USUARIO: ', this.usuario.FechaMantoux);
-              console.log('Fecha fecha: ' , moment().locale('es').format().toString());
-              this.usuarioService.actualizarPerfil(this.usuario);
-              this.usuarioService.guardarUsuario(this.usuario);
-            } else {
-              this.usuario = this.usuarioService.getUsuario();
-              this.usuario.HacerMantoux = true;
-              this.usuario.FechaMantoux = moment(this.notificacion.Fecha).locale('es').format().toString();
-              console.log('FECHA USUARIO: ', this.usuario.FechaMantoux);
-              console.log('Fecha fecha: ' , moment().locale('es').format().toString());
-              this.usuarioService.actualizarPerfil(this.usuario);
-              this.usuarioService.guardarUsuario(this.usuario);
-            }
-            this.someAsyncOperation().then(() => {
-              console.log('someAsyncOperation');
-              navTransition.then(() => {
-                console.log('navTransition.then');
-                this.navCtrl.navigateForward('/vista-tuberculina-inicio');
-              });
-            });
-            return false;
-          }
-        }
-      ]
-    });
-
-    await alerta.present();
-
-    return null;
-  } */
 
   async compartirAPP() {
     try {
@@ -1146,119 +1004,5 @@ export class AppComponent {
     navigator['app'].exitApp();
   }
 
-  /* crearNotificacionesLocalesMantoux(fecha: string) {
-    const fechaPrueba = moment(fecha);
-    console.log('fecha notificacion: ', fecha);
-    const fecha48h = moment(fechaPrueba.add(48, 'hours'));
-    const fecha72h = moment(fechaPrueba.add(72, 'hours'));
-    const fecha3d17h = moment(fecha72h.format('L') + ' 17:00');
-    const fechaActual = moment().locale('es');
-
-    console.log('fecha 72h ', fecha72h.format());
-    console.log('fecha 72h a las 17: ', fecha3d17h.format());
-    for (let i = 0; i < 4; i++) {
-      switch (i) {
-        case 0:
-          // tslint:disable-next-line: no-shadowed-variable
-          const notificacionHora8 = fecha48h.format('L') + ' 08:00';
-          console.log('notificacionHora8:' , moment(notificacionHora8).format());
-          const fechaNot0 = new Date(notificacionHora8);
-          console.log('FICHAPRUEBA:', fechaNot0);
-
-          if (fecha48h < moment(notificacionHora8)) {
-            this.localNotifications.schedule({
-              title: 'Recuerde: Prueba Médica Mantoux',
-              text: 'Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
-              trigger: { at: fechaNot0, count: 365 }
-            });
-
-
-          } else {
-
-            console.log('No creamos la notificación porque se hizo la prueba despues de las 8:00 de la mañana.');
-
-          }
-          break;
-
-        case 1:
-          const notificacionHora11 = fecha48h.format('L') + '11:00';
-          console.log('notificacionHora11:' , moment(notificacionHora11).format());
-          const fechaNot1 = new Date(notificacionHora11);
-          console.log('FICHAPRUEBA:', fechaNot1);
-
-          if (fecha48h < moment(notificacionHora11)) {
-
-            this.localNotifications.schedule({
-              title: 'Recuerde: Prueba Médica Mantoux',
-              text: 'Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
-              trigger: { at: fechaNot1, count: 365 }
-            });
-
-
-          } else {
-
-            console.log('No creamos la notificación porque se hizo la prueba despues de las 8:00 de la mañana.');
-
-          }
-
-          break;
-
-        case 2:
-          const notificacionHora14 = fecha48h.format('L') + ' 14:00';
-          console.log('notificacionHora14:' , moment(notificacionHora14).format());
-          const fechaNot2 = new Date(notificacionHora14);
-          console.log('FICHAPRUEBA:', fechaNot2);
-
-          if (fecha48h < moment(notificacionHora14)) {
-
-            this.localNotifications.schedule({
-              title: 'Recuerde: Prueba Médica Mantoux',
-              text: 'Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
-              trigger: { at: fechaNot2, count: 365 }
-            });
-
-
-          } else {
-
-            console.log('No creamos la notificación porque se hizo la prueba despues de las 8:00 de la mañana.');
-
-          }
-          break;
-
-        case 3:
-          const notificacionHora17 = fecha48h.format('L') + ' 17:00';
-          console.log('notificacionHora17:' , moment(notificacionHora17).format());
-          const fechaNot3 = new Date(notificacionHora17);
-          console.log('FICHAPRUEBA:', fechaNot3);
-
-          if (fecha48h < moment(notificacionHora17)) {
-            this.localNotifications.schedule({
-              title: 'Recuerde: Prueba Médica Mantoux',
-              text: 'Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
-              trigger: { at: fechaNot3, count: 365 }
-            });
-
-
-          } else {
-
-            console.log('No creamos la notificación porque se hizo la prueba despues de las 8:00 de la mañana.');
-
-          }
-          break;
-
-        default:
-          console.log('Caso null');
-        break;
-      }
-
-    }
-  } */
-
-  // goToEditProgile() {
-  //   this.router.navigateByUrl('/edit-profile');
-  // }
-
-  // logout() {
-  //   this.router.navigateByUrl('/login');
-  // }
+  
 }

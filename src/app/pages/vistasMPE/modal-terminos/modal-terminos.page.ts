@@ -17,14 +17,6 @@ export class ModalTerminosPage implements OnInit {
 
   ngOnInit() {
 
-    /* this.usuario = this.usuarioService.getUsuario();
-    console.log('USUARIO MODAL TERMINOS: ', this.usuario);
-    if (this.usuario.EsGuardiaCivil !== undefined && this.usuario.EsGuardiaCivil) {
-      this.EsGuardiaCivil = this.usuario.EsGuardiaCivil;
-    } */
-
-/*     this.presentAlert('Para poder acceder, debe aceptar los términos de la aplicación.', 'Por favor');
- */
   }
 
   aceptarTerminos() {

@@ -25,19 +25,11 @@ export interface UsuarioLogin {
 
     Usuario: string;
     Password: string;
-    FingerID: boolean;
     Tipo: string;
     Nombre: string;
-    Recordarme: boolean;
-    EsBuzo: boolean;
-    EsGuardiaCivil: boolean;
-    RequiereMantoux: boolean;
     Email: string;
     Movil: string;
     Telefono: string;
-    RecordarEditarPerfil: boolean;
-    HacerMantoux: boolean;
-    FechaMantoux: string;
 
 }
 
@@ -127,3 +119,11 @@ export interface Opciones {
     Tab?: string;
     direct: string;
 }
+
+
+export interface RespuestaAPItoken {
+
+    Codigo: number;
+    Mensaje: string;
+  
+  }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UsuarioLogin } from 'src/app/interfaces/usuario-interfaces';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 

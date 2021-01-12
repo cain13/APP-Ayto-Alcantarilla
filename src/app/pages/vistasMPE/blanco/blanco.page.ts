@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../../services/database.service';
 import { UsuarioService } from '../../../services/usuario.service';
 import { NavController, MenuController, ModalController } from '@ionic/angular';
-import { UsuarioLogin, UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
-import { RespuestaGetCentrosTrabajo, ObtenerCentros } from 'src/app/interfaces/interfaces-grupo-mpe';
-import { SeleccionarClientePage } from '../../modal/seleccionar-cliente/seleccionar-cliente.page';
+import {  UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 import { NgxXml2jsonService } from 'ngx-xml2json';
 
 
@@ -51,10 +49,10 @@ export class BlancoPage implements OnInit {
 
          this.usuarioService.guardarUsuario(this.usuario);
          console.log('Usuario: ', ultimoUsuario);
-         this.menuCtrl.enable(false, 'menuTrabajadores');
-         this.menuCtrl.enable(true, 'menuCompleto');
+         this.menuCtrl.enable(true, 'menuTrabajadores');
+         this.menuCtrl.enable(false, 'menuCompleto');
          console.log('BLANCO: Si hay usuario en BD: ', this.usuario);
-         this.navCtrl.navigateRoot('/tab-inicio');
+         this.navCtrl.navigateRoot('/inicio');
 
          /* if ( this.usuario.Tipo === 'CLIENTE') {
           console.log('ACCEDEMOS COMO CLIENTE');
@@ -97,56 +95,7 @@ export class BlancoPage implements OnInit {
     }
 
 
-    /* getCentros() {
-      const xmlhttp = new XMLHttpRequest();
 
-
-      xmlhttp.open('POST', 'https://grupompe.es/MpeNube/ws/DocumentosWS.asmx', true);
-      xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-//       xmlhttp.setRequestHeader('Access-Control-Allow-Origin', '*');
-       xmlhttp.responseType = 'document';
-        // the following variable contains my xml soap request (that you can get thanks to SoapUI for example)
-      const sr =
-      '<?xml version="1.0" encoding="utf-8"?>' +
-      '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
-        '<soap:Header>' +
-          '<AuthHeader xmlns="http://tempuri.org/">' +
-            '<Usuario>' + this.usuarioService.usuario.Usuario + '</Usuario>' +
-            '<Password>' + this.usuarioService.usuario.Password + '</Password>' +
-          '</AuthHeader>' +
-        '</soap:Header>' +
-        '<soap:Body>' +
-          '<ObtenerCentrosTrabajo xmlns="http://tempuri.org/">' +
-          '<NifClienteConsultor></NifClienteConsultor>' +
-          '</ObtenerCentrosTrabajo>' +
-        '</soap:Body>' +
-      '</soap:Envelope>';
-
-      xmlhttp.onreadystatechange =  () => {
-            if (xmlhttp.readyState === 4) {
-                if (xmlhttp.status === 200) {
-                  const xml = xmlhttp.responseXML;
-                  const obj: RespuestaGetCentrosTrabajo = JSON.parse(JSON.stringify(this.ngxXml2jsonService.xmlToJson(xml)));
-                  // tslint:disable-next-line: max-line-length
-                  const a: ObtenerCentros = JSON.parse(JSON.stringify(obj['soap:Envelope']['soap:Body']['ObtenerCentrosTrabajoResponse']['ObtenerCentrosTrabajoResult']));
-                  console.log(a.CentroTrabajoInfo);
-                  this.usuarioService.guardarCentros(a.CentroTrabajoInfo);
-                }
-            }
-        };
-
-      xmlhttp.send(sr);
-    } */
-
-    async searchFilter () {
-      const modal = await this.modalCtrl.create({
-        component: SeleccionarClientePage
-      });
-      modal.onDidDismiss().then(() => {
-        this.navCtrl.navigateRoot('tab-inicio');
-      });
-      return await modal.present();
-    }
 
 
   }

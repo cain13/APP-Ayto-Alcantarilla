@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { CentrosMPEFiltros, DatosFiltros, UsuarioLogin } from 'src/app/interfaces/usuario-interfaces';
-import { MapasService } from 'src/app/services/mapas.service';
+import { CentrosMPEFiltros} from 'src/app/interfaces/usuario-interfaces';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 
@@ -20,10 +19,9 @@ export class SearchFilterPage implements OnInit {
   LocalidadFiltro: string;
 
 
-  constructor(private modalCtrl: ModalController, private usuarioService: UsuarioService, private mapasService: MapasService) { }
+  constructor(private modalCtrl: ModalController, private usuarioService: UsuarioService) { }
 
   ngOnInit() {
-    this.listaCentros =  this.mapasService.getCentrosGuardados();
     this.usuario = this.usuarioService.getUsuario();
   }
 
@@ -38,7 +36,6 @@ export class SearchFilterPage implements OnInit {
       localidad: this.LocalidadFiltro,
     };
 
-    this.mapasService.guardarFiltroCentros(datosFil);
     this.closeModal();
 
   }

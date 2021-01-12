@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PopoverController, NavController } from '@ionic/angular';
 import { MessageService } from '../../providers/message/message.service';
-import { Validators } from '@angular/forms';
 import { Notificaciones, Notificacion } from 'src/app/interfaces/usuario-interfaces';
-import { DocumentosTrabajadoresService } from '../../services/documentos-trabajadores.service';
 import * as moment from 'moment';
-import { NotificacionesMensajes } from '../../interfaces/usuario-interfaces';
 import { DatabaseService } from '../../services/database.service';
 import { UsuarioService } from '../../services/usuario.service';
 
@@ -22,7 +19,6 @@ export class NotificationsComponent implements OnInit {
   constructor(
     public messageService: MessageService,
     public popoverController: PopoverController,
-    private documentosService: DocumentosTrabajadoresService,
     private usuarioService: UsuarioService,
     private navController: NavController,
     private db: DatabaseService

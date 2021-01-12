@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Noticia } from '../../../interfaces/interfaces-grupo-mpe';
 
-import {  NavController, Platform } from '@ionic/angular';
+import {  Platform } from '@ionic/angular';
 
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Noticia } from 'src/app/interfaces/noticias-interfaces';
 
 @Component({
   selector: 'app-noticias-mas-info',
