@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LoadingController, Platform, ToastController, AlertController, NavController, ModalController } from '@ionic/angular';
-import { CambiarPassword, MandarTokenAPI, RespuestaAPItoken, UsuarioLoginApi, UsuarioLogin } from '../interfaces/usuario-interfaces';
+import { CambiarPassword, MandarTokenAPI, RespuestaAPItoken, UsuarioLoginApi, UsuarioLogin, UsuarioLoginAPP, RespuestaAPIBasica, DatosActualziarPassApi } from '../interfaces/usuario-interfaces';
 import { DatabaseService } from './database.service';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -20,10 +20,11 @@ export class UsuarioService {
   usuario: UsuarioLoginApi = {
 
     UserName: '12345651A',
-    Password: 1234,
+    Password: 'ayuntamiento',
+    IdUsuario: 1,
     NombreCompleto: 'Tecnico 1',
-    RememberMe: true,
-    FingerID: false
+    Movil: '695489213',
+    Email: 'contacto@ayutnamientoalcantarilla.es'
   };
 
   vieneDeLogin = false;
@@ -48,14 +49,12 @@ export class UsuarioService {
     // Funciones Ayto_Alcantarilla_APP
 
 
-    async loginAPI(userName: string, password: string): Promise<UsuarioLoginApi> {
+    async loginAPI(userName: string, password: string, token: string): Promise<UsuarioLoginApi> {
 
-      const usuario: UsuarioLoginApi = {
+      const usuario: UsuarioLoginAPP = {
         UserName: userName,
-        Password: parseInt(password, 10),
-        FingerID: false,
-        NombreCompleto: '',
-        RememberMe: false
+        Password: password,
+        Token: token
       };
 
       return await this.http.post<UsuarioLoginApi>(`${url}/LoginApp/Login`, usuario, {headers: this.header}).timeout(7000).toPromise();
@@ -71,6 +70,34 @@ export class UsuarioService {
 
       return respuesta;
 
+    }
+
+    async actualizarDatosUsuarioAPI( user: UsuarioLoginApi): Promise<RespuestaAPIBasica> {
+
+      const datosUsuario: UsuarioLoginApi = {
+  
+        IdUsuario: user.IdUsuario,
+        Password: user.Password,
+        NombreCompleto: user.NombreCompleto,
+        Email: user.Email,
+        Movil: user.Movil,
+        UserName: user.UserName
+      };
+      return await this.http.post<RespuestaAPIBasica>(`${url}/TareaApi/GetApiListaTareas`, datosUsuario).toPromise();
+  
+    }
+
+    async actualizarPasswordAPI( idUsuario: number, passOld: number, passNew: number): Promise<RespuestaAPIBasica> {
+
+      const datosUsuario: DatosActualziarPassApi = {
+  
+        IdUsuario: idUsuario,
+        PassOld: passOld,
+        PassNueva: passNew
+        
+      };
+      return await this.http.post<RespuestaAPIBasica>(`${url}/TareaApi/GetApiListaTareas`, datosUsuario).toPromise();
+  
     }
 
     guardarUsuarioBD(user: UsuarioLoginApi) {

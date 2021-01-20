@@ -46,41 +46,14 @@ export class EditProfilePage implements OnInit {
     this.Tipo = this.usuarioService.usuario.UserName;
     this.usuario = this.usuarioService.getUsuario();
     console.log('this.usuario edit-profile: ', this.usuario);
-    /* if (this.usuario.EsGuardiaCivil !== undefined && this.usuario.EsGuardiaCivil.toString() === 'true') {
-      this.EsGuardiaCivil = true;
-      this.Email = this.usuario.Email;
-      this.Telefono = this.usuario.Telefono;
-      this.Movil = this.usuario.Movil;
-      this.DNI = this.usuario.Usuario;
-    } */
+    
 
-    /* if (this.EsGuardiaCivil === null) {
-      this.EsGuardiaCivil;
-    } */
-    /* if (this.usuario.Email !== undefined && this.usuario.Email !== null && this.usuario.Email.length > 0) {
-      this.Email = this.usuario.Email;
-    } else {
-      this.Email = '';
-    }
-    if (this.usuario.Telefono !== undefined && this.usuario.Telefono !== null && this.usuario.Telefono.length > 0) {
-      this.Telefono = this.usuario.Telefono;
-    } else {
-      this.Telefono = '';
-    }
-    if (this.usuario.Movil !== undefined && this.usuario.Movil !== null && this.usuario.Movil.length > 0 && this.usuario.Movil.toString() !== '0') {
-      this.Movil = this.usuario.Movil;
-    } else {
-      this.Movil = '';
-    } */
-
-    this.Email = 'ayuntamiento@ayto-alcantarilla.es';
-    this.Telefono = '968898200';
-    this.Movil = '968898200';
+    this.Email = this.usuario.Email;
+    this.Movil = this.usuario.Movil;
     this.DNI = this.usuario.UserName;
     this.Nombre = this.usuario.NombreCompleto;
 
     console.log('Nombre: ', this.Nombre);
-    console.log('Telefono: ', this.Telefono);
     console.log('movil: ', this.Movil);
     console.log('email: ', this.Email);
 
@@ -91,9 +64,6 @@ export class EditProfilePage implements OnInit {
         Validators.required
       ])],
       DNI: [this.DNI.toString(), Validators.compose([
-        Validators.required
-      ])],
-      telefono: [this.Telefono.toString(), Validators.compose([
         Validators.required
       ])],
       movil: [this.Movil.toString(), Validators.compose([
@@ -140,84 +110,33 @@ export class EditProfilePage implements OnInit {
   }
 
   guardarCambios() {
-    /* try {
-      this.usuarioService.present('Actualizando datos...');
-      const xmlhttp = new XMLHttpRequest();
+    //this.usuarioService.present('Guardando datos...');
+    const aux: UsuarioLoginApi = this.usuario;
+    aux.Email = this.editProfileForm.value.email;
+    aux.NombreCompleto = this.editProfileForm.value.nombre;
+    aux.Movil = this.editProfileForm.value.movil;
 
+    /* this.usuarioService.actualizarDatosUsuarioAPI(aux).then( resp => {
 
-      xmlhttp.open('POST', 'https://grupompe.es/MpeNube/ws/DocumentosWS.asmx', true);
-//       xmlhttp.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
- //      xmlhttp.setRequestHeader('content-type', 'text/xml');
-//       xmlhttp.setRequestHeader('Access-Control-Allow-Origin', '*');
- //
-      console.log('HEADER2: ', xmlhttp.getResponseHeader);
-      xmlhttp.responseType = 'document';
-        // the following variable contains my xml soap request (that you can get thanks to SoapUI for example)
-      const sr =
-          '<?xml version="1.0" encoding="utf-8"?>' +
-          '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
-            '<soap:Header>' +
-              '<AuthHeader xmlns="http://tempuri.org/">' +
-                '<Usuario>' + this.usuario.Usuario + '</Usuario>' +
-                '<Password>' + this.usuario.Password + '</Password>' +
-              '</AuthHeader>' +
-            '</soap:Header>' +
-            '<soap:Body>' +
-              '<InsertarDatosTrabajador xmlns="http://tempuri.org/">' +
-                '<Datos>' +
-                  '<Nombre>' + this.editProfileForm.value.nombre + '</Nombre>' +
-                  '<Movil>' + this.editProfileForm.value.movil + '</Movil>' +
-                  '<Telefono>' + this.editProfileForm.value.telefono + '</Telefono>' +
-                  '<Email>' + this.editProfileForm.value.email + '</Email>' +
-                '</Datos>' +
-              '</InsertarDatosTrabajador>' +
-            '</soap:Body>' +
-          '</soap:Envelope>';
+      if (!resp.Ok) {
+        this.usuarioService.dismiss();
+        this.usuarioService.presentAlert('Error', 'No se han podido guardar sus datos', 'Intentelo de nuevo más tarde');
+        
+      } else {
+        this.usuarioService.actualizarPerfil(aux);
+        this.usuarioService.dismiss();
+        this.usuarioService.presentToast('Datos actualizados correctamente');
 
+      }
 
-      console.log('MENSAJE MANDADO A LA API:', sr);
-      xmlhttp.onreadystatechange = () => {
-        console.log('XMLHTTP: ', xmlhttp);
-            if (xmlhttp.readyState === 4) {
+    }).catch( error => {
 
-                const aux: UsuarioLogin = this.usuario;
-                aux.Email = this.editProfileForm.value.email;
-                aux.Nombre = this.editProfileForm.value.nombre;
-                aux.Telefono = this.editProfileForm.value.telefono;
-                aux.Movil = this.editProfileForm.value.movil;
-
-                if (aux.Email === null) {
-                  aux.Email = '';
-                }
-                if (aux.Nombre === null) {
-                  aux.Nombre = '';
-                }
-                if (aux.Telefono === null) {
-                  aux.Telefono = '';
-                }
-                if (aux.Movil === null) {
-                  aux.Movil = '';
-                }
-
-
-                if (xmlhttp.status === 200) {
-
-                  this.usuarioService.actualizarPerfil(aux);
-                  this.usuarioService.presentToast('Datos actualizados correctamente');
-
-                } else if (xmlhttp.status === 500 ) {
-                  this.usuarioService.presentAlert('Error', 'Fallo al actualizar datos', 'Intentelo de nuevo más tarde');
-                }
-            }
-            this.usuarioService.dismiss();
-        };
-
-        console.log('XMLHTTP: ', xmlhttp);
-      xmlhttp.send(sr);
-    } catch (error) {
       this.usuarioService.dismiss();
-    }
- */
+      this.usuarioService.presentAlert('Error', 'No se han podido guardar sus datos', 'Intentelo de nuevo más tarde');  
+
+    })  */ 
+    
+    
   }
 
   async cambiarPassword () {

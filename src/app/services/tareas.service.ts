@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { RespuestaTareasAPI, Tarea } from '../interfaces/interfacesTareas';
+import { DatosAddUbicacion, RespuestaTareasAPI, RespuestaTiposIncidenciasAPI, Tarea, TipoIncidencia } from '../interfaces/interfacesTareas';
 import { HttpClient } from '@angular/common/http';
 import { UsuarioService } from './usuario.service';
+import { RespuestaAPIBasica } from '../interfaces/usuario-interfaces';
 
 const url =  'https://abm-time.com/api';
 
@@ -11,19 +12,66 @@ const url =  'https://abm-time.com/api';
 export class TareasService {
 
   tarea: Tarea;
-  listaTareas: Tarea[]
+  listaTareas: Tarea[];
+  listaTipoIncidencias: TipoIncidencia[] = [
+      {
+      IdIncidencia: 0,
+      Nombre: 'Usuario Ausente'
+    },
+    {
+      IdIncidencia: 1,
+      Nombre: 'Otros'
+    }
+  ];
 
   constructor(private http: HttpClient,
               private usuarioService: UsuarioService) { }
 
-  async obtenerTareas(): Promise<RespuestaTareasAPI> {
+  async obtenerListaTareas(idUsuario: number, fecha: string): Promise<RespuestaTareasAPI> {
 
-    const usuario = {
+    const datosTareas = {
 
-      idEmpleado: this.usuarioService.getUsuario().UserName
+      IdUsuario: idUsuario,
+      Fecha: fecha
 
     };
-    return await this.http.post<RespuestaTareasAPI>(`${url}/TareaApi/GetApiListaTareas`, usuario).toPromise();
+    return await this.http.post<RespuestaTareasAPI>(`${url}/TareaApi/GetApiListaTareas`, datosTareas).toPromise();
+
+  }
+
+  async obtenerListaTiposIncidencia(idUsuario: number): Promise<RespuestaTiposIncidenciasAPI> {
+
+    const datosUsuario = {
+
+      IdUsuario: idUsuario
+
+    };
+    return await this.http.post<RespuestaTiposIncidenciasAPI>(`${url}/TareaApi/GetApiListaTareas`, datosUsuario).toPromise();
+
+  }
+
+  async addUbicacionAPI(latitud: number, longitud: number, pin: string, idUsuario: number): Promise<RespuestaAPIBasica> {
+
+    const datosAddUbicacion: DatosAddUbicacion = {
+
+      IdUsuario: idUsuario,
+      Latitud: latitud,
+      Longitud: longitud,
+      Pin: pin
+    };
+    return await this.http.post<RespuestaAPIBasica>(`${url}/TareaApi/GetApiListaTareas`, datosAddUbicacion).toPromise();
+
+  }
+
+  guardarListaIncidencias( listaIncidencias: TipoIncidencia[]) {
+
+    this.listaTipoIncidencias = listaIncidencias;
+
+  }
+
+  getListaIncidencias(): TipoIncidencia[] {
+
+    return this.listaTipoIncidencias;
 
   }
 
@@ -62,8 +110,6 @@ export class TareasService {
         + ' ' + tarea.Grado + ' ' + tarea.IdEstado).toUpperCase().indexOf(key) > -1));
   }
 
-  
-  
 
   guardarTarea(tarea: Tarea) {
 

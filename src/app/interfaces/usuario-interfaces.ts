@@ -3,10 +3,33 @@
 export interface UsuarioLoginApi {
 
     UserName: string;
-    Password: number;
-    RememberMe: boolean;
+    Password: string;
+    IdUsuario: number;
     NombreCompleto: string;
-    FingerID: boolean;
+    Movil: string;
+    Email: string;
+}
+
+export interface UsuarioLoginAPP {
+
+    UserName: string;
+    Password: string;
+    Token: String
+}
+
+export interface RespuestaAPIBasica {
+
+    Ok: boolean;
+    Mensaje: string;
+
+}
+
+export interface DatosActualziarPassApi {
+
+    IdUsuario: number,
+    PassOld: number,
+    PassNueva: number,
+
 }
 
 export interface MandarTokenAPI {
@@ -34,7 +57,7 @@ export interface UsuarioLogin {
 }
 
 export interface Notificacion {
-    IdNotificacion: number;
+    IdNotificacion?: number;
     Titulo: string;
     Mensaje: string;
     Leido: number;
@@ -42,7 +65,6 @@ export interface Notificacion {
     Fecha: string;
     Ruta: string;
     Icono: string;
-
 }
 
 export interface EmpresaConsultor {

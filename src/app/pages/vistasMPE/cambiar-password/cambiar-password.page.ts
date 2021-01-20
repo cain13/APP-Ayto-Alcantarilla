@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController, Platform } from '@ionic/angular';
 import { UsuarioService } from '../../../services/usuario.service';
-import { CambiarPassword } from '../../../interfaces/usuario-interfaces';
+import { CambiarPassword, UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 import { NgxXml2jsonService } from 'ngx-xml2json';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -81,57 +81,36 @@ export class CambiarPasswordPage implements OnInit {
     };
   }
   CambiarPasswordButton() {
-   /*  this.usuarioService.present('Actualizando contraseña...');
-    console.log('PassOld ' + this.onPasswordForm.get('PassOld').value);
-    console.log('PassNew ' + this.onPasswordForm.get('PassNew').value);
-    console.log('PassConfirmada ' + this.onPasswordForm.get('PassConfirmada').value);
+
+    /* this.usuarioService.present('Actualizando contraseña...');
     const passOld = this.onPasswordForm.get('PassOld').value;
     const passNew = this.onPasswordForm.get('PassNew').value;
-    const passConfirm = this.onPasswordForm.get('PassConfirmada').value;
-    const xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('POST', 'https://grupompe.es/MpeNube/ws/DocumentosWS.asmx', true);
-    xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-//    xmlhttp.setRequestHeader('Access-Control-Allow-Origin', '*');
-     xmlhttp.responseType = 'document';
-      // the following variable contains my xml soap request (that you can get thanks to SoapUI for example)
-    const sr =
-    '<?xml version="1.0" encoding="utf-8"?>' +
-    '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
-      '<soap:Header>' +
-        '<AuthHeader xmlns="http://tempuri.org/">' +
-          '<Usuario>' + this.usuarioService.usuario.Usuario + '</Usuario>' +
-          '<Password>' + passOld + '</Password>' +
-        '</AuthHeader>' +
-      '</soap:Header>' +
-      '<soap:Body>' +
-        '<CambiarPassword xmlns="http://tempuri.org/">' +
-          '<Password>' + passNew + '</Password>' +
-          '<ConfirmarPassword>' + passConfirm +  '</ConfirmarPassword>' +
-        '</CambiarPassword>' +
-      '</soap:Body>' +
-    '</soap:Envelope>';
-    xmlhttp.onreadystatechange =  () => {
-          if (xmlhttp.readyState === 4) {
-              if (xmlhttp.status === 200) {
-                  const usuarioAux: UsuarioLogin = this.usuarioService.usuario;
-                  usuarioAux.Password = passNew;
-                  console.log('USUARIO NUEVO: ', usuarioAux);
-                  this.usuarioService.actualizarPerfil(usuarioAux);
-                  this.usuarioService.dismiss();
-                  this.usuarioService.presentToast('Contraseña Cambiada correctamente !!');
-              } else {
-                this.usuarioService.dismiss();
-                this.usuarioService.presentToast('¡ERROR! La contraseña no se a cambiado correctamente');
-              }
-          } else {
-            this.usuarioService.dismiss();
-            this.usuarioService.presentToast('¡ERROR! La contraseña no se a cambiado correctamente');
-          }
-      };
-    xmlhttp.send(sr);
 
-    this.closeModal(); */
+    this.usuarioService.actualizarPasswordAPI(this.usuarioService.getUsuario().IdUsuario, passOld, passNew).then( resp => {
+
+      if (resp.Ok) {
+
+        const usuarioAux: UsuarioLoginApi = this.usuarioService.usuario;
+        usuarioAux.Password = passNew;
+        console.log('USUARIO NUEVO: ', usuarioAux);
+        this.usuarioService.actualizarPerfil(usuarioAux);
+        this.usuarioService.dismiss();
+        this.usuarioService.presentToast('Contraseña Cambiada correctamente !!');
+
+      } else {
+
+        this.usuarioService.dismiss();
+        this.usuarioService.presentAlert('¡ERROR!', 'Fallo al cambiar la contraseña', 'Compruebe su conexión a internet');
+      }
+
+    }).catch( error => {
+
+      this.usuarioService.dismiss();
+      this.usuarioService.presentAlert('¡ERROR!', 'Fallo al cambiar la contraseña', 'Compruebe su conexión a internet');
+
+    }) */
   }
+
   closeModal() {
     this.modalCtrl.dismiss();
   }
@@ -156,6 +135,7 @@ export class CambiarPasswordPage implements OnInit {
     return this.onPasswordForm.get('PassNew').invalid && this.onPasswordForm.get('PassNew').touched && passNew.length > 0;
 
   }
+
 
   get passConfirNoValido() {
     let passNueva: string;

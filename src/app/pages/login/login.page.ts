@@ -76,18 +76,7 @@ export class LoginPage implements OnInit {
         ])]
       });
 
-
     } else {
-      if (this.usuario.RememberMe.toString() === 'true') {
-        this.onLoginForm = this.formBuilder.group({
-          usuario: [this.usuario.UserName, Validators.compose([
-            Validators.required
-          ])],
-          password: [this.usuario.Password, Validators.compose([
-            Validators.required
-          ])]
-        });
-      } else {
         this.onLoginForm = this.formBuilder.group({
           usuario: [null, Validators.compose([
             Validators.required
@@ -98,7 +87,7 @@ export class LoginPage implements OnInit {
         });
       }
 
-      if (this.usuario.RememberMe.toString() === 'true' || this.usuario.RememberMe == null) {
+      /* if (this.usuario.RememberMe.toString() === 'true' || this.usuario.RememberMe == null) {
 
         this.recordarme = true;
 
@@ -112,10 +101,7 @@ export class LoginPage implements OnInit {
 
       } else {
         this.loginFinger = false;
-      }
-
-
-    }
+      } */
 
   }
 
@@ -187,7 +173,8 @@ export class LoginPage implements OnInit {
 
   }
  */
-  mostrarContrase() {
+  
+ mostrarContrase() {
     console.log(this.passwordIcon2);
     this.mostrarContra = !this.mostrarContra;
     if (this.passwordIcon2 === 'eye-off-outline') {
@@ -201,7 +188,7 @@ export class LoginPage implements OnInit {
 
   }
 
-  async  getDatosLogin() {
+  async getDatosLogin() {
     console.log('this.usuario: ', this.usuario)
     this.usuarioService.guardarUsuarioBD(this.usuario);
     this.menuCtrl.enable(true, 'menuTrabajadores');
@@ -209,11 +196,12 @@ export class LoginPage implements OnInit {
     this.menuCtrl.enable(false, 'menuCompleto');
 
     this.navCtrl.navigateRoot('/inicio');
-   /*  await this.usuarioService.loginAPI(this.onLoginForm.value.usuario, this.convertPassword(this.onLoginForm.value.password)).then( res => {
+    await this.usuarioService.loginAPI(this.onLoginForm.value.usuario, this.onLoginForm.value.password, this.tokenAPI).then( res => {
 
       this.ComprobarRespuestDeAPI(res);
 
-    }); */
+    });
+
 
   }
 
@@ -239,9 +227,6 @@ export class LoginPage implements OnInit {
 
       console.log('LOGIN-DNI: Usuario de API: ', this.usuario);
 
-      if (this.soportaFingerID) {
-        this.checkFinger = this.botonHuella.checked;
-      }
       this.usuarioService.guardarUsuarioBD(this.usuario); // this.botonHuella.checked);
       console.log('LOGIN: ', this.usuario);
 
@@ -270,11 +255,11 @@ export class LoginPage implements OnInit {
     navigator['app'].exitApp();
   }
 
-  convertPassword(cadena: string): string {
+  /* convertPassword(cadena: string): string {
 
     return ('0000' + cadena).slice(-'0000'.length);
   }
-
+ */
 
   async mostrarTerminos() {
     console.log('PRESENT ALERT: TERMINOS');

@@ -1,8 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TareasService } from '../../../services/tareas.service';
 import { UsuarioService } from '../../../services/usuario.service';
-import { RespuestaTareasAPI, Tarea, EstadoTarea, Visita, Subtarea } from '../../../interfaces/interfacesTareas';
+import { RespuestaTareasAPI, Tarea, EstadoTarea, Visita, Subtarea, TipoIncidencia } from '../../../interfaces/interfacesTareas';
 import { IonList, NavController } from '@ionic/angular';
+import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
+
+
+import * as moment from 'moment';
+import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
+
 
 @Component({
   selector: 'app-tareas-inicio',
@@ -50,7 +56,9 @@ export class TareasInicioPage implements OnInit {
       ViveSolo: 'SI',
       IdPersonaAsistida: 1,
       PersonaContacto1: '666123453',
-      HorasSemanales: 7.5
+      HorasSemanales: 7.5,
+      AuxiliarTitular: 'Juana Gonzalez Ruiz',
+      TelAuxiliarTitular: '685425565'
 
     },
     {
@@ -70,7 +78,9 @@ export class TareasInicioPage implements OnInit {
       IdPersonaAsistida: 2,
       PersonaContacto1: '666123453',
       PersonaContacto2: '678951233',
-      HorasSemanales: 5 
+      HorasSemanales: 5,
+      Latitud: 37.9694,
+      Longitud: -1.2171
     },
     {
       Descripcion: 'Apoyo a aseo y atención doméstica. Hacer camas Limpieza vivienda. Tender ropa y acompañamiento a compras si precisa',
@@ -94,8 +104,8 @@ export class TareasInicioPage implements OnInit {
       DireccionTarea: 'C/ Santiago, 41 - bajo',
       Edad: 81,
       Grado: 2,
-      HoraInicio: '12:15',
-      HoraFin: '13:45',
+      HoraInicio: '17:15',
+      HoraFin: '19:45',
       IdEmpleado: 225,
       IdEstado: 2,
       IdTarea: 5,
@@ -104,7 +114,6 @@ export class TareasInicioPage implements OnInit {
       TelefonoCliente: '968555112',
       ViveSolo: 'SI',
       IdPersonaAsistida: 1
-
     }
   ];
   estadosTarea: EstadoTarea[] = [
@@ -126,14 +135,47 @@ export class TareasInicioPage implements OnInit {
     },
   ];
 
+  fecha: string;
   tareas: Tarea[];
+  usuario: UsuarioLoginApi;
   constructor(private tareasService: TareasService,
               private usuarioService: UsuarioService,
-              private navCtrl: NavController) { }
+              private navCtrl: NavController,
+              ) { 
+                this.usuario = this.usuarioService.getUsuario();
 
-  ngOnInit() {
-    this.tareas = this.listaTareas;
-    this.tareasService.setListaTareas(this.tareas)
+              }
+
+  async ngOnInit() {
+    // await this.usuarioService.present('Cargando tareas...');
+    this.fecha = moment().locale('es').format('DD/MM/YYYY');
+/*     await this.tareasService.obtenerTareas(this.usuario.IdUsuario, this.fecha).then( resp => {
+ */
+      this.tareas = this.listaTareas;
+      this.definirEstado(this.listaTareas[0]);
+      this.tareasService.setListaTareas(this.tareas);
+
+    /* }).catch( error => {
+
+      console.log('ERROR getTareas: ', error);
+
+    }) */
+
+
+    /* await this.tareasService.obtenerListaTiposIncidencia(this.usuario.IdUsuario).then( resp => {
+
+      this.tareasService.guardarListaIncidencias(resp.ListaTipoIncidencias);
+      this.usuarioService.dismiss();
+
+    }).catch( error => {
+
+      console.log('ERROR getIncidencias: ', error);
+      this.usuarioService.dismiss();
+      this.usuarioService.presentAlert('Error','No se han podido cargar todos los datos.', 'Compruebe su conexión a internet');
+
+    }) */
+    
+
   }
 
   addIncidencia(tarea: Tarea) {
@@ -276,20 +318,25 @@ export class TareasInicioPage implements OnInit {
     this.isOpenFiltros = !this.isOpenFiltros;
   }
 
-  public definirEstado(idEstado: number ): string {
+  public definirEstado(tarea: Tarea ) {
 
-    for (const estado of this.estadosTarea) {
+    const fecha_actual = moment();
+    const horaTareaInicio = tarea.HoraInicio.split(':')[0];
+    const minutosTareaInicio = tarea.HoraInicio.split(':')[1];
+    const fechaTareaInicio = moment().set({hour: parseInt(horaTareaInicio, 10), minute: parseInt(minutosTareaInicio, 10), second: 0});
 
-      if ( estado.IdEstadoTarea === idEstado) {
+    const horaTareaFin = tarea.HoraFin.split(':')[0];
+    const minutosTareaFin = tarea.HoraFin.split(':')[1];
+    const fechaTareaFin = moment().set({hour: parseInt(horaTareaFin, 10), minute: parseInt(minutosTareaFin, 10), second: 0});
 
-        if (estado.Nombre === 'Cerrada') {
-          return 'Pendiente de Revisión';
-        }
-
-        return estado.Nombre;
-
+    if ( fecha_actual > fechaTareaInicio) {
+      if (fechaTareaFin > fecha_actual ) {
+        return 1
+      } else {
+        return 0
       }
-
+    } else {
+      return 2
     }
 
   }
@@ -317,6 +364,33 @@ export class TareasInicioPage implements OnInit {
     }); */
     this.searchKey = '';
     this.tareas = this.listaTareas;
+  }
+
+  async diaAnterior() {
+    const aux = moment(this.fecha, 'DD/MM/YYYY').subtract(1, 'day');
+    this.fecha = aux.format('DD/MM/YYYY');
+
+    /* await this.tareasService.obtenerTareas( this.usuario.IdUsuario, this.fecha).then( resp => {
+ */
+      this.tareas = this.listaTareas;
+      this.definirEstado(this.listaTareas[0]);
+      this.tareasService.setListaTareas(this.tareas);
+
+    /* }) */
+
+  }
+
+  async diaSiguiente() {
+    const aux = moment(this.fecha, 'DD/MM/YYYY').add(1, 'day');
+    this.fecha = aux.format('DD/MM/YYYY');
+
+    /* await this.tareasService.obtenerTareas( this.usuario.IdUsuario, this.fecha).then( resp => {
+ */
+      this.tareas = this.listaTareas;
+      this.definirEstado(this.listaTareas[0]);
+      this.tareasService.setListaTareas(this.tareas);
+/* 
+    }) */
   }
 
   async doRefresh(event) {
@@ -360,6 +434,12 @@ export class TareasInicioPage implements OnInit {
 
   findAll() {
     this.listaTareas = this.tareasService.getListaTareas();
+
+  }
+
+  firmar(tarea: Tarea) {
+    this.tareasService.guardarTarea(tarea);
+    this.navCtrl.navigateForward('firma');
 
   }
 

@@ -48,7 +48,7 @@
     "@ionic-native/file-path": "^5.28.0",
     "@ionic-native/file-transfer": "^5.28.0",
     "@ionic-native/fingerprint-aio": "^5.28.0",
-    "@ionic-native/geolocation": "^5.28.0",
+    "@ionic-native/geolocation": "^5.30.0",
     "@ionic-native/in-app-browser": "^5.28.0",
     "@ionic-native/local-notifications": "^5.29.0",
     "@ionic-native/social-sharing": "^5.28.0",
@@ -93,6 +93,7 @@
     "properties-parser": "^0.3.1",
     "rxjs": "~6.5.3",
     "rxjs-compat": "^6.6.3",
+    "signature_pad": "^3.0.0-beta.4",
     "tslib": "^1.10.0",
     "typescript": "^3.9.7",
     "uk.co.workingedge.cordova.plugin.sqliteporter": "^1.1.1",
@@ -110,6 +111,7 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
+    "call-number": "^1.0.1",
     "codelyzer": "^5.1.2",
     "cordova-android": "^9.0.0",
     "cordova-plugin-badge": "^0.8.8",
@@ -161,7 +163,9 @@
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-filechooser": {},
       "cordova-plugin-filepath": {},
-      "cordova-plugin-local-notification": {}
+      "cordova-plugin-local-notification": {},
+      "cordova-plugin-geolocation": {},
+      "mx.ferreyra.callnumber": {}
     },
     "platforms": [
       "ios",

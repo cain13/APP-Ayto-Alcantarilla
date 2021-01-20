@@ -37,8 +37,8 @@ export class NotificacionesPage implements OnInit {
     this.usuario = this.usuarioService.getUsuario();
     await this.getNotificaciones();
   }
-    async getNotificaciones() {
-    this.usuarioService.present('Cargando notificaciones...');
+  async getNotificaciones() {
+  this.usuarioService.present('Cargando notificaciones...');
 
     await this.db.obtenerTodasNotificacion().then( async res => {
 
@@ -67,7 +67,7 @@ export class NotificacionesPage implements OnInit {
         Mensaje: 'No hay notificaciones nuevas',
         Fecha:  moment().format('YYYY-MM-DDT00:00:00'),
         Leido: 1,
-        TipoDocumento: 'Docuemento'
+        TipoDocumento: 'Documento'
       };
       this.listaMensajes.push(notificacion);
       return this.listaMensajes;
@@ -99,20 +99,18 @@ export class NotificacionesPage implements OnInit {
     this.notificacionesService.marcarNotificacionesTodasLeidas();
   }
 
-  abrirNotificacion(idNotificacion: number, ruta: string, tipoDocumento: string, not: Notificacion) {
+  abrirNotificacion(not: Notificacion) {
     // const rutaAux = ruta.concat(':')
-    this.db.marcarNotificacionLeida(idNotificacion).then(() => {
-      console.log('Ruta ' + ruta);
+    console.log('not ', not);
+    this.db.marcarNotificacionLeida(not.IdNotificacion).then(() => {
+      console.log('Ruta ' + not.Ruta);
       let rutaMensaje = '';
-      if (tipoDocumento.toUpperCase() === 'MENSAJE') {
-        rutaMensaje = ruta + idNotificacion.toString();
+      if (not.TipoDocumento.toUpperCase() === 'INFORMACION') {
+        rutaMensaje = not.Ruta + not.IdNotificacion.toString();
+        console.log('Ruta ' + not.Ruta);
+
       } else {
-        rutaMensaje = ruta;
-      }
-      if (tipoDocumento.toUpperCase() === 'MANTOUX') {
-
-        this.notificacionesService.guardarNotMantoux(not);
-
+        rutaMensaje = not.Ruta;
       }
       console.log('rutaMensaje ' + rutaMensaje);
       this.navController.navigateForward(rutaMensaje);

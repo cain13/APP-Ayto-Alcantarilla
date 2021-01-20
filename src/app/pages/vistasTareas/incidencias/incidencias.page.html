@@ -23,8 +23,14 @@
             <ion-input color="dark" type="text" >{{usuario.NombreCompleto}}</ion-input>
           </ion-item>
           <ion-item>
+            <ion-label color="dark" position="stacked">Tipo Incidencia:</ion-label>
+            <ion-select formControlName="tipoIncidencia" [(ngModel)]="tipoIncidenciaSeleccionada" color="dark">
+              <ion-select-option color="dark" *ngFor="let incidencia of listaTiposIncidencias" [value]=incidencia.IdIncidencia>{{incidencia.Nombre}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
             <ion-label color="dark" position="stacked">Asunto:</ion-label>
-            <ion-input text="wrap" color="dark" type="text" formControlName="asunto"></ion-input>
+            <ion-input text="wrap" color="dark" type="text" formControlName="asunto" placeholder="Indique un asunto para su incidencia"></ion-input>
           </ion-item>
           <ion-item style="padding-bottom: 5px;">
             <ion-label color="dark" position="stacked" style="padding-bottom: 5px;">Descripción:</ion-label>

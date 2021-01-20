@@ -30,7 +30,7 @@ export class NotificationsComponent implements OnInit {
     await this.getNotificaciones();
   }
     async getNotificaciones() {
-    this.usuarioService.present('Cargando notificaciones...');
+    await this.usuarioService.present('Cargando notificaciones...');
 
     await this.db.obtenerTodasNotificacion().then( async res => {
 

@@ -34,14 +34,13 @@ export class AppComponent {
   public usuario: UsuarioLoginApi;
   public appPages: Array<Pages>;
   public appPagesVSAll: Array<Pages>;
+  
   public appPagesTrabajador: Array<Pages>;
   private HayModal = false;
   public appPagesGuardiaCivil: Array<Pages>;
-  private textoCompartirAPP = 'Disfrute de la App de GrupoMPE para la gestión laboral, puede descargarla pinchando en el siguiente enlace!!';
-  private urlCompartirAPP = 'https://mpeprevencion.com/qr-appmpe.html';
   public Version = 'Versión 1.0.0';
 
-  private notificacion: Notificacion;
+  notificacion: Notificacion;
 
   constructor(
     private platform: Platform,
@@ -86,7 +85,7 @@ export class AppComponent {
 
     ];
 
-    this.appPagesGuardiaCivil = [
+    /* this.appPagesGuardiaCivil = [
       {
         title: 'Formularios',
         url: '/construccion',
@@ -119,7 +118,7 @@ export class AppComponent {
       },
 
 
-    ];
+    ]; */
 
     this.appPagesVSAll = [
       {
@@ -187,28 +186,7 @@ export class AppComponent {
 
     ];
 
-    this.platform.ready().then(() => {
-      this.localNotifications.on('click').subscribe(notification => {
-        console.log('click on notification fired');
-        console.log('notification:', notification);
-
-        const notificacion: Notificacion = {
-          IdNotificacion: 1,
-          Fecha: moment(new Date(notification.trigger.at)).format('L'),
-          Titulo: notification.title,
-          Mensaje: notification.text,
-          Icono: 'medkit-outline',
-          Leido: 0,
-          Ruta: '/mensaje-mantoux',
-          TipoDocumento: 'MANTOUX'
-        };
-        console.log('NOTIFICACION MANTOUX INICIO: ', notificacion);
-        this.db.addNotificacion(notificacion);
-        this.notificacionesService.SumaUnaNotificaciones();
-        this.notificacionesService.guardarNotMantoux(notification);
-        this.navCtrl.navigateForward('/mensaje-mantoux');
-      });
-    });
+    
 
     this.initializeApp();
   }
@@ -227,12 +205,10 @@ export class AppComponent {
             }
             console.log('Received app closed: ', data);
             console.log('TipoUsuario ' + data['TipoUsuario']);
-            const titulo = data['Titulo'];
-            const tipoDocumento = data['TipoDocumento'];
-            console.log('TITULO: ', titulo);
+
             const notificacion: Notificacion = {
               IdNotificacion: 1,
-              Fecha: '',
+              Fecha: moment().locale('es').format(),
               Titulo: '',
               Mensaje: '',
               Icono: '',
@@ -241,91 +217,34 @@ export class AppComponent {
               TipoDocumento: ''
             };
 
-            notificacion.Titulo = titulo;
+            notificacion.Titulo = data['Titulo'];
             notificacion.Leido = 0;
             notificacion.Mensaje = data['Mensaje'];
-            notificacion.Fecha = data['FechaNotificacion'];
             notificacion.TipoDocumento = data['TipoDocumento'];
 
             this.notificacion = notificacion;
-            console.log('PRUEBA TRABAJADOR APPCOMPONENTS: ', data['TipoUsuario'].toString().includes('TRABAJADOR'));
-            if (!data['TipoUsuario'].toString().includes('TRABAJADOR')) {
-              console.log('tipoDocumento.toUpperCase( CLIENTE ) ', tipoDocumento.toUpperCase());
-              switch (tipoDocumento.toUpperCase()) {
-                case 'DOCUMENTO':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/certificado-aptitud-menu';
-                  break;
-                case 'HISTORICO':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/historial-notificaciones';
-                  break;
-                case 'MENSAJE':
+
+            if (data['TipoUsuario'].toString().includes('TECNICO')) {
+
+              switch (notificacion.TipoDocumento.toUpperCase()) {
+                case 'INFORMACION':
                   notificacion.Icono = 'mail-outline';
                   notificacion.Ruta = '/message/';
                   break;
-                case 'MANTOUX':
-                    notificacion.Icono = 'medkit-outline';
-                    notificacion.Ruta = '/mensaje-mantoux';
-                    /* this.db.addNotificacion(notificacion);
-                    //  this.db.ModificarRutaNotificacion();
-                    this.notificacionesService.SumaUnaNotificaciones(); */
-                    this.crearNotificacionesLocalesMantoux(notificacion.Fecha, notificacion);
-
-
-                    const fechaPrueba = moment(notificacion.Fecha).format('DD/MM/YYYY');
-                    const fecha48h = moment(notificacion.Fecha).add(2, 'days');
-
-                   /*  this.presentAlertTestMantoux('ALERTA', ' Información sobre su prueba de Mantoux', 'A Vd. se le ha realizado con fecha ' + fechaPrueba +
-                    ' una prueba de Mantoux, por lo que le comunicamos que entre el día ' + fecha48h.format('DD/MM/YYYY') + ' y el ' + fecha48h.add(1440, 'minutes').format('DD/MM/YYYY') +
-                    ' debe proceder a realizarse una fotografía a través de ésta App para su diagnóstico. \n' + 'Esta App se lo recordara a través de notificaciones push durante el plazo indicado.');
-                   */
+                case 'TAREA':
+                  notificacion.Icono = 'document-text-outline';
+                  notificacion.Ruta = '/tareas-inicio';
                   break;
+                
                 default:
                   notificacion.Icono = 'alert-circle-outline';
-                  notificacion.Ruta = '/certificado-aptitud-menu';
-                  break;
-              }
-            } else {
-              console.log('tipoDocumento.toUpperCase( TRABAJADOR ) ', tipoDocumento.toUpperCase());
-              switch (tipoDocumento.toUpperCase()) {
-                case 'DOCUMENTO':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/documentos-trabajador-menu';
-                  break;
-                case 'DOCUMENTO-COVID':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/documentos-covid-menu';
-                  break;
-                case 'MENSAJE':
-                  notificacion.Icono = 'mail-outline';
-                  notificacion.Ruta = '/message/';
-                  break;
-                case 'MANTOUX':
-                  notificacion.Icono = 'medkit-outline';
-                  notificacion.Ruta = '/mensaje-mantoux';
-                  this.crearNotificacionesLocalesMantoux(notificacion.Fecha, notificacion);
-
-                  const fechaPrueba = moment(notificacion.Fecha).format('DD/MM/YYYY');
-                  const fecha48h = moment(notificacion.Fecha).add(2, 'days');
-                 /*  this.db.addNotificacion(notificacion);
-                  //  this.db.ModificarRutaNotificacion();
-                  this.notificacionesService.SumaUnaNotificaciones(); */
-
-                  /* this.presentAlertTestMantoux('ALERTA', ' Información sobre su prueba de Mantoux', 'A Vd. se le ha realizado con fecha ' + fechaPrueba +
-                  ' una prueba de Mantoux, por lo que le comunicamos que entre el día ' + fecha48h.format('DD/MM/YYYY') + ' y el ' + fecha48h.add(1440, 'minutes').format('DD/MM/YYYY') +
-                  ' debe proceder a realizarse una fotografía a través de ésta App para su diagnóstico. \n' + 'Esta App se lo recordara a través de notificaciones push durante el plazo indicado.');
-                   */
-                  break;
-                default:
-                  notificacion.Icono = 'alert-circle-outline';
-                  notificacion.Ruta = '/documentos-trabajador-menu';
+                  notificacion.Ruta = '/inicio';
                   break;
               }
             }
 
             this.db.addNotificacion(notificacion);
-       //  this.db.ModificarRutaNotificacion();
+        //  this.db.ModificarRutaNotificacion();
             this.notificacionesService.SumaUnaNotificaciones();
         });
 
@@ -336,14 +255,9 @@ export class AppComponent {
           }
           if (data.wasTapped) {
             console.log('Received Segundo in background: ', data);
-            console.log('Tipo Documento ' + data['TipoDocumento']);
-            console.log('TipoUsuario ' + data['TipoUsuario']);
-            const titulo = data['Titulo'];
-            const tipoDocumento = data['TipoDocumento'];
-            console.log('TITULO: ', titulo);
             const notificacion: Notificacion = {
               IdNotificacion: 1,
-              Fecha: '',
+              Fecha: moment().locale('es').format(),
               Titulo: '',
               Mensaje: '',
               Icono: '',
@@ -352,85 +266,28 @@ export class AppComponent {
               TipoDocumento: ''
             };
 
-            notificacion.Titulo = titulo;
+            notificacion.Titulo = data['Titulo'];
             notificacion.Leido = 0;
             notificacion.Mensaje = data['Mensaje'];
-            notificacion.Fecha = data['FechaNotificacion'];
             notificacion.TipoDocumento = data['TipoDocumento'];
 
             this.notificacion = notificacion;
 
-            console.log('PRUEBA TRABAJADOR APPCOMPONENTS: ', data['TipoUsuario'].toString().includes('TRABAJADOR'));
-            if (!data['TipoUsuario'].toString().includes('TRABAJADOR')) {
-              console.log('tipoDocumento.toUpperCase( CLIENTE ) ', tipoDocumento.toUpperCase());
-              switch (tipoDocumento.toUpperCase()) {
-                case 'DOCUMENTO':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/certificado-aptitud-menu';
-                  break;
-                case 'HISTORICO':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/historial-notificaciones';
-                  break;
-                case 'MENSAJE':
+            if (data['TipoUsuario'].toString().includes('TECNICO')) {
+
+              switch (notificacion.TipoDocumento.toUpperCase()) {
+                case 'INFORMACION':
                   notificacion.Icono = 'mail-outline';
                   notificacion.Ruta = '/message/';
                   break;
-                case 'MANTOUX':
-                  notificacion.Icono = 'medkit-outline';
-                  notificacion.Ruta = '/mensaje-mantoux';
-                  this.crearNotificacionesLocalesMantoux(notificacion.Fecha, notificacion);
-
-                  const fechaPrueba = moment(notificacion.Fecha).format('DD/MM/YYYY');
-                  const fecha48h = moment(notificacion.Fecha).add(2, 'days');
-                  /* this.db.addNotificacion(notificacion);
-                  //  this.db.ModificarRutaNotificacion();
-                  this.notificacionesService.SumaUnaNotificaciones(); */
-
-                 /*  this.presentAlertTestMantoux('ALERTA', ' Información sobre su prueba de Mantoux', 'A Vd. se le ha realizado con fecha ' + fechaPrueba +
-                  ' una prueba de Mantoux, por lo que le comunicamos que entre el día ' + fecha48h.format('DD/MM/YYYY') + ' y el ' + fecha48h.add(1440, 'minutes').format('DD/MM/YYYY') +
-                  ' debe proceder a realizarse una fotografía a través de ésta App para su diagnóstico. \n' + 'Esta App se lo recordara a través de notificaciones push durante el plazo indicado.');
-                   */
+                case 'TAREA':
+                  notificacion.Icono = 'document-text-outline';
+                  notificacion.Ruta = '/tareas-inicio';
                   break;
+                
                 default:
                   notificacion.Icono = 'alert-circle-outline';
-                  notificacion.Ruta = '/certificado-aptitud-menu';
-                  break;
-              }
-            } else {
-              console.log('tipoDocumento.toUpperCase( TRABAJADOR ) ', tipoDocumento.toUpperCase());
-              switch (tipoDocumento.toUpperCase()) {
-                case 'DOCUMENTO':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/documentos-trabajador-menu';
-                  break;
-                case 'DOCUMENTO-COVID':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/documentos-covid-menu';
-                  break;
-                case 'MENSAJE':
-                  notificacion.Icono = 'mail-outline';
-                  notificacion.Ruta = '/message/';
-                  break;
-                case 'MANTOUX':
-                  notificacion.Icono = 'medkit-outline';
-                  notificacion.Ruta = '/mensaje-mantoux';
-                  this.crearNotificacionesLocalesMantoux(notificacion.Fecha, notificacion);
-
-                  const fechaPrueba = moment(notificacion.Fecha).format('DD/MM/YYYY');
-                  const fecha48h = moment(notificacion.Fecha).add(2, 'days');
-                  /* this.db.addNotificacion(notificacion);
-                  //  this.db.ModificarRutaNotificacion();
-                  this.notificacionesService.SumaUnaNotificaciones();
- */
-                  /* this.presentAlertTestMantoux('ALERTA', ' Información sobre su prueba de Mantoux', 'A Vd. se le ha realizado con fecha ' + fechaPrueba +
-                  ' una prueba de Mantoux, por lo que le comunicamos que entre el día ' + fecha48h.format('DD/MM/YYYY') + ' y el  ' + fecha48h.add(1440, 'minutes').format('DD/MM/YYYY') +
-                  ' debe proceder a realizarse una fotografía a través de ésta App para su diagnóstico. \n' + 'Esta App se lo recordara a través de notificaciones push durante el plazo indicado.');
-                   */
-                  break;
-                default:
-                  notificacion.Icono = 'alert-circle-outline';
-                  notificacion.Ruta = '/documentos-trabajador-menu';
+                  notificacion.Ruta = '/inicio';
                   break;
               }
             }
@@ -440,12 +297,8 @@ export class AppComponent {
           } else {
             console.log('Received primer plano: ', data);
 
-            const titulo = data['title'];
-            const tipoDocumento = data['TipoDocumento'];
-            console.log('TITULO: ', titulo);
             const notificacion: Notificacion = {
-              IdNotificacion: 1,
-              Fecha: '',
+              Fecha: moment().locale('es').format(),
               Titulo: '',
               Mensaje: '',
               Icono: '',
@@ -454,93 +307,35 @@ export class AppComponent {
               TipoDocumento: ''
             };
 
-            notificacion.Titulo = titulo;
+            notificacion.Titulo = data['Titulo'];
             notificacion.Leido = 0;
             notificacion.Mensaje = data['Mensaje'];
-            notificacion.Fecha = data['FechaNotificacion'];
             notificacion.TipoDocumento = data['TipoDocumento'];
 
             this.notificacion = notificacion;
 
-            console.log('PRUEBA TRABAJADOR APPCOMPONENTS: ', data['TipoUsuario'].toString().includes('TRABAJADOR'));
-            if (!data['TipoUsuario'].toString().includes('TRABAJADOR')) {
-              console.log('tipoDocumento.toUpperCase( CLIENTE ) ', tipoDocumento.toUpperCase());
-              switch (tipoDocumento.toUpperCase()) {
-                case 'DOCUMENTO':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/certificado-aptitud-menu';
-                  break;
-                case 'HISTORICO':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/historial-notificaciones';
-                  break;
-                case 'MENSAJE':
+            if (data['TipoUsuario'].toString().includes('TECNICO')) {
+
+              switch (notificacion.TipoDocumento.toUpperCase()) {
+                case 'INFORMACION':
                   notificacion.Icono = 'mail-outline';
                   notificacion.Ruta = '/message/';
                   break;
-                case 'MANTOUX':
-                  notificacion.Icono = 'medkit-outline';
-                  notificacion.Ruta = '/mensaje-mantoux';
-                  this.crearNotificacionesLocalesMantoux(notificacion.Fecha, notificacion);
-
-                  const fechaPrueba = moment(notificacion.Fecha).format('DD/MM/YYYY');
-                  const fecha48h = moment(notificacion.Fecha).add(2, 'days');
-/*                   this.db.addNotificacion(notificacion);
-                  //  this.db.ModificarRutaNotificacion();
-                  this.notificacionesService.SumaUnaNotificaciones(); */
-
-                 /*  this.presentAlertTestMantoux('ALERTA', ' Información sobre su prueba de Mantoux', 'A Vd. se le ha realizado con fecha ' + fechaPrueba +
-                  ' una prueba de Mantoux, por lo que le comunicamos que entre el día ' + fecha48h.format('DD/MM/YYYY') + ' y el ' + fecha48h.add(1440, 'minutes').format('DD/MM/YYYY') +
-                  ' debe proceder a realizarse una fotografía a través de ésta App para su diagnóstico. \n' + 'Esta App se lo recordara a través de notificaciones push durante el plazo indicado.');
-                   */
+                case 'TAREA':
+                  notificacion.Icono = 'document-text-outline';
+                  notificacion.Ruta = '/tareas-inicio';
                   break;
+                
                 default:
                   notificacion.Icono = 'alert-circle-outline';
-                  notificacion.Ruta = '/certificado-aptitud-menu';
-                  break;
-              }
-            } else {
-              console.log('tipoDocumento.toUpperCase( TRABAJADOR ) ', tipoDocumento.toUpperCase());
-              switch (tipoDocumento.toUpperCase()) {
-                case 'DOCUMENTO':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/documentos-trabajador-menu';
-                  break;
-                case 'DOCUMENTO-COVID':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/documentos-covid-menu';
-                  break;
-                case 'MENSAJE':
-                  notificacion.Icono = 'mail-outline';
-                  notificacion.Ruta = '/message/';
-                  break;
-                case 'MANTOUX':
-                  notificacion.Icono = 'medkit-outline';
-                  notificacion.Ruta = '/mensaje-mantoux';
-                  this.crearNotificacionesLocalesMantoux(notificacion.Fecha, notificacion);
-
-                  const fechaPrueba = moment(notificacion.Fecha).format('DD/MM/YYYY');
-                  const fecha48h = moment(notificacion.Fecha).add(2, 'days');
-                  /* this.db.addNotificacion(notificacion);
-                  //  this.db.ModificarRutaNotificacion();
-                  this.notificacionesService.SumaUnaNotificaciones(); */
-
-                  /* this.presentAlertTestMantoux('ALERTA', ' Información sobre su prueba de Mantoux', 'A Vd. se le ha realizado con fecha ' + fechaPrueba +
-                  ' una prueba de Mantoux, por lo que le comunicamos que entre el día ' + fecha48h.format('DD/MM/YYYY') + ' y el ' + fecha48h.add(1440, 'minutes').format('DD/MM/YYYY') +
-                  ' debe proceder a realizarse una fotografía a través de ésta App para su diagnóstico. \n' + 'Esta App se lo recordara a través de notificaciones push durante el plazo indicado.');
-                   */
-                  break;
-                default:
-                  notificacion.Icono = 'alert-circle-outline';
-                  notificacion.Ruta = '/documentos-trabajador-menu';
+                  notificacion.Ruta = '/inicio';
                   break;
               }
             }
             this.db.addNotificacion(notificacion);
             this.notificacionesService.SumaUnaNotificaciones();
-            if (tipoDocumento.toUpperCase() !== 'MANTOUX') {
-              this.usuarioService.presentAlertNotificaciones('NUEVA NOTIFICACIÓN!!', 'Tiene una notificación nueva!!', '');
-            }
+            this.usuarioService.presentAlertNotificaciones('NUEVA NOTIFICACIÓN!!', 'Tiene una notificación nueva!!', '');
+
           }
         });
         this.statusBar.styleDefault();
@@ -624,84 +419,7 @@ export class AppComponent {
 
 
 
-  async compartirAPP() {
-    try {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Compartir APP',
-      cssClass: 'my-custom-class',
-      buttons: [{
-        text: 'Facebook',
-        icon: 'logo-facebook',
-        handler: () => {
-          console.log('Lanzamos Facebook');
-            // Sharing via email is possible
-            this.socialSharing.shareViaFacebook('https://mpeprevencion.com/qr-appmpe.html', null, null).then( () => {
-              console.log('Then Lanzamos Facebook');
-            }).catch( error => {
-              console.log('error Facebook', error);
-            });
-        }
-      }, {
-        text: 'Twitter',
-        icon: 'logo-twitter',
-        handler: () => {
-          console.log('Lanzamos Twitter');
-          this.socialSharing.shareViaTwitter(this.textoCompartirAPP, 'https://mpecronos.com/Documentos/Descarga/icn-app-mpe.jpg', this.urlCompartirAPP).then( () => {
-
-
-
-          }).catch( error => {
-            console.log('Lanzamos Twitter error', error);
-            this.usuarioService.presentAlert('Error', 'No tiene la app de Twitter en su móvil', 'Descarguela y pruebe de nuevo, gracias.');
-
-            });
-          }
-        }, {
-          text: 'Whatsapp',
-          icon: 'logo-whatsapp',
-          handler: () => {
-            console.log('Lanzamos Whatsapp');
-            this.socialSharing.shareViaWhatsApp(this.textoCompartirAPP, 'https://mpecronos.com/Documentos/Descarga/icn-app-mpe.jpg', this.urlCompartirAPP).then( () => {
-
-
-
-            }).catch( error => {
-
-            console.log('Lanzamos Whatsapp error', error);
-            this.usuarioService.presentAlert('Error', 'No tiene la app de Whatsapp en su móvil', 'Descarguela y pruebe de nuevo, gracias.');
-
-
-          });
-        }
-      }, {
-        text: 'Email',
-        icon: 'mail-outline',
-        handler: () => {
-          console.log('Lanzamos Email');
-          this.socialSharing.shareViaEmail(this.textoCompartirAPP + ':' + this.urlCompartirAPP, 'Descarga la App de prevención de Grupo MPE', null).then( () => {
-
-
-            }).catch( error => {
-
-
-
-            });
-          }
-        }, {
-          text: 'Cancelar',
-          icon: 'close',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
-        }]
-      });
-
-      await actionSheet.present();
-    } catch (error) {
-        console.log('Fallo al cargar ');
-    }
-  }
+  
 
   editarPerfil() {
     this.navCtrl.navigateForward('edit-profile');

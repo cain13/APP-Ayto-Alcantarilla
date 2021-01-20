@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Firma</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding">
+    <div class="signature-pad">
+      <div class="signature-pad--body">
+        <canvas #sPad width="900" height="863" style="touch-action: none;"></canvas>
+      </div>
+    </div>
+  </div>
+  <ion-button icon-left size="large" color="primary" expand="full" (click)="borrar()" tappable>
+      <ion-icon slot="start" name="backspace-outline"></ion-icon>
+      Borrar
+  </ion-button>
+
+  <ion-button icon-left size="large" expand="full" color="success" (click)="firmar()" tappable>
+      <ion-icon slot="start" name="send-outline"></ion-icon>
+      Enviar Firma
+  </ion-button>
+
+</ion-content>

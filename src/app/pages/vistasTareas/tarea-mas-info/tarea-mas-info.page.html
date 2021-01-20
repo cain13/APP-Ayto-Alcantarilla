@@ -15,102 +15,128 @@
       <ion-card-title>{{tarea.Nombre}}</ion-card-title>
     </ion-card-header>
     <ion-card-content style="margin-top: 0px;">
-      <ion-grid class="ion-padding-top">
+      <ion-grid >
 
         <!-- DESCRIPCION -->
-                  
-        <ion-row>
-          <ion-col>
-            <strong style="font-size: large;">Descripción:</strong>
-          </ion-col>
-        </ion-row>
-
-        <ion-col class="ion-no-padding">
-          <ion-label class="ion-text-wrap" style="margin-left: 0.15cm !important;">{{tarea.Descripcion}}</ion-label>
-        </ion-col>
         
-        <!-- HORA INICIO -->
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Descripcion !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-label>
+            <h2>
+              <ion-text style="color: #7e7e7e !important;"><strong>Descripción</strong></ion-text>
+            </h2>
+            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;">{{tarea.Descripcion}} </ion-text>
+          </ion-label>
+        </ion-item>
 
-        <ion-row>
-          <ion-col size="6" style="text-align: start;">
-            <strong style="text-align: start; font-size: large;">Horas Inicio:</strong>
-          </ion-col>
-          <ion-col size="6" style="text-align: end;">
-             <ion-label style="text-align: end;">{{tarea.HoraInicio}}</ion-label>
-          </ion-col>
-        </ion-row>
-
-        <!-- HORA FIN -->
-
-        <ion-row>
-          <ion-col size="6" style="text-align: start;">
-            <strong style="text-align: start; font-size: large;">Horas Fin:</strong>
-          </ion-col>
-          <ion-col size="6" style="text-align: end;">
-             <ion-label style="text-align: end;">{{tarea.HoraFin}}</ion-label>
-          </ion-col>
-        </ion-row>
+        <!-- OBSERVACIONES -->
+        
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Observaciones !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-label>
+            <h2>
+              <ion-text style="color: #7e7e7e !important;"><strong>Observaciones:</strong></ion-text>
+            </h2>
+            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;">{{tarea.Observaciones}} </ion-text>
+          </ion-label>
+        </ion-item>
 
         <!-- DIRECCION -->
 
-        <ion-row>
-          <ion-col>
-            <strong style="font-size: large;">Direccion:</strong>
-          </ion-col>
-        </ion-row>
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.DireccionTarea !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-label>
+            <h2>
+              <ion-text style="color: #7e7e7e !important;"><strong>Dirección:</strong></ion-text>
+            </h2>
+            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;">{{tarea.DireccionTarea}} </ion-text>
+          </ion-label>
+        </ion-item>
+                  
+        <!-- NOMBRE AUXILIAR TITULAR -->
 
-        <ion-col class="ion-no-padding">
-          <ion-label class="ion-text-wrap" style="margin-left: 0.15cm !important;">{{tarea.DireccionTarea}}</ion-label>
-        </ion-col>
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.DireccionTarea !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-label>
+            <h2>
+              <ion-text style="color: #7e7e7e !important;"><strong>Auxiliar Titular:</strong></ion-text>
+            </h2>
+            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;">{{tarea.AuxiliarTitular}} </ion-text>
+          </ion-label>
+        </ion-item>
+
+        <!-- TELEFONO AUXILIAR TITULAR -->
+
+        <ion-item *ngIf="tarea.PersonaContacto1 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.TelAuxiliarTitular.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-col class="ion-no-padding" size="6" style="text-align: start;">
+             <strong style="text-align: start; color: #7e7e7e !important;">Tel. Auxilar Titular:</strong>
+           </ion-col>
+           <ion-col class="ion-no-padding" size="6" style="text-align: end;">
+              <ion-label style="text-align: end;  color: #1975db">{{tarea.TelAuxiliarTitular.toString()}}</ion-label>
+           </ion-col>
+        </ion-item>
+
+        <!-- HORA INICIO -->
+
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.HoraInicio !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+           <ion-col class="ion-no-padding" size="6" style="text-align: start;">
+              <strong style="text-align: start; color: #7e7e7e !important;">Hora Inicio:</strong>
+            </ion-col>
+            <ion-col class="ion-no-padding" size="6" style="text-align: end;">
+               <ion-label style="text-align: end;">{{tarea.HoraInicio}}</ion-label>
+            </ion-col>
+        </ion-item>
+
+        <!-- HORA FIN -->
+
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.HoraFin !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-col class="ion-no-padding" size="6" style="text-align: start;">
+             <strong style="text-align: start; color: #7e7e7e !important;">Hora Fin:</strong>
+           </ion-col>
+           <ion-col class="ion-no-padding" size="6" style="text-align: end;">
+              <ion-label style="text-align: end;">{{tarea.HoraFin}}</ion-label>
+           </ion-col>
+        </ion-item>
 
         <!-- PERSONA CONTACTO 1 -->
 
-        <ion-row *ngIf="tarea.PersonaContacto1 !== undefined">
-          <ion-col size="6" style="text-align: start;">
-            <strong style="text-align: start; font-size: large;">Contacto 1:</strong>
-          </ion-col>
-          <ion-col size="6" style="text-align: end;">
-            <ion-item  href="telefono" lines="none">
-              <ion-label style="text-align: end;">{{tarea.PersonaContacto1}}</ion-label>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+        <ion-item *ngIf="tarea.PersonaContacto1 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.PersonaContacto1.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-col class="ion-no-padding" size="6" style="text-align: start;">
+             <strong style="text-align: start; color: #7e7e7e !important;">Contacto 1:</strong>
+           </ion-col>
+           <ion-col class="ion-no-padding" size="6" style="text-align: end;">
+              <ion-label style="text-align: end;  color: #1975db">{{tarea.PersonaContacto1.toString()}}</ion-label>
+           </ion-col>
+        </ion-item>
 
         <!-- PERSONA CONTACTO 2 -->
         
-        <ion-row *ngIf="tarea.PersonaContacto2 !== undefined ">
-          <ion-col>
-            <strong style="font-size: large;">Persona Contacto 2:</strong>
-          </ion-col>
-        </ion-row>
-
-        <ion-col class="ion-no-padding" *ngIf="tarea.PersonaContacto2 !== undefined">
-          <ion-label class="ion-text-wrap" style="margin-left: 0.15cm !important;">{{tarea.PersonaContacto2}}</ion-label>
-        </ion-col>
+        <ion-item *ngIf="tarea.PersonaContacto2 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.PersonaContacto2.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-col class="ion-no-padding" size="6" style="text-align: start;">
+             <strong style="text-align: start; color: #7e7e7e !important;">Contacto 2:</strong>
+           </ion-col>
+           <ion-col class="ion-no-padding" size="6" style="text-align: end;">
+              <ion-label style="text-align: end;  color: #1975db">{{tarea.PersonaContacto2.toString()}}</ion-label>
+           </ion-col>
+        </ion-item>
 
         <!-- PERSONA CONTACTO 3 -->
 
-        <ion-row *ngIf="tarea.PersonaContacto3 !== undefined">
-          <ion-col>
-            <strong style="font-size: large;">Persona Contacto 3:</strong>
-          </ion-col>
-        </ion-row>
-
-        <ion-col class="ion-no-padding" *ngIf="tarea.PersonaContacto3 !== undefined">
-          <ion-label class="ion-text-wrap" style="margin-left: 0.15cm !important;">{{tarea.PersonaContacto3}}</ion-label>
-        </ion-col>
+        <ion-item *ngIf="tarea.PersonaContacto3 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.PersonaContacto3.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-col class="ion-no-padding" size="6" style="text-align: start;">
+             <strong style="text-align: start; color: #7e7e7e !important;">Contacto 3:</strong>
+           </ion-col>
+           <ion-col class="ion-no-padding" size="6" style="text-align: end;">
+              <ion-label style="text-align: end;  color: #1975db">{{tarea.PersonaContacto3.toString()}}</ion-label>
+           </ion-col>
+        </ion-item>
 
         <!-- HORAS SEMANALES -->
 
-        <ion-row *ngIf="tarea.HorasSemanales !== undefined || tarea.HorasSemanales !== null">
-          <ion-col size="6" style="text-align: start;">
-            <strong style="text-align: start; font-size: large;">H. Semanales:</strong>
-          </ion-col>
-
-          <ion-col size="6" style="text-align: end;">
-             <ion-label style="text-align: end;">{{tarea.HorasSemanales}}</ion-label>
-          </ion-col>
-        </ion-row>
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.HorasSemanales !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-col class="ion-no-padding" size="9" style="text-align: start;">
+             <strong style="text-align: start; color: #7e7e7e !important;">Horas Semales:</strong>
+           </ion-col>
+           <ion-col class="ion-no-padding" size="3" style="text-align: end;">
+              <ion-label style="text-align: end;">{{tarea.HorasSemanales}}</ion-label>
+           </ion-col>
+        </ion-item>
 
        
       </ion-grid>
@@ -118,3 +144,22 @@
   </ion-card>
 
 </ion-content>
+
+<ion-footer class="no-padding">
+
+  <ion-button *ngIf="tarea.Latitud !== undefined && tarea.Longitud !== undefined" icon-left size="large" expand="full" color="success" (click)="abrirGoogleMaps()" tappable>
+    <ion-icon slot="start" name="map-outline"></ion-icon>
+    Como llegar
+  </ion-button>
+
+  <ion-button *ngIf="tarea.Latitud === undefined && tarea.Longitud === undefined" icon-left size="large" expand="full" color="success" (click)="addUbicacion()" tappable>
+    <ion-icon slot="start" name="map-outline"></ion-icon>
+    Añadir Ubicación
+  </ion-button>
+
+  <ion-button *ngIf="tarea.TelefonoCliente !== undefined" icon-left size="large" expand="full" color="primary" href="tel:{{tarea.TelefonoCliente.toString()}}" tappable>
+    <ion-icon slot="start" name="call-outline"></ion-icon>
+    Llamar Usuario
+  </ion-button>    
+
+</ion-footer>

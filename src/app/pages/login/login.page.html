@@ -44,35 +44,35 @@
         </ion-text>
       </p>
  -->
-      <ion-row></ion-row>
+      <!-- <ion-row></ion-row>
       <ion-item lines="none" *ngIf="!soportaFingerID">
         <ion-label>¿Recordarme?</ion-label>
         <ion-checkbox #botonRecordarme mode="ios" color="light" checked={{recordarme}} ></ion-checkbox>
       </ion-item>
 
-      <ion-row></ion-row>
+      <ion-row></ion-row> -->
 <!--       <ion-item lines="none">
         <a style="text-decoration: none;" (click)="mostrarTerminos()"><ion-label><strong><small>Aceptar Terminos y Condiciones</small></strong></ion-label></a>
         <ion-checkbox #botonTerminos mode="ios" slot="end" color="light" checked={{terminos}} ></ion-checkbox>
       </ion-item> -->
 
-      <ion-row></ion-row>
+      <!-- <ion-row></ion-row>
         <ion-item style="width: max-content; text-align: center;" lines="none" *ngIf="soportaFingerID"> 
           <ion-thumbnail slot="start">
             <img src="assets/finger.png">
           </ion-thumbnail>
           <ion-label style="text-align: center;">¿Login por huella?</ion-label>
           <ion-checkbox slot="end" #botonHuella mode="ios" color="light" checked={{loginFinger}} ></ion-checkbox>
-      </ion-item>
+      </ion-item> -->
 
       
     </form>
 
-    <p tappable (click)="forgotPass()" class="ion-text-center paz">
+<!--     <p tappable (click)="forgotPass()" class="ion-text-center paz">
       <ion-text color="light">
         <strong>{{ 'app.pages.login.label.forgot' | translate }}</strong>
       </ion-text>
-    </p>
+    </p> -->
 
     <div>
       <ion-button icon-left size="medium" expand="full" shape="round" color="warning" (click)="getDatosLogin()" [disabled]="!onLoginForm.valid" tappable>

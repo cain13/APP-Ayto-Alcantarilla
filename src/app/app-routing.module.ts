@@ -62,7 +62,8 @@ const routes: Routes = [
   {
     path: 'construccion-menu',
     loadChildren: () => import('./pages/vistasMPE/construccion-menu/construccion-menu.module').then( m => m.ConstruccionMenuPageModule)
-  },  {
+  },
+  {
     path: 'tareas-inicio',
     loadChildren: () => import('./pages/vistasTareas/tareas-inicio/tareas-inicio.module').then( m => m.TareasInicioPageModule)
   },
@@ -73,7 +74,13 @@ const routes: Routes = [
   {
     path: 'tarea-mas-info',
     loadChildren: () => import('./pages/vistasTareas/tarea-mas-info/tarea-mas-info.module').then( m => m.TareaMasInfoPageModule)
+  },
+  {
+    path: 'firma',
+    loadChildren: () => import('./pages/vistasMPE/firma/firma.module').then( m => m.FirmaPageModule)
   }
+
+
 
 ];
 

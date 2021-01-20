@@ -123,7 +123,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     Camera,
     SocialSharing,
     Geolocation,
-    ComponentsModule
+    ComponentsModule,
+    
   ],
   bootstrap: [AppComponent]
 })

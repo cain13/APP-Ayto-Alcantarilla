@@ -11,14 +11,9 @@
 
 <ion-content style="background-color: #eeeeee;">
 
-  <ion-list class="ion-no-padding" *ngIf="noticia.FechaFin !== null">
-    <ion-list-header color="danger" mode="md">
-      <ion-text color="light" style="font-size: large;">Promociones valida hasta {{noticia.FechaFin | date: 'dd/MM/yyyy'}}</ion-text>
-    </ion-list-header>
-  </ion-list>
 
   <ion-card  *ngIf="noticia.URLYoutube === null || noticia.URLYoutube === undefined" >
-    <img src="{{noticia.PathImagen}}" />
+    <img src="{{noticia.PathImagen}}" alt=""/>
   </ion-card>
 
   <ion-card *ngIf="noticia.URLYoutube !== null && noticia.URLYoutube !== undefined ">
@@ -33,7 +28,7 @@
     <ion-card-content>
       {{noticia.Descripcion}}
       <label> </label>
-      <ion-button *ngIf="noticia.Url !== undefined && noticia.FechaFin !== null && noticia.Url.length > 0" color="primary" expand="block" (click)="vistarWeb()" > 
+      <ion-button *ngIf="noticia.Url !== undefined && noticia.Url.length > 0" color="primary" expand="block" (click)="vistarWeb()" > 
         <ion-icon slot="start" name="earth-outline"></ion-icon>
         Vistar Web
       </ion-button>

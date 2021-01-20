@@ -5,9 +5,13 @@ export interface Noticia {
     Url:              string;
     PathImagen:       string;
     DescripcionCorta: string;
-    TipoNoticia:      string;
-    TipoEmpleado:     string;
     FechaInicio:      string;
-    FechaFin:         string;
     URLYoutube:       string;
+}
+
+export interface RespuestaAPINoticias {
+    Respuesta: string;
+    ImagenDestacada: Noticia;
+    Noticias:  Noticia[];
+    Codigo:    number;
 }

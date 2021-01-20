@@ -42,9 +42,10 @@ export class BlancoPage implements OnInit {
           this.usuario = {
             UserName: ultimoUsuario.UserName,
             Password: ultimoUsuario.Password,
+            IdUsuario: ultimoUsuario.IdUsuario,
             NombreCompleto: ultimoUsuario.NombreCompleto,
-            RememberMe: ultimoUsuario.RememberMe,
-            FingerID: ultimoUsuario.FingerID
+            Movil: ultimoUsuario.Movil,
+            Email: ultimoUsuario.Email
           };
 
          this.usuarioService.guardarUsuario(this.usuario);

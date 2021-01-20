@@ -5,6 +5,7 @@ import { Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { Notificacion, UsuarioLoginApi } from '../interfaces/usuario-interfaces';
+import { FirmaPendiente } from '../interfaces/firma-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -81,9 +82,9 @@ export class DatabaseService {
           console.log('DB: Tabla USUARIOS vacia'); }).catch(() => { console.log('DB: ERROR AL BORRAR TABLAS USUARIO'); });
 
         // tslint:disable-next-line: max-line-length
-        const data = [usuario.UserName, usuario.Password, usuario.RememberMe, usuario.NombreCompleto, usuario.FingerID];
+        const data = [usuario.UserName, usuario.Password, usuario.NombreCompleto, usuario.Movil, usuario.Email];
         // tslint:disable-next-line: max-line-length
-        const respuesta = this.storage.executeSql('INSERT INTO usuariosTable (UserName, Password_, RememberMe, NombreCompleto, FingerID) VALUES (?, ?, ?, ?, ?)', data).then(() => {
+        const respuesta = this.storage.executeSql('INSERT INTO usuariosTable (UserName, Pass, NombreCompleto, Movil, Email) VALUES (?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Usuario creado');
 
         });
@@ -116,16 +117,17 @@ export class DatabaseService {
       return {
         UserName: res.rows.item(0).UserName,
         Password: res.rows.item(0).Password,
+        IdUsuario: res.rows.item(0).IdUsuario,
         NombreCompleto: res.rows.item(0).NombreCompleto,
-        RememberMe: res.rows.item(0).RememberMe,
-        FingerID: res.rows.item(0).FingerID
+        Movil: res.rows.item(0).Movil,
+        Email: res.rows.item(0).Email
       };
     } else { return null; }
 
   }
 
   addNotificacion(notificacion: Notificacion) {
-
+    console.log('notificacion 2: ',notificacion);
     this.estadoBD().then(async () => {
         const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.TipoDocumento, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
         const respuesta = await this.storage.executeSql('INSERT INTO notificacion (Titulo, Mensaje, Leido, TipoDocumento, Fecha,Ruta,Icono) VALUES (?, ?, ?, ?, ?, ?, ?)', data).then(() => {
@@ -175,6 +177,7 @@ export class DatabaseService {
     const res = await this.storage.executeSql('UPDATE notificacion SET Leido=? WHERE Leido = ?', data);
     return null;
   }
+
   async marcarNotificacionLeida(id) {
     const data = [1, id];
     // tslint:disable-next-line: max-line-length
@@ -198,6 +201,7 @@ export class DatabaseService {
     } else { return null; }
 
   }
+
 
   async ModificarRutaNotificacion() {
     const res =  await this.storage.executeSql('SELECT * FROM notificacion ORDER BY IdNotificacion DESC LIMIT 1', []);
@@ -239,9 +243,47 @@ export class DatabaseService {
           Promise.reject(error);
         }
 
+  }
+
+
+  //Firmas Pendientes
+
+  addFirmaPendiente(idUsuario: number, idTarea: number, blobFirma: Blob) {
+    console.log('add firmaPendiente a bd IDUSUARIO: ',idUsuario);
+    console.log('add firmaPendiente a bd IDTAREA: ',idTarea);
+    console.log('add firmaPendiente a bd BLOB: ',blobFirma);
+
+    this.estadoBD().then(async () => {
+        const data = [idUsuario, idTarea, blobFirma];
+        const respuesta = await this.storage.executeSql('INSERT INTO firmasPendientes (IdUsuario, IdTarea, FirmaBLOB) VALUES (?, ?, ?)', data).then(() => {
+          console.log('DB: FirmaPendiente añadida');
+
+
+        });
+        console.log('DB: Respuesta FirmaPendiente', respuesta);
+    });
+  }
+
+  async obtenerTodasFirmasPendientes(): Promise<FirmaPendiente[]> {
+
+    const sql = 'SELECT * FROM firmasPendientes';
+
+    try {
+      const response = await this.storage.executeSql(sql, []);
+      const firmaPendiente = [];
+      console.log('obtener firmaPendiente index ' + firmaPendiente);
+      for (let index = 0; index < response.rows.length; index++) {
+        firmaPendiente.push(response.rows.item(index));
+        console.log('obtener firmaPendiente index ' + response.rows.item(index));
       }
+      return Promise.resolve<FirmaPendiente[]>(firmaPendiente);
+    } catch (error) {
+      Promise.reject(error);
+    }
+
+  }
 
 
-
+  
 
 }

@@ -32,7 +32,6 @@ export class NoticiasMasInfoPage implements OnInit {
       file = file.replace('watch?v=', '');
       urlYoutube += file;
       this.trustedVideoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(urlYoutube);
-      console.log('NOTICIA:', this.noticia.FechaFin);
     }
   }
 

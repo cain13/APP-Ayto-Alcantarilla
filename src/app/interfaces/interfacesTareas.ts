@@ -9,6 +9,15 @@ export interface Visita {
     Nombre: string;
 }
 
+export interface DatosAddUbicacion {
+
+    IdUsuario: number;
+    Latitud: number;
+    Longitud: number;
+    Pin: string;
+
+}
+
 export interface EstadoTarea {
     IdEstadoTarea: number;
     Nombre: string;
@@ -16,23 +25,39 @@ export interface EstadoTarea {
 
 export interface Tarea {
     IdTarea: number;
-    Nombre: string;
-    Descripcion: string;
-    IdEstado: number;
-    HoraFin: string;
-    Grado: number;
-    SubtareasLista: Subtarea[];
-    HoraInicio: string;
-    IdEmpleado: number;
-    ViveSolo: string;
-    Edad: number;
-    TelefonoCliente: string;
-    DireccionTarea: string;
-    IdPersonaAsistida: number;
+    Nombre?: string;
+    Descripcion?: string;
+    Observaciones?: string;
+    IdEstado?: number;
+    HoraFin?: string;
+    Grado?: number;
+    SubtareasLista?: Subtarea[];
+    HoraInicio?: string;
+    IdEmpleado?: number;
+    ViveSolo?: string;
+    Edad?: number;
+    TelefonoCliente?: string;
+    DireccionTarea?: string;
+    IdPersonaAsistida?: number;
     PersonaContacto1?: string;
     PersonaContacto2?: string;
     PersonaContacto3?: string;
     HorasSemanales?: number;
+    Latitud?: number;
+    Longitud?: number;
+    AuxiliarTitular?: string;
+    TelAuxiliarTitular?: string
+}
+
+export interface RespuestaTiposIncidenciasAPI {
+    ListaTipoIncidencias: TipoIncidencia[];
+}
+
+export interface TipoIncidencia {
+
+    IdIncidencia: number;
+    Nombre: string;
+
 }
 
 export interface Subtarea {
