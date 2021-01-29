@@ -5,6 +5,8 @@ import { AlertController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { UsuarioService } from '../../../services/usuario.service';
 import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
+import { Servicio } from 'src/app/interfaces/servicos-interfaces';
+import * as moment from 'moment';
 
 
 
@@ -15,7 +17,7 @@ import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 })
 export class TareaMasInfoPage implements OnInit {
 
-  tarea: Tarea;
+  tarea: Servicio;
   telefono: string;
   usuario: UsuarioLoginApi;
   constructor(private tareaService: TareasService,
@@ -27,7 +29,7 @@ export class TareaMasInfoPage implements OnInit {
   ngOnInit() {
 
     this.tarea = this.tareaService.getTarea();
-    this.telefono = this.tarea.PersonaContacto1;
+    this.telefono = this.tarea.Usuario.Telefono1;
     this.usuario = this.usuarioService.getUsuario();
     console.log('TAREA: ', this.tarea);
     console.log('Telefono: ', this.telefono);
@@ -37,7 +39,7 @@ export class TareaMasInfoPage implements OnInit {
 
   async abrirGoogleMaps() {
 
-    const urlDestino: string = 'https://www.google.com/maps/dir/?api=1&destination='+this.tarea.Latitud+','+this.tarea.Longitud+'&travelmode=driving';
+    const urlDestino: string = 'https://www.google.com/maps/dir/?api=1&destination='+this.tarea.Usuario.Latitud+','+this.tarea.Usuario.Longitud+'&travelmode=driving';
 
     window.open(urlDestino, '_system');
 
@@ -72,7 +74,7 @@ export class TareaMasInfoPage implements OnInit {
             console.log('Confirm Password Inicio');
             //await this.usuarioService.present('Añadiendo ubicación...');
             this.geolocation.getCurrentPosition().then( async (pos) => {
-              /* await this.tareaService.addUbicacionAPI(pos.coords.latitude, pos.coords.longitude, data.name1, this.usuario.IdUsuario).then( async respuesta => {
+              /* await this.tareaService.addUbicacionAPI(pos.coords.latitude, pos.coords.longitude, data.name1, this.tarea.IdUsuario).then( async respuesta => {
 
                 if (!respuesta.Ok) {
                   await alert.dismiss();
@@ -113,6 +115,12 @@ export class TareaMasInfoPage implements OnInit {
     });
     await alert.present();
     
+  }
+
+  devolverHora(fecha: string) {
+
+    return moment(fecha).locale('es').format('HH:mm');
+
   }
 
 }

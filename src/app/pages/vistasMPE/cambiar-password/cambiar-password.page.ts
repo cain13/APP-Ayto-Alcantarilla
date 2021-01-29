@@ -82,20 +82,21 @@ export class CambiarPasswordPage implements OnInit {
   }
   CambiarPasswordButton() {
 
-    /* this.usuarioService.present('Actualizando contraseña...');
+    this.usuarioService.present('Actualizando contraseña...');
     const passOld = this.onPasswordForm.get('PassOld').value;
     const passNew = this.onPasswordForm.get('PassNew').value;
 
-    this.usuarioService.actualizarPasswordAPI(this.usuarioService.getUsuario().IdUsuario, passOld, passNew).then( resp => {
+    this.usuarioService.actualizarPasswordAPI(this.usuarioService.getUsuario().UserName, passOld.toString(), passNew.toString()).then( resp => {
+      console.log('respuesta api cambiar: ', resp);
 
-      if (resp.Ok) {
+      if (resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
 
         const usuarioAux: UsuarioLoginApi = this.usuarioService.usuario;
         usuarioAux.Password = passNew;
         console.log('USUARIO NUEVO: ', usuarioAux);
         this.usuarioService.actualizarPerfil(usuarioAux);
         this.usuarioService.dismiss();
-        this.usuarioService.presentToast('Contraseña Cambiada correctamente !!');
+        this.usuarioService.presentToast('Contraseña Cambiada correctamente!!');
 
       } else {
 
@@ -108,7 +109,7 @@ export class CambiarPasswordPage implements OnInit {
       this.usuarioService.dismiss();
       this.usuarioService.presentAlert('¡ERROR!', 'Fallo al cambiar la contraseña', 'Compruebe su conexión a internet');
 
-    }) */
+    })
   }
 
   closeModal() {

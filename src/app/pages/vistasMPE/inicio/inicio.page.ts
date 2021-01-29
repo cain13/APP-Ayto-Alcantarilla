@@ -3,7 +3,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationExtras } from '@angular/router';
 import { IonRouterOutlet, MenuController, ModalController, NavController, Platform, PopoverController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { EmpresaConsultor} from 'src/app/interfaces/usuario-interfaces';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { NotificacionesPage } from '../notificaciones/notificaciones.page';
@@ -41,7 +40,6 @@ import { NoticiasService } from '../../../services/noticias.service';
 export class InicioPage implements OnInit {
 
   usuario: UsuarioLoginApi;
-  empresaCoonsultor: EmpresaConsultor;
   hayConsultor = false;
   Cantidad = 0;
   cantidad$: Observable<number>;
@@ -95,15 +93,51 @@ export class InicioPage implements OnInit {
                 public menuCtrl: MenuController,
                 public navCtrl: NavController,
                 public modalCtrl: ModalController,
-                private noticiasService: NoticiasService
+                private noticiasService: NoticiasService,
+                private dataBaseService: DatabaseService
                 
     ) {
-    this.usuario = this.usuarioService.getUsuario();
 
+      this.usuario = this.usuarioService.getUsuario();
+
+
+   /*  try {
+    } catch (error) {
+      this.dataBaseService.estadoBD().then( async () => {
+
+        console.log('BLANCO: Comprobamos si hay ultimo usuario...');
+        await this.dataBaseService.obtenerUltimoUsuario().then( ultimoUsuario => {
+          if (ultimoUsuario === null) {
+            console.log('No hay usuarios en la BD');
+            this.navCtrl.navigateRoot('/walkthrough');
+  
+          } else {
+  
+            this.usuario = {
+              UserName: ultimoUsuario.UserName,
+              Password: ultimoUsuario.Password,
+              IdEmpleado: ultimoUsuario.IdEmpleado,
+              HorasSemanales: ultimoUsuario.HorasSemanales,
+              NombreCompleto: ultimoUsuario.NombreCompleto,
+              Telefono: ultimoUsuario.Telefono,
+              Email: ultimoUsuario.Email
+            };
+  
+           this.usuarioService.guardarUsuario(this.usuario);
+           console.log('Usuario: ', ultimoUsuario);
+           this.menuCtrl.enable(true, 'menuTrabajadores');
+           this.menuCtrl.enable(false, 'menuCompleto');
+           console.log('BLANCO: Si hay usuario en BD: ', this.usuario);
+          }
+        });
+      })
+    } */
   }
 
   async ngOnInit() {
 
+
+     await this.usuarioService.enviarEnviosPendientes();
     /* await this.usuarioService.present('Cargando datos...');
     await this.noticiasService.getNoticias(this.usuario.IdUsuario).then( resp => {
 

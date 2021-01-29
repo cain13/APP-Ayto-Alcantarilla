@@ -16,8 +16,8 @@
     <ion-item-sliding (ionSwipe)="delete(NotificacionesMensajes)" *ngFor="let NotificacionesMensajes of listaMensajes" >
         <ion-item class="ion-no-padding ion-no-margin"   tappable [class]="NotificacionesMensajes.Leido ==  1 ? 'NotificacionLeida' : 'NotificacionPendiente'" >
         
-        <ion-icon style="margin: 0px !important; padding: 10px;" slot="start" name="mail-open-outline" color="danger" *ngIf="NotificacionesMensajes.Leido ==  1 && NotificacionesMensajes.TipoDocumento.toUpperCase() === 'MENSAJE'"></ion-icon>
-        <ion-icon style="margin: 0px !important; padding: 10px;" slot="start" [name]="NotificacionesMensajes.Icono" color="danger" *ngIf="!(NotificacionesMensajes.Leido ==  1  && NotificacionesMensajes.TipoDocumento.toUpperCase() === 'MENSAJE')"></ion-icon>
+        <ion-icon style="margin: 0px !important; padding: 10px;" slot="start" name="mail-open-outline" color="danger" *ngIf="NotificacionesMensajes.Leido ==  1 "></ion-icon>
+        <ion-icon style="margin: 0px !important; padding: 10px;" slot="start" [name]="NotificacionesMensajes.Icono" color="danger" *ngIf="NotificacionesMensajes.Leido !== 1"></ion-icon>
         <ion-label (click)="abrirNotificacion(NotificacionesMensajes)">
           <h2>
             <ion-text color="dark"><strong>{{NotificacionesMensajes.Mensaje}}</strong></ion-text>

@@ -12,14 +12,14 @@
     <img class="ion-padding" src="assets/img/logoAlcantarillaTransparente.png" />
     <ion-card-header>
       <ion-card-subtitle>Grado {{tarea.Grado}}</ion-card-subtitle>
-      <ion-card-title>{{tarea.Nombre}}</ion-card-title>
+      <ion-card-title>{{tarea.Usuario.Nombre}} {{tarea.Usuario.ApellidosCompletos}}</ion-card-title>
     </ion-card-header>
     <ion-card-content style="margin-top: 0px;">
       <ion-grid >
 
         <!-- DESCRIPCION -->
         
-        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Descripcion !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Descripcion !== null && tarea.Descripcion !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-label>
             <h2>
               <ion-text style="color: #7e7e7e !important;"><strong>Descripción</strong></ion-text>
@@ -30,113 +30,113 @@
 
         <!-- OBSERVACIONES -->
         
-        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Observaciones !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Usuario.Observaciones !== null && tarea.Usuario.Observaciones !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-label>
             <h2>
               <ion-text style="color: #7e7e7e !important;"><strong>Observaciones:</strong></ion-text>
             </h2>
-            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;">{{tarea.Observaciones}} </ion-text>
+            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;">{{tarea.Usuario.Observaciones}} </ion-text>
           </ion-label>
         </ion-item>
 
         <!-- DIRECCION -->
 
-        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.DireccionTarea !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Usuario.Direccion !== null && tarea.Usuario.Direccion !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-label>
             <h2>
               <ion-text style="color: #7e7e7e !important;"><strong>Dirección:</strong></ion-text>
             </h2>
-            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;">{{tarea.DireccionTarea}} </ion-text>
+            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;">{{tarea.Usuario.Direccion}} </ion-text>
           </ion-label>
         </ion-item>
                   
         <!-- NOMBRE AUXILIAR TITULAR -->
 
-        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.DireccionTarea !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Usuario.EmpleadoTitular !== null && tarea.Usuario.EmpleadoTitular !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-label>
             <h2>
               <ion-text style="color: #7e7e7e !important;"><strong>Auxiliar Titular:</strong></ion-text>
             </h2>
-            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;">{{tarea.AuxiliarTitular}} </ion-text>
+            <ion-text class="ion-text-wrap" style="font-size: small !important; margin-bottom: 0px;">{{tarea.EmpleadoTitular.NombreCompleto}} </ion-text>
           </ion-label>
         </ion-item>
 
         <!-- TELEFONO AUXILIAR TITULAR -->
 
-        <ion-item *ngIf="tarea.PersonaContacto1 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.TelAuxiliarTitular.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item *ngIf="tarea.EmpleadoTitular !== null && tarea.EmpleadoTitular.Telefono !== null &&tarea.EmpleadoTitular.Telefono !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.EmpleadoTitular.Telefono.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-col class="ion-no-padding" size="6" style="text-align: start;">
              <strong style="text-align: start; color: #7e7e7e !important;">Tel. Auxilar Titular:</strong>
            </ion-col>
            <ion-col class="ion-no-padding" size="6" style="text-align: end;">
-              <ion-label style="text-align: end;  color: #1975db">{{tarea.TelAuxiliarTitular.toString()}}</ion-label>
+              <ion-label style="text-align: end;  color: #1975db">{{tarea.EmpleadoTitular.Telefono.toString()}}</ion-label>
            </ion-col>
         </ion-item>
 
         <!-- HORA INICIO -->
 
-        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.HoraInicio !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.FechaInicio !== null && tarea.FechaInicio !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
            <ion-col class="ion-no-padding" size="6" style="text-align: start;">
               <strong style="text-align: start; color: #7e7e7e !important;">Hora Inicio:</strong>
             </ion-col>
             <ion-col class="ion-no-padding" size="6" style="text-align: end;">
-               <ion-label style="text-align: end;">{{tarea.HoraInicio}}</ion-label>
+               <ion-label style="text-align: end;">{{devolverHora(tarea.FechaInicio)}}</ion-label>
             </ion-col>
         </ion-item>
 
         <!-- HORA FIN -->
 
-        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.HoraFin !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.FechaFin !== null && tarea.FechaFin !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-col class="ion-no-padding" size="6" style="text-align: start;">
              <strong style="text-align: start; color: #7e7e7e !important;">Hora Fin:</strong>
            </ion-col>
            <ion-col class="ion-no-padding" size="6" style="text-align: end;">
-              <ion-label style="text-align: end;">{{tarea.HoraFin}}</ion-label>
+              <ion-label style="text-align: end;">{{devolverHora(tarea.FechaFin)}}</ion-label>
            </ion-col>
         </ion-item>
 
         <!-- PERSONA CONTACTO 1 -->
 
-        <ion-item *ngIf="tarea.PersonaContacto1 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.PersonaContacto1.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item *ngIf="tarea.Usuario.Telefono1 !== null && tarea.Usuario.Telefono1 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.Usuario.Telefono1.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-col class="ion-no-padding" size="6" style="text-align: start;">
              <strong style="text-align: start; color: #7e7e7e !important;">Contacto 1:</strong>
            </ion-col>
            <ion-col class="ion-no-padding" size="6" style="text-align: end;">
-              <ion-label style="text-align: end;  color: #1975db">{{tarea.PersonaContacto1.toString()}}</ion-label>
+              <ion-label style="text-align: end;  color: #1975db">{{tarea.Usuario.Telefono1.toString()}}</ion-label>
            </ion-col>
         </ion-item>
 
         <!-- PERSONA CONTACTO 2 -->
         
-        <ion-item *ngIf="tarea.PersonaContacto2 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.PersonaContacto2.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item *ngIf="tarea.Usuario.Telefono2 !== null && tarea.Usuario.Telefono2 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.Usuario.Telefono2.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-col class="ion-no-padding" size="6" style="text-align: start;">
              <strong style="text-align: start; color: #7e7e7e !important;">Contacto 2:</strong>
            </ion-col>
            <ion-col class="ion-no-padding" size="6" style="text-align: end;">
-              <ion-label style="text-align: end;  color: #1975db">{{tarea.PersonaContacto2.toString()}}</ion-label>
+              <ion-label style="text-align: end;  color: #1975db">{{tarea.Usuario.Telefono2.toString()}}</ion-label>
            </ion-col>
         </ion-item>
 
         <!-- PERSONA CONTACTO 3 -->
 
-        <ion-item *ngIf="tarea.PersonaContacto3 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.PersonaContacto3.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item *ngIf="tarea.Usuario.Telefono3 !== null && tarea.Usuario.Telefono3 !== undefined" lines= "none" class="ion-no-padding" href="tel:{{tarea.Usuario.Telefono3.toString()}}"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-col class="ion-no-padding" size="6" style="text-align: start;">
              <strong style="text-align: start; color: #7e7e7e !important;">Contacto 3:</strong>
            </ion-col>
            <ion-col class="ion-no-padding" size="6" style="text-align: end;">
-              <ion-label style="text-align: end;  color: #1975db">{{tarea.PersonaContacto3.toString()}}</ion-label>
+              <ion-label style="text-align: end;  color: #1975db">{{tarea.Usuario.Telefono3.toString()}}</ion-label>
            </ion-col>
         </ion-item>
 
         <!-- HORAS SEMANALES -->
 
-        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.HorasSemanales !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+        <!-- <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Usuario.H !== undefined">
           <ion-col class="ion-no-padding" size="9" style="text-align: start;">
              <strong style="text-align: start; color: #7e7e7e !important;">Horas Semales:</strong>
            </ion-col>
            <ion-col class="ion-no-padding" size="3" style="text-align: end;">
               <ion-label style="text-align: end;">{{tarea.HorasSemanales}}</ion-label>
            </ion-col>
-        </ion-item>
+        </ion-item> -->
 
        
       </ion-grid>
@@ -147,19 +147,19 @@
 
 <ion-footer class="no-padding">
 
-  <ion-button *ngIf="tarea.Latitud !== undefined && tarea.Longitud !== undefined" icon-left size="large" expand="full" color="success" (click)="abrirGoogleMaps()" tappable>
+  <ion-button *ngIf="tarea.Usuario.Latitud !== null && tarea.Usuario.Longitud !== null && tarea.Usuario.Latitud !== undefined && tarea.Usuario.Longitud !== undefined" icon-left size="large" expand="full" color="success" (click)="abrirGoogleMaps()" tappable>
     <ion-icon slot="start" name="map-outline"></ion-icon>
     Como llegar
   </ion-button>
 
-  <ion-button *ngIf="tarea.Latitud === undefined && tarea.Longitud === undefined" icon-left size="large" expand="full" color="success" (click)="addUbicacion()" tappable>
+  <ion-button *ngIf="tarea.Usuario.Latitud === null || tarea.Usuario.Longitud === null || tarea.Usuario.Latitud === undefined || tarea.Usuario.Longitud === undefined" icon-left size="large" expand="full" color="success" (click)="addUbicacion()" tappable>
     <ion-icon slot="start" name="map-outline"></ion-icon>
     Añadir Ubicación
   </ion-button>
 
-  <ion-button *ngIf="tarea.TelefonoCliente !== undefined" icon-left size="large" expand="full" color="primary" href="tel:{{tarea.TelefonoCliente.toString()}}" tappable>
+  <ion-button *ngIf="tarea.Usuario.Telefono1 !== null && tarea.Usuario.Telefono1 !== undefined" icon-left size="large" expand="full" color="primary" href="tel:{{tarea.Usuario.Telefono1.toString()}}" tappable>
     <ion-icon slot="start" name="call-outline"></ion-icon>
-    Llamar Usuario
+    Persona Contacto 1
   </ion-button>    
 
 </ion-footer>

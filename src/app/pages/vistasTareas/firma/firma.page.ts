@@ -8,6 +8,10 @@ import { Tarea } from '../../../interfaces/interfacesTareas';
 import { TareasService } from '../../../services/tareas.service';
 import { DatabaseService } from '../../../services/database.service';
 import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
+import { FirmaAPI } from '../../../interfaces/firma-interfaces';
+import { Servicio } from '../../../interfaces/servicos-interfaces';
+import { NavController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-firma',
@@ -17,7 +21,7 @@ import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 
 export class FirmaPage implements OnInit {
 
-  
+ 
   @ViewChild('sPad', {static: true}) signaturePad;
   signPad: any;
   res: any;
@@ -28,14 +32,15 @@ export class FirmaPage implements OnInit {
     mediaType: this.camera.MediaType.PICTURE
   };
 
-  tarea: Tarea;
+  tarea: Servicio;
   usuario: UsuarioLoginApi;
   constructor(private camera: Camera,
               private firmaService: FirmaService,
               private file: File,
               private tareaService: TareasService,
               private usuarioService: UsuarioService,
-              private dbService: DatabaseService
+              private dbService: DatabaseService,
+              private navCtrl: NavController
               ) {}
 
   ngOnInit(): void {
@@ -64,26 +69,66 @@ export class FirmaPage implements OnInit {
   async firmar() {
     this.usuarioService.present('Enviando firma...');
     const firmaBase64 = this.signPad.toDataURL();
-    await this.firmaService.enviarFirmaAPI(this.usuario.IdUsuario, this.tarea.IdTarea, firmaBase64).then( data => {
+    const firma = firmaBase64.split(',')[1];
+    const firmaData = {
+      UserName: this.usuario.UserName,
+      Password: this.usuario.Password,
+      FirmaBase64: firma,
+      IdEventoServicio: this.tarea.IdEventoServicio
+    }
 
-      if(data.Ok) {
+    console.log('FIRMA DATOS ENVIADOS: ', firmaData);
+    await this.firmaService.enviarFirmaAPI(this.usuario.UserName, this.usuario.Password, this.tarea.IdEventoServicio, firma).then( data => {
+      console.log('RESPUESTA API FIRMA: ', data);
+      if(data.Respuesta.toString().toLocaleUpperCase() === 'OK') {
 
         this.usuarioService.dismiss();
+        this.usuarioService.presentToast('Firma enviada correctamente.');
+        this.navCtrl.navigateRoot('/tareas-inicio');
 
       } else {
-        const blob = this.dataURLToBlob(firmaBase64);
-        
-        this.dbService.addFirmaPendiente(this.usuario.IdUsuario, this.tarea.IdTarea, blob)
-        this.usuarioService.dismiss();
+        //const blob = this.dataURLToBlob(firmaBase64);
 
+        const firma: FirmaAPI = {
+
+          UserName: this.usuario.UserName,
+          Password: this.usuario.Password,
+          FirmaBase64: firmaBase64,
+          IdEventoServicio: this.tarea.IdEventoServicio
+          
+        }
+
+        console.log('FIRMA DATOS ENVIADOS: ', firma);
+
+        const contenido = JSON.stringify(firma);
+        const urlPendiente = 'https://intranet-ayto.com/api/Ayto/FinServicio';
+        const tipoJsonPendiente = 'FIRMA';
+        this.dbService.addJsonPendiente(urlPendiente, contenido,  tipoJsonPendiente);
+        this.borrar();
+        this.usuarioService.dismiss();
+        this.usuarioService.presentToast('Firma enviada correctamente.');
+        this.navCtrl.navigateRoot('/tareas-inicio');
       }
 
     }).catch( error => {
 
       const blob = this.dataURLToBlob(firmaBase64);
         
-      this.dbService.addFirmaPendiente(this.usuario.IdUsuario, this.tarea.IdTarea, blob)
+      const firma: FirmaAPI = {
+        UserName: this.usuario.UserName,
+        Password: this.usuario.Password,
+        FirmaBase64: firmaBase64,
+        IdEventoServicio: this.tarea.IdEventoServicio
+      }
+
+      const contenido = JSON.stringify(firma);
+      const urlPendiente = 'https://intranet-ayto.com/api/Ayto/FinServicio';
+      const tipoJsonPendiente = 'FIRMA'
+      this.dbService.addJsonPendiente(urlPendiente, contenido, tipoJsonPendiente);
+      this.borrar();
       this.usuarioService.dismiss();
+      this.usuarioService.presentToast('Firma enviada correctamente.');
+      this.navCtrl.navigateRoot('/tareas-inicio');
 
     }); 
 

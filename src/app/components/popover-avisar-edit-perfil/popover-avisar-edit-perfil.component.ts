@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { IonCheckbox, NavController, PopoverController } from '@ionic/angular';
 import { UsuarioService } from '../../services/usuario.service';
-import { UsuarioLogin, UsuarioLoginApi } from '../../interfaces/usuario-interfaces';
+import { UsuarioLoginApi } from '../../interfaces/usuario-interfaces';
 import { DatabaseService } from '../../services/database.service';
 
 @Component({

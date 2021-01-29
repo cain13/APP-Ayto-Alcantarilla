@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UsuarioLogin } from 'src/app/interfaces/usuario-interfaces';
 import { UsuarioService } from '../../services/usuario.service';
 import { ViewWillEnter, MenuController, ModalController, Platform, ActionSheetController } from '@ionic/angular';
 import { NotificacionesService } from '../../services/notificaciones.service';

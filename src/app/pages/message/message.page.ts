@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { DatabaseService } from '../../services/database.service';
+import { Notificacion } from '../../interfaces/usuario-interfaces';
 
 @Component({
   selector: 'app-message',
@@ -9,13 +10,12 @@ import { DatabaseService } from '../../services/database.service';
   styleUrls: ['./message.page.scss'],
 })
 export class MessagePage implements OnInit {
-  message = {
+  message: Notificacion = {
     IdNotificacion: 0,
-        TipoDocumento: '',
         Titulo:'',
         Leido:1,
         Mensaje:'',
-        Fecha: new Date(),
+        Fecha: 'new Date()',
         Icono: '',
         Ruta:''
   };
@@ -28,15 +28,15 @@ export class MessagePage implements OnInit {
   ) { }
 
   async ngOnInit() {
+
     console.log("messageID ",this.messageID);
     await this.db.obtenerNotificacion(this.messageID).then((noti) => {
       this.message = {
         IdNotificacion: noti.IdNotificacion,
-        TipoDocumento: noti.TipoDocumento,
         Titulo: noti.Titulo,
         Leido: noti.Leido,
         Mensaje: noti.Mensaje,
-        Fecha:  new Date(noti.Fecha),
+        Fecha:  new Date(noti.Fecha).toString(),
         Icono: noti.Icono,
         Ruta: noti.Ruta
       };

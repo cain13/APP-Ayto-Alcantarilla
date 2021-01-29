@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { UsuarioService } from '../../../services/usuario.service';
-import { UsuarioLogin } from '../../../interfaces/usuario-interfaces';
+import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 
 @Component({
   selector: 'app-modal-terminos',
@@ -10,7 +10,7 @@ import { UsuarioLogin } from '../../../interfaces/usuario-interfaces';
 })
 export class ModalTerminosPage implements OnInit {
 
-  private usuario: UsuarioLogin;
+  private usuario: UsuarioLoginApi;
   EsGuardiaCivil: boolean;
 
   constructor(private modalCtrl: ModalController, private alertCtrl: AlertController, private usuarioService: UsuarioService) { }

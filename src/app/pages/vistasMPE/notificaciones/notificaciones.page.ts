@@ -59,7 +59,7 @@ export class NotificacionesPage implements OnInit {
 
   getSinNotificaciones() {
 
-      const notificacion = {
+      const notificacion: Notificacion = {
         IdNotificacion: 1,
         Titulo: 'No tienes notificaciones',
         Icono: 'notifications-off-outline',
@@ -67,7 +67,6 @@ export class NotificacionesPage implements OnInit {
         Mensaje: 'No hay notificaciones nuevas',
         Fecha:  moment().format('YYYY-MM-DDT00:00:00'),
         Leido: 1,
-        TipoDocumento: 'Documento'
       };
       this.listaMensajes.push(notificacion);
       return this.listaMensajes;
@@ -105,13 +104,10 @@ export class NotificacionesPage implements OnInit {
     this.db.marcarNotificacionLeida(not.IdNotificacion).then(() => {
       console.log('Ruta ' + not.Ruta);
       let rutaMensaje = '';
-      if (not.TipoDocumento.toUpperCase() === 'INFORMACION') {
-        rutaMensaje = not.Ruta + not.IdNotificacion.toString();
-        console.log('Ruta ' + not.Ruta);
+     
+      rutaMensaje = not.Ruta + not.IdNotificacion.toString();
+      console.log('Ruta ' + not.Ruta);
 
-      } else {
-        rutaMensaje = not.Ruta;
-      }
       console.log('rutaMensaje ' + rutaMensaje);
       this.navController.navigateForward(rutaMensaje);
       this.modalCtrl.dismiss();

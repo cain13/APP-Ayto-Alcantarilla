@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { LoadingController, Platform, ToastController, AlertController, NavController, ModalController } from '@ionic/angular';
-import { CambiarPassword, MandarTokenAPI, RespuestaAPItoken, UsuarioLoginApi, UsuarioLogin, UsuarioLoginAPP, RespuestaAPIBasica, DatosActualziarPassApi } from '../interfaces/usuario-interfaces';
+import { CambiarPassword, MandarTokenAPI, UsuarioLoginApi, UsuarioLoginAPP, RespuestaAPIBasica, DatosActualziarPassApi, EnviosPendientes, NotificacionesPendientes } from '../interfaces/usuario-interfaces';
 import { DatabaseService } from './database.service';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NotificacionesPage } from '../pages/vistasMPE/notificaciones/notificaciones.page';
 import 'rxjs/add/operator/timeout';
+import { TipoIncidencia } from '../interfaces/interfacesTareas';
 
-const url =  'https://abm-time.com/api';
+const url =  'https://intranet-ayto.com/api';
 
 
 
@@ -16,16 +17,19 @@ const url =  'https://abm-time.com/api';
 })
 export class UsuarioService {
 
-  version = 'Versión 1.0.0';
-  usuario: UsuarioLoginApi = {
+  listaTipoIncidencias: TipoIncidencia[] = [
+    {
+    IdIncidencia: 0,
+    Nombre: 'Usuario Ausente'
+  },
+  {
+    IdIncidencia: 1,
+    Nombre: 'Otros'
+  }
+];
 
-    UserName: '12345651A',
-    Password: 'ayuntamiento',
-    IdUsuario: 1,
-    NombreCompleto: 'Tecnico 1',
-    Movil: '695489213',
-    Email: 'contacto@ayutnamientoalcantarilla.es'
-  };
+  version = 'Versión 1.0.0';
+  usuario: UsuarioLoginApi;
 
   vieneDeLogin = false;
   cambiarPassword: CambiarPassword;
@@ -46,7 +50,7 @@ export class UsuarioService {
     private navController: NavController,
     ) { }
 
-    // Funciones Ayto_Alcantarilla_APP
+  //#region  FUNCIONS LOGIN
 
 
     async loginAPI(userName: string, password: string, token: string): Promise<UsuarioLoginApi> {
@@ -57,46 +61,34 @@ export class UsuarioService {
         Token: token
       };
 
-      return await this.http.post<UsuarioLoginApi>(`${url}/LoginApp/Login`, usuario, {headers: this.header}).timeout(7000).toPromise();
+      return await this.http.post<UsuarioLoginApi>(`${url}/Ayto/Login`, usuario, {headers: this.header}).timeout(7000).toPromise();
 
     }
 
-
-    async mandarTokenAPI(tokenAPI: MandarTokenAPI): Promise <RespuestaAPItoken> {
-      // tslint:disable-next-line: no-shadowed-variable
-      const URL = 'https://mpecronos.com/api/CommonAPI/AddUsuarioNotificacion';
-
-      const respuesta = await  this.http.post<RespuestaAPItoken>(URL, tokenAPI, {headers: this.header}).toPromise();
-
-      return respuesta;
-
-    }
 
     async actualizarDatosUsuarioAPI( user: UsuarioLoginApi): Promise<RespuestaAPIBasica> {
 
-      const datosUsuario: UsuarioLoginApi = {
-  
-        IdUsuario: user.IdUsuario,
+      const datosUsuario = {
+        
+        UserName: user.UserName,
         Password: user.Password,
-        NombreCompleto: user.NombreCompleto,
         Email: user.Email,
-        Movil: user.Movil,
-        UserName: user.UserName
+        Telefono: user.Telefono,
       };
-      return await this.http.post<RespuestaAPIBasica>(`${url}/TareaApi/GetApiListaTareas`, datosUsuario).toPromise();
+      return await this.http.post<RespuestaAPIBasica>(`${url}/Ayto/EditarPerfil`, datosUsuario).toPromise();
   
     }
 
-    async actualizarPasswordAPI( idUsuario: number, passOld: number, passNew: number): Promise<RespuestaAPIBasica> {
+    async actualizarPasswordAPI( username: string, passOld: string, passNew: string): Promise<RespuestaAPIBasica> {
 
-      const datosUsuario: DatosActualziarPassApi = {
+      const datosUsuario = {
   
-        IdUsuario: idUsuario,
-        PassOld: passOld,
-        PassNueva: passNew
+        UserName: username,
+        Password: passOld,
+        PasswordNew: passNew
         
       };
-      return await this.http.post<RespuestaAPIBasica>(`${url}/TareaApi/GetApiListaTareas`, datosUsuario).toPromise();
+      return await this.http.post<RespuestaAPIBasica>(`${url}/Ayto/CambioPass`, datosUsuario).toPromise();
   
     }
 
@@ -104,54 +96,111 @@ export class UsuarioService {
       
       this.usuario = user;
       this.dataBaseService.addUsuario(user);
+      this.dataBaseService.guardarArrayIncidencias(user.TipoIncidencias);
+
+      if(user.NotificacionesPendientes !== null && user.NotificacionesPendientes !== undefined) {
+        let notificacionesPendientes: NotificacionesPendientes[] = []
+        if (Array.isArray(user.NotificacionesPendientes)) {
+
+          notificacionesPendientes = user.NotificacionesPendientes;
+
+        } else {
+
+          notificacionesPendientes.push(notificacionesPendientes[0]);
+
+        }
+
+        this.dataBaseService.addNotificacionesPendientes(user.NotificacionesPendientes);
+
+      }
+      
 
     }
 
 
+//#endregion
 
 
-    async present(mensaje: string) {
-      this.isLoading = true;
-      return await this.loadingCtrl.create({
-        message: mensaje
-      }).then(a => {
-        a.present().then(() => {
-          console.log('presented');
-          if (!this.isLoading) {
-            a.dismiss().then(() => console.log('abort presenting'));
-          }
-        }).catch(error => {
+    
 
-          console.log('Ha tocado en la pantalla mienstras estaba el cargando... ', error);
+    
 
-        });
+    async enviarEnviosPendientes() {
+
+      let enviosPendientes: EnviosPendientes[] = [];
+      
+      await this.dataBaseService.obtenerTodosJsonPendientes().then( data => {
+
+        enviosPendientes = data;
+
+      }).catch( error => {
+
+        console.log('ERROR, envios pendientes db');
+
       });
-    }
+      if (enviosPendientes.length !== 0) {
 
-    async dismiss() {
-      if (this.isLoading) {
+        let objetoJson: any;
 
-        this.isLoading = false;
-        return await this.loadingCtrl.dismiss().then(() => console.log('dismissed'));
+        for(let envio of enviosPendientes) {
+          console.log('envio pendiente: ', objetoJson);
+          const contenido = JSON.parse(envio.Contenido);
+          if( envio.TipoJsonPendiente.toLocaleUpperCase() === 'FIRMA') {
+
+            objetoJson = {
+              IdUsuario: contenido.IdUsuario,
+              IdTarea: contenido.IdTarea,
+              FirmaBase64: contenido.FirmaBase64
+            }
+
+          } else if (envio.TipoJsonPendiente.toLocaleUpperCase() === 'NOTIFICACION'){
+
+            objetoJson = {
+              IdNotificacion: contenido.IdNotificacion,
+            }
+
+
+          } else {
+
+            objetoJson = {
+              UserName: contenido.UserName,
+              IdTipoIncidencia: contenido. IdTipoIncidencia,
+              Descripcion: contenido.Descripcion,
+              IdEventoServicio: contenido.IdEventoServicio,
+              FechaIncidencia: contenido.FechaIncidencia
+            }
+
+          }
+
+          
+          console.log('envio pendiente: ', objetoJson);
+          await this.http.post<RespuestaAPIBasica>(envio.Url, objetoJson).toPromise().then( async data => {
+            console.log('Envio pendiente enviado correctamente: ', contenido);
+            await this.dataBaseService.borrarJSONPendiente(envio.IdEnvioPendiente).then(data => {
+
+              console.log('Envio Pendiente eliminado')
+
+            }).catch( error => {
+
+              console.log('Error, al borrar el JsonPendiente de la BD.')
+
+            });
+            
+
+          }).catch(error => {
+
+            console.log('ERROR, envio pendiente: ', error, ' CONTENIDO: ', contenido)
+
+          });
+
+        }
 
       } else {
 
-        return null;
+        console.log('No hay envios pendientes.');
 
       }
 
-    }
-
-    async presentAlert(titulo: string, subtitulo: string, mensaje: string) {
-      console.log('presentAlert');
-      const alert = await this.alertCtrl.create({
-        header: titulo,
-        subHeader: subtitulo,
-        message: mensaje,
-        buttons: ['OK']
-      });
-
-      await alert.present();
     }
 
     guardarUsuario(user: UsuarioLoginApi) {
@@ -176,6 +225,25 @@ export class UsuarioService {
 
       this.dataBaseService.addUsuario(usuario);
 
+    }
+
+    
+
+    async notifications() {
+      const modal = await this.modalCtrl.create({
+        component: NotificacionesPage
+          });
+      return await modal.present();
+    }
+
+   //#region FUNCIONS RUTINARIAS
+
+    BorrarEmpleado() {
+      this.dataBaseService.BorrarUsuario();
+    }
+
+    getCambiarPassword() {
+      return this.cambiarPassword;
     }
 
     async presentToast(texto: string) {
@@ -209,9 +277,6 @@ export class UsuarioService {
       await alert.present();
     }
 
-    async someAsyncOperation() {
-      // await this.navController.navigateForward("/test");
-    }
 
     async presentAlertSalir(titulo: string, subtitulo: string, mensaje: string): Promise<boolean>  {
       console.log('presentAlert');
@@ -240,11 +305,22 @@ export class UsuarioService {
       return null;
     }
 
-    async notifications() {
-      const modal = await this.modalCtrl.create({
-        component: NotificacionesPage
-          });
-      return await modal.present();
+
+    convertPassword(cadena: string): string {
+
+      return ('0000' + cadena).slice(-'0000'.length);
+    }
+
+    async presentAlert(titulo: string, subtitulo: string, mensaje: string) {
+      console.log('presentAlert');
+      const alert = await this.alertCtrl.create({
+        header: titulo,
+        subHeader: subtitulo,
+        message: mensaje,
+        buttons: ['OK']
+      });
+
+      await alert.present();
     }
 
     async presentAlertCerrarSesion(titulo: string, subtitulo: string, mensaje: string): Promise<boolean>  {
@@ -277,18 +353,38 @@ export class UsuarioService {
       return null;
     }
 
-    BorrarEmpleado() {
-      this.dataBaseService.BorrarUsuario();
+    async present(mensaje: string) {
+      this.isLoading = true;
+      return await this.loadingCtrl.create({
+        message: mensaje
+      }).then(a => {
+        a.present().then(() => {
+          console.log('presented');
+          if (!this.isLoading) {
+            a.dismiss().then(() => console.log('abort presenting'));
+          }
+        }).catch(error => {
+
+          console.log('Ha tocado en la pantalla mienstras estaba el cargando... ', error);
+
+        });
+      });
     }
 
-    getCambiarPassword() {
-      return this.cambiarPassword;
+    async dismiss() {
+      if (this.isLoading) {
+
+        this.isLoading = false;
+        return await this.loadingCtrl.dismiss().then(() => console.log('dismissed'));
+
+      } else {
+
+        return null;
+
+      }
+
     }
 
-
-    convertPassword(cadena: string): string {
-
-      return ('0000' + cadena).slice(-'0000'.length);
-    }
+  //#endregion
 
 }

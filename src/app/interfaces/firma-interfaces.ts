@@ -1,11 +1,6 @@
 export interface FirmaAPI {
-    IdUsuario: number;
-    IdTarea: number;
+    UserName: string;
+    Password: string;
+    IdEventoServicio: number;
     FirmaBase64: string;
-}
-
-export interface FirmaPendiente {
-    IdUsuario: number;
-    IdTarea: number;
-    FirmaBase64: Blob;
 }

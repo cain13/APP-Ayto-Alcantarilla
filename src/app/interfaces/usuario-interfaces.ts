@@ -1,13 +1,27 @@
+import { TipoIncidencia } from './interfacesTareas';
 
 
 export interface UsuarioLoginApi {
 
     UserName: string;
-    Password: string;
-    IdUsuario: number;
+    Password?: string;
+    IdEmpleado: number;
     NombreCompleto: string;
-    Movil: string;
+    Respuesta?: string;
+    HorasSemanales: number;
     Email: string;
+    Telefono: string;
+    TipoIncidencias?: TipoIncidencia[]
+    NotificacionesPendientes?: NotificacionesPendientes[]
+}
+
+export interface NotificacionesPendientes {
+
+    IdNotificacion: number;
+    Titulo: string;
+    Mensaje: string;
+    Fecha: string;
+
 }
 
 export interface UsuarioLoginAPP {
@@ -19,16 +33,16 @@ export interface UsuarioLoginAPP {
 
 export interface RespuestaAPIBasica {
 
-    Ok: boolean;
-    Mensaje: string;
+    Respuesta: string;
+    Mensaje?: string;
 
 }
 
 export interface DatosActualziarPassApi {
 
-    IdUsuario: number,
-    PassOld: number,
-    PassNueva: number,
+    UserName: string,
+    PassOld: string,
+    PassNueva: string,
 
 }
 
@@ -40,38 +54,25 @@ export interface MandarTokenAPI {
 
   }
 
-
-
-// INTERFACES GRUPO_MPE_APP
-
-export interface UsuarioLogin {
-
-    Usuario: string;
-    Password: string;
-    Tipo: string;
-    Nombre: string;
-    Email: string;
-    Movil: string;
-    Telefono: string;
+export interface EnviosPendientes {
+    IdEnvioPendiente: number;
+    Url: string;
+    Contenido: string;
+    TipoJsonPendiente: string;
 
 }
+
 
 export interface Notificacion {
     IdNotificacion?: number;
     Titulo: string;
     Mensaje: string;
     Leido: number;
-    TipoDocumento: string;
     Fecha: string;
     Ruta: string;
     Icono: string;
 }
 
-export interface EmpresaConsultor {
-
-    Nif: string;
-    NombreCliente: string;
-}
 
 export interface CambiarPassword {
 
@@ -94,58 +95,3 @@ export interface NotificacionesMensajes {
     Fecha: string;
     Id: number;
 }
-
-export interface DatosFiltros {
-
-    fecha_desde: string;
-    fecha_hasta: string;
-    nombre?: string;
-    dni?: string;
-    noPresentado?: boolean;
-    idCentro?: number;
-    idCentroEspecificado?: number;
-
-}
-
-export interface CentrosMPEFiltros {
-
-    codigoPostal?: string;
-    provincia?: string;
-    localidad?: string;
-}
-
-export interface UsuarioPost {
-
-    tipoUsuario: string;
-
-}
-
-export interface RespuestaAPIPost {
-
-    Direccion: string;
-    Provincia: string;
-    Fecha: string;
-    Titulo: string;
-    Texto: string;
-    Imagen: string;
-    Latitud: string;
-    Longitud: string;
-
-}
-
-export interface Opciones {
-
-    Titulo: string;
-    Icon: string;
-    Url: string;
-    Tab?: string;
-    direct: string;
-}
-
-
-export interface RespuestaAPItoken {
-
-    Codigo: number;
-    Mensaje: string;
-  
-  }

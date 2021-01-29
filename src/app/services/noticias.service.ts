@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { RespuestaAPINoticias } from '../interfaces/noticias-interfaces';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-const url =  'https://abm-time.com/api';
+const url =  'https://intranet-ayto.com/api/Ayto/GetNoticias';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class NoticiasService {
 
     };
 
-    const respuesta = await  this.http.post<RespuestaAPINoticias>(`${url}/TareaApi/GetApiListaTareas`, usuario, {headers: this.header}).toPromise();
+    const respuesta = await  this.http.post<RespuestaAPINoticias>(url, usuario, {headers: this.header}).toPromise();
 
     return respuesta;
 

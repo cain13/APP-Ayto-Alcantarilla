@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { FirmaAPI, FirmaPendiente } from '../interfaces/firma-interfaces';
+import { FirmaAPI } from '../interfaces/firma-interfaces';
 import { RespuestaAPIBasica } from '../interfaces/usuario-interfaces';
 import { File } from '@ionic-native/file/ngx';
 
-const url =  'https://abm-time.com/api';
+const url =  'https://intranet-ayto.com/api/Ayto/FinServicio';
 
 
 @Injectable({
@@ -18,34 +18,36 @@ export class FirmaService {
               private file: File) { }
 
 
-  async enviarFirmaAPI(idUsuario: number, idTarea: number, firmaBase64: string) {
+  async enviarFirmaAPI(username: string,pass: string, idEventoServicio: number, firmaBase64: string) {
 
     const firma: FirmaAPI = {
-      IdUsuario: idUsuario,
-      IdTarea: idTarea,
+      UserName: username,
+      Password: pass,
+      IdEventoServicio: idEventoServicio,
       FirmaBase64: firmaBase64
     };
 
-    return await this.http.post<RespuestaAPIBasica>(`${url}/LoginApp/Login`, firma, {headers: this.header}).timeout(7000).toPromise();
+    return await this.http.post<RespuestaAPIBasica>(url, firma, {headers: this.header}).timeout(7000).toPromise();
   }
 
-  async enviarFirmasPendientesAPI(firmaPendiente: FirmaPendiente){
-    var base64data: string | ArrayBuffer;                
+  async enviarFirmasPendientesAPI(firmaAPI: FirmaAPI){
+    /*var base64data: string | ArrayBuffer;                
     var reader = new FileReader();
-    reader.readAsDataURL(firmaPendiente.FirmaBase64); 
+     reader.readAsDataURL(firmaAPI.FirmaBase64); 
     reader.onloadend = function() {
       base64data = reader.result;                
       console.log('BLOB to base64: ',base64data);
-    }
+    } */
     const firma: FirmaAPI = {
-      IdUsuario: firmaPendiente.IdUsuario,
-      IdTarea: firmaPendiente.IdTarea,
-      FirmaBase64: base64data.toString()
+      UserName: firmaAPI.UserName,
+      Password: firmaAPI.Password,
+      IdEventoServicio: firmaAPI.IdEventoServicio,
+      FirmaBase64: firmaAPI.FirmaBase64
     };
 
-    console.log('Firma Pendiente: ', firmaPendiente);
+    console.log('Firma Pendiente: ', firma);
     
-    return await this.http.post<RespuestaAPIBasica>(`${url}/LoginApp/Login`, firma, {headers: this.header}).timeout(7000).toPromise();
+    return await this.http.post<RespuestaAPIBasica>(url, firma, {headers: this.header}).timeout(7000).toPromise();
 
 
   }

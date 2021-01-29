@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../../services/usuario.service';
-import { Opciones, UsuarioLogin, UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
+import {UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -12,8 +12,8 @@ export class TabInicioPage implements OnInit {
 
   usuario: UsuarioLoginApi;
   esGuardiaCivil = false;
-  opcionesTab: Opciones[];
-
+/*   opcionesTab: Opciones[];
+ */
 
   constructor(private usuarioService: UsuarioService,
               private route: ActivatedRoute) {

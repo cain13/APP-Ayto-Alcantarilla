@@ -35,6 +35,7 @@ export class LoginPage implements OnInit {
   mostrarContra = false;
   passwordIcon = 'eye-outline';
   passwordIcon2 = 'eye-off-outline';
+  pass: string = '';
   plataforma: string;
   EsGuardiaCivil = false;
   mostrarTerminosModal = false;
@@ -78,10 +79,10 @@ export class LoginPage implements OnInit {
 
     } else {
         this.onLoginForm = this.formBuilder.group({
-          usuario: [null, Validators.compose([
+          usuario: [this.usuario.UserName, Validators.compose([
             Validators.required
           ])],
-          password: [null, Validators.compose([
+          password: [this.usuario.Password, Validators.compose([
             Validators.required
           ])]
         });
@@ -174,7 +175,7 @@ export class LoginPage implements OnInit {
   }
  */
   
- mostrarContrase() {
+  mostrarContrase() {
     console.log(this.passwordIcon2);
     this.mostrarContra = !this.mostrarContra;
     if (this.passwordIcon2 === 'eye-off-outline') {
@@ -189,17 +190,18 @@ export class LoginPage implements OnInit {
   }
 
   async getDatosLogin() {
-    console.log('this.usuario: ', this.usuario)
-    this.usuarioService.guardarUsuarioBD(this.usuario);
+    
+    await this.usuarioService.present('Comprobando acceso...');
     this.menuCtrl.enable(true, 'menuTrabajadores');
     this.menuCtrl.enable(false, 'menuGuardiaCivil');
     this.menuCtrl.enable(false, 'menuCompleto');
 
-    this.navCtrl.navigateRoot('/inicio');
+    this.pass = this.onLoginForm.value.password;
+
     await this.usuarioService.loginAPI(this.onLoginForm.value.usuario, this.onLoginForm.value.password, this.tokenAPI).then( res => {
 
       this.ComprobarRespuestDeAPI(res);
-
+      this.usuarioService.dismiss;
     });
 
 
@@ -213,6 +215,8 @@ export class LoginPage implements OnInit {
       this.usuarioService.dismiss();
       this.usuarioService.presentAlert('Datos Incorrectos', 'Compruebe sus datos de nuevo.', '');
 
+      this.navCtrl.navigateRoot('/inicio');
+
     } else {
 
       try {
@@ -224,9 +228,9 @@ export class LoginPage implements OnInit {
         this.usuario = res;
 
       }
-
+      this.usuario.Password = this.pass;
       console.log('LOGIN-DNI: Usuario de API: ', this.usuario);
-
+      
       this.usuarioService.guardarUsuarioBD(this.usuario); // this.botonHuella.checked);
       console.log('LOGIN: ', this.usuario);
 
@@ -234,11 +238,16 @@ export class LoginPage implements OnInit {
       this.usuarioService.dismiss();
 
 
-      this.navCtrl.navigateRoot('/tab-inicio');
+      this.navCtrl.navigateRoot('/inicio');
 
 
     }
 
+  }
+
+  salirAPP() {
+
+    navigator['app'].exitApp();
   }
 
   
@@ -248,11 +257,6 @@ export class LoginPage implements OnInit {
 
 /*     window.open('https://grupompe.es/MpeNube/RecuperarPassApp.aspx', '_system');
  */
-  }
-
-  salirAPP() {
-
-    navigator['app'].exitApp();
   }
 
   /* convertPassword(cadena: string): string {

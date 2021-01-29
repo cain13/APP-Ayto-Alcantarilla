@@ -3,8 +3,7 @@ import { ModalController, NavController, LoadingController, ToastController, Ale
 import { TranslateProvider } from '../../providers';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { CambiarPasswordPage } from '../vistasMPE/cambiar-password/cambiar-password.page';
-import { UsuarioLogin } from 'src/app/interfaces/usuario-interfaces';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DatabaseService } from '../../services/database.service';
 import { NotificacionesService } from '../../services/notificaciones.service';
 import { UsuarioLoginApi } from '../../interfaces/usuario-interfaces';
@@ -20,7 +19,6 @@ export class EditProfilePage implements OnInit {
   Nombre = '';
   Tipo = '';
   Email = '';
-  Telefono = '';
   Movil = '';
   DNI = '';
 
@@ -49,7 +47,7 @@ export class EditProfilePage implements OnInit {
     
 
     this.Email = this.usuario.Email;
-    this.Movil = this.usuario.Movil;
+    this.Movil = this.usuario.Telefono;
     this.DNI = this.usuario.UserName;
     this.Nombre = this.usuario.NombreCompleto;
 
@@ -57,15 +55,22 @@ export class EditProfilePage implements OnInit {
     console.log('movil: ', this.Movil);
     console.log('email: ', this.Email);
 
+    if( this.Email === null ||  this.Email === undefined) {
 
+      this.Email = ""
+
+    }
+
+    if( this.Movil === null ||  this.Movil === undefined) {
+
+      this.Movil = ""
+
+    }
 
     this.editProfileForm = this.formBuilder.group({
-      nombre: [this.Nombre.toString(), Validators.compose([
-        Validators.required
-      ])],
-      DNI: [this.DNI.toString(), Validators.compose([
-        Validators.required
-      ])],
+      nombre: new FormControl({value: this.Nombre.toString(), disabled: true}, Validators.required),
+      
+      DNI: new FormControl({value: this.DNI.toString(), disabled: true}, Validators.required),
       movil: [this.Movil.toString(), Validators.compose([
         Validators.required
       ])],
@@ -110,15 +115,15 @@ export class EditProfilePage implements OnInit {
   }
 
   guardarCambios() {
-    //this.usuarioService.present('Guardando datos...');
+    this.usuarioService.present('Guardando datos...');
     const aux: UsuarioLoginApi = this.usuario;
     aux.Email = this.editProfileForm.value.email;
-    aux.NombreCompleto = this.editProfileForm.value.nombre;
-    aux.Movil = this.editProfileForm.value.movil;
+    aux.NombreCompleto = this.Nombre;
+    aux.Telefono = this.editProfileForm.value.movil;
 
-    /* this.usuarioService.actualizarDatosUsuarioAPI(aux).then( resp => {
-
-      if (!resp.Ok) {
+    this.usuarioService.actualizarDatosUsuarioAPI(aux).then( resp => {
+      console.log('RESPUESTA API EDIT PERFIL: ', resp);
+      if (resp.Respuesta.toString().toLocaleUpperCase() !== 'OK') {
         this.usuarioService.dismiss();
         this.usuarioService.presentAlert('Error', 'No se han podido guardar sus datos', 'Intentelo de nuevo más tarde');
         
@@ -134,7 +139,7 @@ export class EditProfilePage implements OnInit {
       this.usuarioService.dismiss();
       this.usuarioService.presentAlert('Error', 'No se han podido guardar sus datos', 'Intentelo de nuevo más tarde');  
 
-    })  */ 
+    });  
     
     
   }

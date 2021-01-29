@@ -24,7 +24,7 @@ export interface EstadoTarea {
 }
 
 export interface Tarea {
-    IdTarea: number;
+    IdEventoServicio: number;
     Nombre?: string;
     Descripcion?: string;
     Observaciones?: string;

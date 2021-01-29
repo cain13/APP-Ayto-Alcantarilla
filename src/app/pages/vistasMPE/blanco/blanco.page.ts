@@ -42,9 +42,10 @@ export class BlancoPage implements OnInit {
           this.usuario = {
             UserName: ultimoUsuario.UserName,
             Password: ultimoUsuario.Password,
-            IdUsuario: ultimoUsuario.IdUsuario,
+            IdEmpleado: ultimoUsuario.IdEmpleado,
+            HorasSemanales: ultimoUsuario.HorasSemanales,
             NombreCompleto: ultimoUsuario.NombreCompleto,
-            Movil: ultimoUsuario.Movil,
+            Telefono: ultimoUsuario.Telefono,
             Email: ultimoUsuario.Email
           };
 

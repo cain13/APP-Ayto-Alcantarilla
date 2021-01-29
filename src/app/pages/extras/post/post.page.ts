@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../../services/usuario.service';
-import { RespuestaAPIPost, UsuarioLogin, UsuarioPost, UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
@@ -41,17 +40,17 @@ export class PostPage implements OnInit {
     timestamp: '11h ago'
   }];
 
-  usuario: UsuarioLoginApi;
+  /* usuario: UsuarioLoginApi;
   header = new HttpHeaders().set('Content-Type', 'application/json');
   postAPI: RespuestaAPIPost[];
-
+ */
   constructor(private usuarioService: UsuarioService,
               private http: HttpClient) { }
 
   async ngOnInit() {
-    await this.usuarioService.present('Cargando anuncios...');
+    /* await this.usuarioService.present('Cargando anuncios...');
 
-    this.usuario = this.usuarioService.getUsuario();
+    this.usuario = this.usuarioService.getUsuario(); */
 
 /*   const usuarioPost: UsuarioPost = {
 
@@ -76,7 +75,7 @@ export class PostPage implements OnInit {
 
   }
 
-  async obtenerPost(usuarioPost: UsuarioPost): Promise <RespuestaAPIPost[]> {
+  /* async obtenerPost(usuarioPost: UsuarioPost): Promise <RespuestaAPIPost[]> {
     // tslint:disable-next-line: no-shadowed-variable
     const URL = 'https://mpecronos.com/api/Fichar/Fichar';
 
@@ -86,7 +85,7 @@ export class PostPage implements OnInit {
     return respuesta;
 
 
-  }
+  } */
 
 
 }

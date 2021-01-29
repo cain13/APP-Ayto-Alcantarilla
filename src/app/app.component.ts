@@ -214,17 +214,17 @@ export class AppComponent {
               Icono: '',
               Leido: 0,
               Ruta: '',
-              TipoDocumento: ''
             };
 
             notificacion.Titulo = data['Titulo'];
             notificacion.Leido = 0;
             notificacion.Mensaje = data['Mensaje'];
-            notificacion.TipoDocumento = data['TipoDocumento'];
-
+            notificacion.Icono = 'mail-outline';
+            notificacion.Ruta = '/message/';
+            
             this.notificacion = notificacion;
 
-            if (data['TipoUsuario'].toString().includes('TECNICO')) {
+            /* if (data['TipoUsuario'].toString().includes('TECNICO')) {
 
               switch (notificacion.TipoDocumento.toUpperCase()) {
                 case 'INFORMACION':
@@ -241,7 +241,7 @@ export class AppComponent {
                   notificacion.Ruta = '/inicio';
                   break;
               }
-            }
+            } */
 
             this.db.addNotificacion(notificacion);
         //  this.db.ModificarRutaNotificacion();
@@ -263,17 +263,16 @@ export class AppComponent {
               Icono: '',
               Leido: 0,
               Ruta: '',
-              TipoDocumento: ''
             };
 
             notificacion.Titulo = data['Titulo'];
             notificacion.Leido = 0;
             notificacion.Mensaje = data['Mensaje'];
-            notificacion.TipoDocumento = data['TipoDocumento'];
-
+            notificacion.Icono = 'mail-outline';
+            notificacion.Ruta = '/message/';
             this.notificacion = notificacion;
 
-            if (data['TipoUsuario'].toString().includes('TECNICO')) {
+            /* if (data['TipoUsuario'].toString().includes('TECNICO')) {
 
               switch (notificacion.TipoDocumento.toUpperCase()) {
                 case 'INFORMACION':
@@ -290,7 +289,7 @@ export class AppComponent {
                   notificacion.Ruta = '/inicio';
                   break;
               }
-            }
+            } */
             this.db.addNotificacion(notificacion);
             this.notificacionesService.SumaUnaNotificaciones();
 
@@ -304,17 +303,19 @@ export class AppComponent {
               Icono: '',
               Leido: 0,
               Ruta: '',
-              TipoDocumento: ''
+              
             };
 
             notificacion.Titulo = data['Titulo'];
             notificacion.Leido = 0;
             notificacion.Mensaje = data['Mensaje'];
-            notificacion.TipoDocumento = data['TipoDocumento'];
 
             this.notificacion = notificacion;
+            
+            notificacion.Icono = 'mail-outline';
+            notificacion.Ruta = '/message/';
 
-            if (data['TipoUsuario'].toString().includes('TECNICO')) {
+           /*  if (data['TipoUsuario'].toString().includes('TECNICO')) {
 
               switch (notificacion.TipoDocumento.toUpperCase()) {
                 case 'INFORMACION':
@@ -331,19 +332,20 @@ export class AppComponent {
                   notificacion.Ruta = '/inicio';
                   break;
               }
-            }
+            } */
             this.db.addNotificacion(notificacion);
             this.notificacionesService.SumaUnaNotificaciones();
             this.usuarioService.presentAlertNotificaciones('NUEVA NOTIFICACIÓN!!', 'Tiene una notificación nueva!!', '');
 
           }
         });
+
         this.statusBar.styleDefault();
+
         setTimeout(() => {
           this.splashScreen.hide();
         }, 1000);
-        // this.splashScreen.hide();
-        // Set language of the app.
+
         this.translateService.setDefaultLang(environment.language);
         this.translateService.use(environment.language);
         this.translateService.getTranslation(environment.language).subscribe(translations => {
@@ -373,6 +375,7 @@ export class AppComponent {
     }); */
 
   }
+
   backButtonEvent() {
     this.platform.backButton.subscribeWithPriority(0, async () => {
       await this.CerrarPopoOvr();
@@ -390,6 +393,7 @@ export class AppComponent {
       this.usuarioService.dismiss();
     });
   }
+
   async CerrarPopoOvr() {
     const popover = await this.popoverController.getTop();
         if (popover) {
@@ -400,6 +404,7 @@ export class AppComponent {
         }
        // this.navCtrl.navigateRoot('/tab-inicio');
   }
+
   closeMenu() {
     this.usuarioService.presentAlertSalir('Información', '', '¿Quieres usted salir de la aplicación?');
     // this.menu.close();
@@ -408,18 +413,7 @@ export class AppComponent {
 
   inicioMenu() {
     this.navCtrl.navigateRoot('inicio');
-  }
-
-  
-  async someAsyncOperation() {
-    // await this.navController.navigateForward("/test");
-  }
-
-
-
-
-
-  
+  }  
 
   editarPerfil() {
     this.navCtrl.navigateForward('edit-profile');

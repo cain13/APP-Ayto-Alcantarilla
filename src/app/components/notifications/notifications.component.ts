@@ -50,7 +50,7 @@ export class NotificationsComponent implements OnInit {
   }
   getSinNotificaciones() {
 
-      const Notificacion = {
+      const Notificacion: Notificacion = {
         IdNotificacion: 1,
         Titulo: 'No tienes notificaciones',
         Icono: 'notifications-off-outline',
@@ -58,7 +58,6 @@ export class NotificationsComponent implements OnInit {
         Mensaje: 'No hay notificaciones nuevas',
         Fecha:  moment().format('YYYY-MM-DDT00:00:00'),
         Leido: 1,
-        TipoDocumento: 'Docuemento'
       };
       this.listaMensajes.push(Notificacion);
       return this.listaMensajes;

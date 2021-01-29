@@ -8,6 +8,8 @@ import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 
 import * as moment from 'moment';
 import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
+import { DatabaseService } from '../../../services/database.service';
+import { Servicio } from 'src/app/interfaces/servicos-interfaces';
 
 
 @Component({
@@ -39,7 +41,7 @@ export class TareasInicioPage implements OnInit {
       Nombre: 'Pepe Moreno Muñoz',
     }
   ]
-  listaTareas: Tarea[] = [
+  /* listaTareas: Tarea[] = [
     {
       Descripcion: 'COMIDA, LIMPIEZA Y ASEO',
       DireccionTarea: 'C/ Ramón y Cajal nº 32 - 1º B',
@@ -49,7 +51,7 @@ export class TareasInicioPage implements OnInit {
       HoraFin: '9:00',
       IdEmpleado: 225,
       IdEstado: 0,
-      IdTarea: 5,
+      IdEventoServicio: 5,
       Nombre: 'JOSE NAVARRETE MARTINEZ',
       SubtareasLista: this.subtareasEjemplo,
       TelefonoCliente: '968555112',
@@ -115,7 +117,7 @@ export class TareasInicioPage implements OnInit {
       ViveSolo: 'SI',
       IdPersonaAsistida: 1
     }
-  ];
+  ]; */
   estadosTarea: EstadoTarea[] = [
     {
       Nombre: 'Terminada',
@@ -135,64 +137,148 @@ export class TareasInicioPage implements OnInit {
     },
   ];
 
-  fecha: string;
-  tareas: Tarea[];
+  mesesEnEspanol = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+  tareas: Servicio[];
   usuario: UsuarioLoginApi;
+  datePickerMin = Date.now().toString();
+  datePicker: Date = new Date();
+  verfechaInicial: boolean = true;
+  isTareaVacia: boolean = false;
+
   constructor(private tareasService: TareasService,
               private usuarioService: UsuarioService,
               private navCtrl: NavController,
+              private dataBaseService: DatabaseService
               ) { 
                 this.usuario = this.usuarioService.getUsuario();
 
               }
 
   async ngOnInit() {
-    // await this.usuarioService.present('Cargando tareas...');
-    this.fecha = moment().locale('es').format('DD/MM/YYYY');
-/*     await this.tareasService.obtenerTareas(this.usuario.IdUsuario, this.fecha).then( resp => {
- */
-      this.tareas = this.listaTareas;
-      this.definirEstado(this.listaTareas[0]);
-      this.tareasService.setListaTareas(this.tareas);
+    await this.usuarioService.present('Cargando tareas...');
 
-    /* }).catch( error => {
+    console.log('FECHA: ', moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ'));
+    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
+      console.log('RESPUESTA API GET TAREAS: ', resp)
+      if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
+
+        this.tareas = resp.Servicios;
+        if(this.tareas.length !== 0) {
+
+          this.definirEstado(this.tareas[0]);
+          this.tareasService.setListaTareas(this.tareas);
+          this.usuarioService.dismiss();  
+
+        } else {
+
+          this.isTareaVacia = true;
+          this.usuarioService.dismiss();  
+
+        }
+        
+      } else {
+
+        this.usuarioService.dismiss();
+        console.log('ERROR mensaje: ', resp.Mensaje);
+
+        this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
+
+      }
+      
+
+    }).catch( error => {
 
       console.log('ERROR getTareas: ', error);
+      this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
 
-    }) */
+      this.usuarioService.dismiss();
+
+    })
 
 
-    /* await this.tareasService.obtenerListaTiposIncidencia(this.usuario.IdUsuario).then( resp => {
+    await this.dataBaseService.obtenerListaTiposIncidencia().then( resp => {
 
-      this.tareasService.guardarListaIncidencias(resp.ListaTipoIncidencias);
+      const listaIncidencias: TipoIncidencia[] = resp;
+
+      if(listaIncidencias.length !== 0) {
+
+        this.tareasService.guardarListaIncidencias(listaIncidencias);
+
+      }
       this.usuarioService.dismiss();
 
     }).catch( error => {
 
       console.log('ERROR getIncidencias: ', error);
       this.usuarioService.dismiss();
-      this.usuarioService.presentAlert('Error','No se han podido cargar todos los datos.', 'Compruebe su conexión a internet');
+      this.usuarioService.presentAlert('Error','No se han podido cargar todos los datos.', 'Compruebe su conexión a internet.');
 
-    }) */
+    })
     
 
   }
 
-  addIncidencia(tarea: Tarea) {
+  addIncidencia(tarea: Servicio) {
     this.tareasService.guardarTarea(tarea);
     this.lista.closeSlidingItems();
     this.navCtrl.navigateForward('incidencias');
 
   }
 
-  masInformacion(tarea: Tarea) {
+  masInformacion(tarea: Servicio) {
 
     this.tareasService.guardarTarea(tarea);
     this.navCtrl.navigateForward('tarea-mas-info');
 
   }
 
-  async filtrar() {
+  async filtrarPorFecha() {
+    this.verfechaInicial = false;
+    console.log('datepicker: ', this.datePicker);
+    console.log('FECHA mandada: ', moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ'));
+
+    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
+      console.log('RESPUESTA API GET TAREAS: ', resp)
+      if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
+
+        this.tareas = resp.Servicios;
+        console.log('THIS. TAREAS: ', this.tareas);
+        if(this.tareas.length !== 0) {
+
+          this.definirEstado(this.tareas[0]);
+          this.isTareaVacia = false;
+          this.tareasService.setListaTareas(this.tareas);
+          this.usuarioService.dismiss();  
+
+        } else {
+
+          this.isTareaVacia = true;
+          this.usuarioService.dismiss();  
+
+        }
+        
+      } else {
+
+        this.usuarioService.dismiss();
+        console.log('ERROR mensaje: ', resp.Mensaje);
+
+        this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
+
+      }
+      
+
+    }).catch( error => {
+
+      console.log('ERROR getTareas: ', error);
+      this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
+
+      this.usuarioService.dismiss();
+
+    })
+  }
+
+  /* async filtrar() {
     console.log(this.estadoTareaSelec);
     console.log(this.visitaSeleccionada);
     await this.usuarioService.present('Filtrando tareas...');
@@ -246,7 +332,7 @@ export class TareasInicioPage implements OnInit {
     }
     console.log(arrayAux);
     this.tareas = arrayAux;
-    this.usuarioService.dismiss();
+    this.usuarioService.dismiss(); */
 
     /* await this.tareasService.obtenerTareas().then(res => {
       try {
@@ -310,23 +396,23 @@ export class TareasInicioPage implements OnInit {
   }).catch( error => {
     this.usuarioService.dismiss();
     this.usuarioService.presentAlert('ERROR','Fallo al filtrar.', 'Revise su conexión a internet.');
-  }); */
+  }); 
+  }*/
 
-  }
 
   public abirFiltros(): void {
     this.isOpenFiltros = !this.isOpenFiltros;
   }
 
-  public definirEstado(tarea: Tarea ) {
+  public definirEstado(servicio: Servicio ) {
 
     const fecha_actual = moment();
-    const horaTareaInicio = tarea.HoraInicio.split(':')[0];
-    const minutosTareaInicio = tarea.HoraInicio.split(':')[1];
+    const horaTareaInicio = moment(servicio.FechaInicio).format('HH');
+    const minutosTareaInicio = moment(servicio.FechaInicio).format('mm');
     const fechaTareaInicio = moment().set({hour: parseInt(horaTareaInicio, 10), minute: parseInt(minutosTareaInicio, 10), second: 0});
 
-    const horaTareaFin = tarea.HoraFin.split(':')[0];
-    const minutosTareaFin = tarea.HoraFin.split(':')[1];
+    const horaTareaFin = moment(servicio.FechaFin).format('HH')
+    const minutosTareaFin = moment(servicio.FechaFin).format('mm')
     const fechaTareaFin = moment().set({hour: parseInt(horaTareaFin, 10), minute: parseInt(minutosTareaFin, 10), second: 0});
 
     if ( fecha_actual > fechaTareaInicio) {
@@ -346,72 +432,143 @@ export class TareasInicioPage implements OnInit {
   }
 
   async actualizar() {
-    /* await this.usuarioService.present('Actualizando tareas...');
-    let respuestaAPI: RespuestaTareasAPI;
-    await this.tareasService.obtenerTareas().then(res => {
-      try {
-        respuestaAPI = JSON.parse(res.toString());
+    await this.usuarioService.present('Actualizando tareas...');
+    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('AAAA-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
 
-      } catch (error) {
-        respuestaAPI = res;
+      if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
+
+        this.tareas = resp.Servicios;
+        this.definirEstado(this.tareas[0]);
+        this.tareasService.setListaTareas(this.tareas);
+        this.usuarioService.dismiss();
+
+      } else {
+
+        this.usuarioService.dismiss();
+        console.log('ERROR mensaje: ', resp.Mensaje);
+
+        this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
+
       }
-      this.tareas = respuestaAPI.ListaTarea;
-      this.usuarioService.dismiss();
-    }).catch( error => {
-      this.usuarioService.dismiss();
-      this.usuarioService.presentAlert('ERROR', 'Fallo al actualizar', 'Revise su conexión a internet');
+      
 
-    }); */
+    }).catch( error => {
+
+      console.log('ERROR getTareas: ', error);
+      this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
+
+      this.usuarioService.dismiss();
+
+    })
     this.searchKey = '';
-    this.tareas = this.listaTareas;
   }
 
   async diaAnterior() {
-    const aux = moment(this.fecha, 'DD/MM/YYYY').subtract(1, 'day');
-    this.fecha = aux.format('DD/MM/YYYY');
+    this.verfechaInicial = false;
+    await this.usuarioService.present('Actualizando tareas...');
+    const aux = new Date(moment(this.datePicker).subtract(1, 'day').toDate())
+    /* const aux = moment(this.datePicker, 'DD/MM/YYYY').subtract(1, 'day');
+    this.datePicker = new Date(aux.toString()); */
+    this.datePicker = aux;
+    console.log(this.datePicker);
 
-    /* await this.tareasService.obtenerTareas( this.usuario.IdUsuario, this.fecha).then( resp => {
- */
-      this.tareas = this.listaTareas;
-      this.definirEstado(this.listaTareas[0]);
-      this.tareasService.setListaTareas(this.tareas);
+    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('AAAA-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
 
-    /* }) */
+      if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
+
+        this.tareas = resp.Servicios;
+        this.definirEstado(this.tareas[0]);
+        this.tareasService.setListaTareas(this.tareas);
+        this.usuarioService.dismiss();
+
+      } else {
+
+        this.usuarioService.dismiss();
+        console.log('ERROR mensaje: ', resp.Mensaje);
+
+        this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
+
+      }
+      
+
+    }).catch( error => {
+
+      console.log('ERROR getTareas: ', error);
+      this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
+
+      this.usuarioService.dismiss();
+
+    })
 
   }
 
   async diaSiguiente() {
-    const aux = moment(this.fecha, 'DD/MM/YYYY').add(1, 'day');
-    this.fecha = aux.format('DD/MM/YYYY');
+    this.verfechaInicial = false;
+    await this.usuarioService.present('Actualizando tareas...');
+    const aux = new Date(moment(this.datePicker).add(1, 'day').toDate())
+    /* const aux = moment(this.datePicker, 'DD/MM/YYYY').subtract(1, 'day');
+    this.datePicker = new Date(aux.toString()); */
+    this.datePicker = aux;
+    console.log(this.datePicker);
+    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('AAAA-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
 
-    /* await this.tareasService.obtenerTareas( this.usuario.IdUsuario, this.fecha).then( resp => {
- */
-      this.tareas = this.listaTareas;
-      this.definirEstado(this.listaTareas[0]);
-      this.tareasService.setListaTareas(this.tareas);
-/* 
-    }) */
+      if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
+
+        this.tareas = resp.Servicios;
+        this.definirEstado(this.tareas[0]);
+        this.tareasService.setListaTareas(this.tareas);
+        this.usuarioService.dismiss();
+
+      } else {
+
+        this.usuarioService.dismiss();
+        console.log('ERROR mensaje: ', resp.Mensaje);
+
+        this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
+
+      }
+      
+
+    }).catch( error => {
+
+      console.log('ERROR getTareas: ', error);
+      this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
+
+      this.usuarioService.dismiss();
+
+    })
   }
 
   async doRefresh(event) {
 
-    /* let respuestaAPI: RespuestaTareasAPI;
-    await this.tareasService.obtenerTareas().then(res => {
-      try {
-        respuestaAPI = JSON.parse(res.toString());
+    await this.usuarioService.present('Actualizando tareas...');
+    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('AAAA-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
 
-      } catch (error) {
-        respuestaAPI = res;
+      if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
+
+        this.tareas = resp.Servicios;
+        this.definirEstado(this.tareas[0]);
+        this.tareasService.setListaTareas(this.tareas);
+        this.usuarioService.dismiss();
+
+      } else {
+
+        this.usuarioService.dismiss();
+        console.log('ERROR mensaje: ', resp.Mensaje);
+
+        this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
 
       }
-      this.tareas = respuestaAPI.ListaTarea;
-      event.target.complete();
-    }).catch(error => {
-      this.usuarioService.presentAlert('ERROR', 'Fallo al actualizar', 'Revise su conexión a internet');
+      
 
-    }); */
+    }).catch( error => {
 
-    this.tareas = this.listaTareas;
+      console.log('ERROR getTareas: ', error);
+      this.usuarioService.presentAlert('ERROR', 'Fallo al cargar los servicios.', 'Compruebe su conexión a internet.');
+
+      this.usuarioService.dismiss();
+
+    })
     this.searchKey = '';
     event.target.complete();
 
@@ -433,12 +590,19 @@ export class TareasInicioPage implements OnInit {
 
 
   findAll() {
-    this.listaTareas = this.tareasService.getListaTareas();
+    this.tareas = this.tareasService.getListaTareas();
 
   }
 
-  firmar(tarea: Tarea) {
+  devolverHora(fecha: string) {
+
+    return moment(fecha).locale('es').format('HH:mm');
+
+  }
+
+  firmar(tarea: Servicio) {
     this.tareasService.guardarTarea(tarea);
+    this.lista.closeSlidingItems();
     this.navCtrl.navigateForward('firma');
 
   }

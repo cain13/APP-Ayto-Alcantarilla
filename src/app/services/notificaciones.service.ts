@@ -18,7 +18,8 @@ export class NotificacionesService {
   notificacionMantoux: any;
 
 
-  constructor(private db: DatabaseService) { }
+  constructor(private db: DatabaseService,
+          ) { }
 
   aumentarNotificaciones() {
     this.db.obtenerTodasSinLeerNotificacion().then( resp => {
@@ -30,6 +31,7 @@ export class NotificacionesService {
     });
 
   }
+
 
    marcarNotificacionesLeidas() {
     if (this.numNot !== 0) {

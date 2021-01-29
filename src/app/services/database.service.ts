@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { SQLiteObject, SQLite } from '@ionic-native/sqlite/ngx';
 import { BehaviorSubject } from 'rxjs';
 import { Platform } from '@ionic/angular';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
-import { Notificacion, UsuarioLoginApi } from '../interfaces/usuario-interfaces';
-import { FirmaPendiente } from '../interfaces/firma-interfaces';
+import { EnviosPendientes, Notificacion, NotificacionesPendientes, RespuestaAPIBasica, UsuarioLoginApi } from '../interfaces/usuario-interfaces';
+import { TipoIncidencia } from '../interfaces/interfacesTareas';
+
+const url =  'https://intranet-ayto.com/api';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,8 @@ export class DatabaseService {
   private storage: SQLiteObject;
   private isDbReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+
+  header = new HttpHeaders().set('Content-Type', 'application/json');
 
 
   constructor(private platform: Platform, private sqlite: SQLite, private httpClient: HttpClient, private sqlPorter: SQLitePorter) {
@@ -82,9 +86,9 @@ export class DatabaseService {
           console.log('DB: Tabla USUARIOS vacia'); }).catch(() => { console.log('DB: ERROR AL BORRAR TABLAS USUARIO'); });
 
         // tslint:disable-next-line: max-line-length
-        const data = [usuario.UserName, usuario.Password, usuario.NombreCompleto, usuario.Movil, usuario.Email];
+        const data = [usuario.UserName, usuario.Password, usuario.IdEmpleado, usuario.HorasSemanales, usuario.NombreCompleto, usuario.Telefono, usuario.Email];
         // tslint:disable-next-line: max-line-length
-        const respuesta = this.storage.executeSql('INSERT INTO usuariosTable (UserName, Pass, NombreCompleto, Movil, Email) VALUES (?, ?, ?, ?, ?)', data).then(() => {
+        const respuesta = this.storage.executeSql('INSERT INTO usuariosTable (UserName, Pass, IdEmpleado, HorasSemanales, NombreCompleto, Telefono, Email) VALUES (?, ?, ?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Usuario creado');
 
         });
@@ -98,6 +102,57 @@ export class DatabaseService {
 
   }
 
+  guardarArrayIncidencias(arrayIncidencias: TipoIncidencia[]) {
+
+    console.log('DB:arrayIncidencias 0');
+    this.estadoBD().then(async () => {
+        console.log('DB:addUsuario 1');
+
+        this.storage.executeSql('DELETE FROM incidenciasTable').then(() => {
+          console.log('DB: Tabla Incidencias vacia'); }).catch(() => { console.log('DB: ERROR AL BORRAR TABLAS INCIDENCIAS'); });
+
+        // tslint:disable-next-line: max-line-length
+
+        for (const incidencia of arrayIncidencias) {
+
+          const data = [incidencia.IdIncidencia, incidencia.Nombre];
+          // tslint:disable-next-line: max-line-length
+          const respuesta = this.storage.executeSql('INSERT INTO incidenciasTable (IdIncidenciaAPI, NombreIncidencia) VALUES (?, ?)', data).then(() => {
+            console.log('DB: Incidencia creado');
+  
+          }).catch(error => {
+
+            console.log('Error, al crear incidencia');
+
+          });
+
+        }
+
+    }).catch( error => {
+
+      console.log('Error al añadir el usuario a la bd: ', error);
+
+    });
+
+  }
+
+  async obtenerListaTiposIncidencia(): Promise<TipoIncidencia[]> {
+    const sql = 'SELECT * FROM incidenciasTable';
+
+    try {
+      const response = await this.storage.executeSql(sql, []);
+      const incidencias = [];
+      console.log('obtener incidencias index ' + incidencias);
+      for (let index = 0; index < response.rows.length; index++) {
+        incidencias.push(response.rows.item(index));
+        console.log('obtener motivo index ' + response.rows.item(index));
+      }
+      return Promise.resolve<TipoIncidencia[]>(incidencias);
+    } catch (error) {
+      Promise.reject(error);
+    }
+  }
+
 
 
   BorrarUsuario() {
@@ -106,31 +161,64 @@ export class DatabaseService {
       console.log('DB: Borramos todo el contenido de la tabla de BD...');
         this.storage.executeSql('DELETE FROM usuariosTable').then(() => {
           console.log('DB: Tabla USUARIOS vacia'); }).catch(error => { console.log('DB: ERROR AL BORRAR TABLAS USUARIO'); });
-          this.storage.executeSql('DELETE FROM notificacion').then(() => {
+          this.storage.executeSql('DELETE FROM notificacionTable').then(() => {
             console.log('DB: Tabla NOTIFICACION vacia'); }).catch(error => { console.log('DB: ERROR AL BORRAR TABLAS NOTFICACION'); });
     });
   }
 
   async obtenerUltimoUsuario(): Promise<UsuarioLoginApi> {
+    
     const res =  await this.storage.executeSql('SELECT * FROM usuariosTable LIMIT 1 ', []);
+    console.log('PRUEBA')
     if (res.rows.length !== 0) {
+      console.log('usuario: ', res.rows.item(0))
       return {
         UserName: res.rows.item(0).UserName,
-        Password: res.rows.item(0).Password,
-        IdUsuario: res.rows.item(0).IdUsuario,
+        Password: res.rows.item(0).Pass,
+        IdEmpleado: res.rows.item(0).IdEmpleado,
+        HorasSemanales: res.rows.item(0).HorasSemanales,
         NombreCompleto: res.rows.item(0).NombreCompleto,
-        Movil: res.rows.item(0).Movil,
+        Telefono: res.rows.item(0).Telefono,
         Email: res.rows.item(0).Email
       };
     } else { return null; }
 
   }
 
+  addNotificacionesPendientes(arrayNotificacionesPendientes: NotificacionesPendientes[]) {
+
+    for( const notPendiente of arrayNotificacionesPendientes) {
+
+      const notificacion : Notificacion = {
+
+        Titulo: notPendiente.Titulo,
+        Mensaje: notPendiente.Mensaje,
+        Leido: 0,
+        Fecha: notPendiente.Fecha,
+        Icono: 'mail-outline',
+        Ruta: '/message/'
+
+      }
+
+      this.estadoBD().then(async () => {
+        const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
+        const respuesta = await this.storage.executeSql('INSERT INTO notificacion (Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?)', data).then(() => {
+          console.log('DB: Notificacion añadida');
+
+
+        });
+        console.log('DB: Respuesta Notificacion', respuesta);
+    });
+
+    }
+
+  }
+
   addNotificacion(notificacion: Notificacion) {
     console.log('notificacion 2: ',notificacion);
     this.estadoBD().then(async () => {
-        const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.TipoDocumento, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
-        const respuesta = await this.storage.executeSql('INSERT INTO notificacion (Titulo, Mensaje, Leido, TipoDocumento, Fecha,Ruta,Icono) VALUES (?, ?, ?, ?, ?, ?, ?)', data).then(() => {
+        const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
+        const respuesta = await this.storage.executeSql('INSERT INTO notificacion (Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Notificacion añadida');
 
 
@@ -145,7 +233,7 @@ export class DatabaseService {
     // La siguiente sentencia SQL borra todo el contenido de la tabla:
     this.estadoBD().then(async () => {
       console.log('DB: Borramos notificacion BD...');
-        this.storage.executeSql('DELETE FROM notificacion WHERE IdNotificacion=' + id).then(() => {
+        this.storage.executeSql('DELETE FROM notificacionTable WHERE IdNotificacion=' + id).then(() => {
           console.log('DB: Notificacion Borrada'); }).catch(error => { console.log('DB: ERROR AL BORRAR NOTIFICACION'); });
     });
   }
@@ -153,7 +241,7 @@ export class DatabaseService {
 
   async obtenerTodasNotificacion() {
 
-    const sql = 'SELECT * FROM notificacion';
+    const sql = 'SELECT * FROM notificacionTable';
 
     try {
       const response = await this.storage.executeSql(sql, []);
@@ -186,24 +274,71 @@ export class DatabaseService {
   }
 
   async obtenerNotificacion(id): Promise<Notificacion> {
-    const res =  await this.storage.executeSql('SELECT * FROM notificacion WHERE IdNotificacion=' + id, []);
+    const res =  await this.storage.executeSql('SELECT * FROM notificacionTable WHERE IdNotificacion=' + id, []);
+
+    const not = {
+
+      IdNotificacion: id
+
+    }
+
+    let notificacion: Notificacion;
+    let aux: any
+    
+
+
     if (res.rows.length !== 0) {
-      return {
+      notificacion =  {
         IdNotificacion: res.rows.item(0).IdNotificacion,
         Titulo: res.rows.item(0).Titulo,
         Mensaje: res.rows.item(0).Mensaje,
-        TipoDocumento: res.rows.item(0).TipoDocumento,
         Leido: res.rows.item(0).Leido,
         Fecha: res.rows.item(0).Fecha,
         Ruta: res.rows.item(0).Ruta,
         Icono: res.rows.item(0).Icono,
       };
-    } else { return null; }
+    } else { 
+      notificacion = null; 
+    }
+    
+    await this.httpClient.post<RespuestaAPIBasica>(`${url}/Ayto/NotificacionLeida`, not, {headers: this.header}).timeout(7000).toPromise().then( data => {
+
+      if (data.Respuesta.toString().toLocaleUpperCase() !== 'OK') {
+         aux = {
+
+          IdNotificacion: id
+  
+        };
+        console.log('ERROR AL MANDAR NOTIFICACION API, ', data.Mensaje);
+        const contenido = JSON.stringify(notificacion);
+        const urlPendiente = 'https://intranet-ayto.com/api/Ayto/NotificacionLeida';
+        const tipoJsonPendiente = 'NOTIFICACION';
+  
+        this.addJsonPendiente(urlPendiente, contenido,  tipoJsonPendiente);
+      }
+
+    }).catch( error => {
+
+      aux = {
+
+        IdNotificacion: id
+
+      };
+      const contenido = JSON.stringify(notificacion);
+      const urlPendiente = 'https://intranet-ayto.com/api/Ayto/NotificacionLeida';
+      const tipoJsonPendiente = 'NOTIFICACION';
+
+      this.addJsonPendiente(urlPendiente, contenido,  tipoJsonPendiente);     
+
+    });
+
+    return notificacion;
+   
 
   }
 
 
-  async ModificarRutaNotificacion() {
+  /* async ModificarRutaNotificacion() {
     const res =  await this.storage.executeSql('SELECT * FROM notificacion ORDER BY IdNotificacion DESC LIMIT 1', []);
     if (res.rows.length !== 0) {
       const notificacion = {
@@ -223,7 +358,7 @@ export class DatabaseService {
      const resultado = await this.storage.executeSql('UPDATE notificacion SET Ruta=? WHERE IdNotificacion = ?', data);
     } else { return null; }
 
-  }
+  } */
 
 
   async obtenerTodasSinLeerNotificacion() {
@@ -231,7 +366,7 @@ export class DatabaseService {
     /*     const sql = 'SELECT * FROM notificacion WHERE Leido = ?';
      */
         try {
-          const response = await this.storage.executeSql('SELECT * FROM notificacion WHERE Leido = ?', [0]);
+          const response = await this.storage.executeSql('SELECT * FROM notificacionTable WHERE Leido = ?', [0]);
           const notificaciones = [];
           for (let index = 0; index < response.rows.length; index++) {
             notificaciones.push(response.rows.item(index));
@@ -246,44 +381,42 @@ export class DatabaseService {
   }
 
 
-  //Firmas Pendientes
+  //Json Pendientes
 
-  addFirmaPendiente(idUsuario: number, idTarea: number, blobFirma: Blob) {
-    console.log('add firmaPendiente a bd IDUSUARIO: ',idUsuario);
-    console.log('add firmaPendiente a bd IDTAREA: ',idTarea);
-    console.log('add firmaPendiente a bd BLOB: ',blobFirma);
-
+  addJsonPendiente(urlEnvio: string, contenido: string, tipoJsonPendiente: string) {
+    
+  
     this.estadoBD().then(async () => {
-        const data = [idUsuario, idTarea, blobFirma];
-        const respuesta = await this.storage.executeSql('INSERT INTO firmasPendientes (IdUsuario, IdTarea, FirmaBLOB) VALUES (?, ?, ?)', data).then(() => {
-          console.log('DB: FirmaPendiente añadida');
-
-
+        const data = [urlEnvio, contenido, tipoJsonPendiente];
+        const respuesta = await this.storage.executeSql('INSERT INTO enviosPendientes (UrlEnvio, Contenido, TipoJsonPendiente) VALUES (?, ?, ?)', data).then(() => {
+          console.log('DB: JsonPendiente añadido');
         });
-        console.log('DB: Respuesta FirmaPendiente', respuesta);
+        console.log('DB: Respuesta JsonPendiente', respuesta);
     });
   }
 
-  async obtenerTodasFirmasPendientes(): Promise<FirmaPendiente[]> {
+  async obtenerTodosJsonPendientes(): Promise<EnviosPendientes[]> {
 
-    const sql = 'SELECT * FROM firmasPendientes';
+    const sql = 'SELECT * FROM enviosPendientesTable';
 
     try {
       const response = await this.storage.executeSql(sql, []);
-      const firmaPendiente = [];
-      console.log('obtener firmaPendiente index ' + firmaPendiente);
+      const enviosPendientes = [];
+      console.log('obtener enviosPendientes index ' + enviosPendientes);
       for (let index = 0; index < response.rows.length; index++) {
-        firmaPendiente.push(response.rows.item(index));
-        console.log('obtener firmaPendiente index ' + response.rows.item(index));
+        enviosPendientes.push(response.rows.item(index));
+        console.log('obtener EnviosPendientes index ' + response.rows.item(index));
       }
-      return Promise.resolve<FirmaPendiente[]>(firmaPendiente);
+      return Promise.resolve<EnviosPendientes[]>(enviosPendientes);
     } catch (error) {
       Promise.reject(error);
     }
 
-  }
-
-
+  } 
   
+  async borrarJSONPendiente(id) {
+
+    const respuestaBD = await this.storage.executeSql('DELETE FROM jsonPendientesTable WHERE IdJSONPend = ?', [id]);
+  }
 
 }

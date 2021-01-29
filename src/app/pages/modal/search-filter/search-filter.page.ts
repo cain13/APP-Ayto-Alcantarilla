@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { CentrosMPEFiltros} from 'src/app/interfaces/usuario-interfaces';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 
@@ -30,11 +29,11 @@ export class SearchFilterPage implements OnInit {
   }
 
   filtrar() {
-    const datosFil: CentrosMPEFiltros = {
+    /* const datosFil: CentrosMPEFiltros = {
       codigoPostal: this.CodigoPostalFiltro,
       provincia: this.ProvinciaFiltro,
       localidad: this.LocalidadFiltro,
-    };
+    }; */
 
     this.closeModal();
 

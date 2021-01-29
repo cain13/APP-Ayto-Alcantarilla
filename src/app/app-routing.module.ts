@@ -77,8 +77,13 @@ const routes: Routes = [
   },
   {
     path: 'firma',
-    loadChildren: () => import('./pages/vistasMPE/firma/firma.module').then( m => m.FirmaPageModule)
+    loadChildren: () => import('./pages/vistasTareas/firma/firma.module').then( m => m.FirmaPageModule)
+  },
+  {
+    path: 'calendario',
+    loadChildren: () => import('./pages/vistasMPE/calendario/calendario.module').then( m => m.CalendarioPageModule)
   }
+
 
 
 

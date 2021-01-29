@@ -3,52 +3,35 @@ import { DatosAddUbicacion, RespuestaTareasAPI, RespuestaTiposIncidenciasAPI, Ta
 import { HttpClient } from '@angular/common/http';
 import { UsuarioService } from './usuario.service';
 import { RespuestaAPIBasica } from '../interfaces/usuario-interfaces';
+import { RespuestaAPIServicios, Servicio } from '../interfaces/servicos-interfaces';
 
-const url =  'https://abm-time.com/api';
+const url =  'https://intranet-ayto.com/api';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TareasService {
 
-  tarea: Tarea;
-  listaTareas: Tarea[];
-  listaTipoIncidencias: TipoIncidencia[] = [
-      {
-      IdIncidencia: 0,
-      Nombre: 'Usuario Ausente'
-    },
-    {
-      IdIncidencia: 1,
-      Nombre: 'Otros'
-    }
-  ];
+  tarea: Servicio;
+  listaTareas: Servicio[];
+  listaTipoIncidencias: TipoIncidencia[] = [];
 
   constructor(private http: HttpClient,
               private usuarioService: UsuarioService) { }
 
-  async obtenerListaTareas(idUsuario: number, fecha: string): Promise<RespuestaTareasAPI> {
+  async obtenerListaTareas(username: string, pass: string, fecha: string): Promise<RespuestaAPIServicios> {
 
     const datosTareas = {
 
-      IdUsuario: idUsuario,
-      Fecha: fecha
+      UserName: username,
+      Password: pass,
+      FechaInicio: fecha
 
     };
-    return await this.http.post<RespuestaTareasAPI>(`${url}/TareaApi/GetApiListaTareas`, datosTareas).toPromise();
+    return await this.http.post<RespuestaAPIServicios>(`${url}/Ayto/GetServicios`, datosTareas).toPromise();
 
   }
 
-  async obtenerListaTiposIncidencia(idUsuario: number): Promise<RespuestaTiposIncidenciasAPI> {
-
-    const datosUsuario = {
-
-      IdUsuario: idUsuario
-
-    };
-    return await this.http.post<RespuestaTiposIncidenciasAPI>(`${url}/TareaApi/GetApiListaTareas`, datosUsuario).toPromise();
-
-  }
 
   async addUbicacionAPI(latitud: number, longitud: number, pin: string, idUsuario: number): Promise<RespuestaAPIBasica> {
 
@@ -75,7 +58,7 @@ export class TareasService {
 
   }
 
-  setListaTareas(listaTareas) {
+  setListaTareas(listaTareas: Servicio[]) {
     this.listaTareas = listaTareas;
   }
 
@@ -93,7 +76,7 @@ export class TareasService {
 
   getItem(id) {
     for (let i = 0; i < this.listaTareas.length; i++) {
-      if (this.listaTareas[i].IdTarea === parseInt(id, 10)) {
+      if (this.listaTareas[i].Servicio.IdServicio === parseInt(id, 10)) {
         return this.listaTareas[i];
       }
     }
@@ -103,21 +86,21 @@ export class TareasService {
   findByName(searchKey: string) {
     console.log(searchKey);
     const key: string = searchKey.toUpperCase();
-    return Promise.resolve(this.listaTareas.filter((tarea: Tarea) =>
-        (tarea.Descripcion +  ' ' + tarea.Nombre + ' ' + 
-        tarea.HoraInicio + ' ' + tarea.HoraFin + ' ' + tarea.IdPersonaAsistida 
-        + ' ' + tarea.IdPersonaAsistida + ' ' + tarea.Edad + ' ' + tarea.DireccionTarea + ' ' + tarea.TelefonoCliente
-        + ' ' + tarea.Grado + ' ' + tarea.IdEstado).toUpperCase().indexOf(key) > -1));
+    return Promise.resolve(this.listaTareas.filter((tarea: Servicio) =>
+        (tarea.Descripcion +  ' ' + tarea.Usuario.Nombre + ' ' + ' ' + tarea.Usuario.ApellidosCompletos + ' ' +  
+        tarea.FechaInicio + ' ' + tarea.FechaFin + ' ' + tarea.Usuario.IdUsuario 
+        + ' ' + tarea.Usuario.Edad  + ' ' + tarea.Usuario.Direccion + ' ' + tarea.Usuario.DNI
+        + ' ' + tarea.Grado ).toUpperCase().indexOf(key) > -1));
   }
 
 
-  guardarTarea(tarea: Tarea) {
+  guardarTarea(tarea: Servicio) {
 
     this.tarea = tarea;
 
   }
 
-  getTarea(): Tarea {
+  getTarea(): Servicio {
 
     return this.tarea;
 
