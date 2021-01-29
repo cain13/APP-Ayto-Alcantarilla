@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { EnviosPendientes, Notificacion, NotificacionesPendientes, RespuestaAPIBasica, UsuarioLoginApi } from '../interfaces/usuario-interfaces';
 import { TipoIncidencia } from '../interfaces/interfacesTareas';
+import { UsuarioService } from './usuario.service';
 
 const url =  'https://intranet-ayto.com/api';
 
@@ -202,7 +203,7 @@ export class DatabaseService {
 
       this.estadoBD().then(async () => {
         const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
-        const respuesta = await this.storage.executeSql('INSERT INTO notificacion (Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?)', data).then(() => {
+        const respuesta = await this.storage.executeSql('INSERT INTO notificacionTable (Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Notificacion añadida');
 
 
@@ -218,7 +219,7 @@ export class DatabaseService {
     console.log('notificacion 2: ',notificacion);
     this.estadoBD().then(async () => {
         const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
-        const respuesta = await this.storage.executeSql('INSERT INTO notificacion (Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?)', data).then(() => {
+        const respuesta = await this.storage.executeSql('INSERT INTO notificacionTable (Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Notificacion añadida');
 
 
@@ -266,14 +267,14 @@ export class DatabaseService {
     return null;
   }
 
-  async marcarNotificacionLeida(id) {
+  async  marcarNotificacionLeida(id) {
     const data = [1, id];
     // tslint:disable-next-line: max-line-length
-    const res = await this.storage.executeSql('UPDATE notificacion SET Leido=? WHERE IdNotificacion = ?', data);
+    const res = await this.storage.executeSql('UPDATE notificacionTable SET Leido=? WHERE IdNotificacion = ?', data);
 
   }
 
-  async obtenerNotificacion(id): Promise<Notificacion> {
+  async obtenerNotificacion(id,username: string, password: string): Promise<Notificacion> {
     const res =  await this.storage.executeSql('SELECT * FROM notificacionTable WHERE IdNotificacion=' + id, []);
 
     const not = {
@@ -305,11 +306,12 @@ export class DatabaseService {
 
       if (data.Respuesta.toString().toLocaleUpperCase() !== 'OK') {
          aux = {
-
+          UserName: username,
+          Password: password,
           IdNotificacion: id
   
         };
-        console.log('ERROR AL MANDAR NOTIFICACION API, ', data.Mensaje);
+        console.log('ERROR AL MANDAR NOTIFICACION API, ', data);
         const contenido = JSON.stringify(notificacion);
         const urlPendiente = 'https://intranet-ayto.com/api/Ayto/NotificacionLeida';
         const tipoJsonPendiente = 'NOTIFICACION';
@@ -388,7 +390,7 @@ export class DatabaseService {
   
     this.estadoBD().then(async () => {
         const data = [urlEnvio, contenido, tipoJsonPendiente];
-        const respuesta = await this.storage.executeSql('INSERT INTO enviosPendientes (UrlEnvio, Contenido, TipoJsonPendiente) VALUES (?, ?, ?)', data).then(() => {
+        const respuesta = await this.storage.executeSql('INSERT INTO enviosPendientesTable (UrlEnvio, Contenido, TipoJsonPendiente) VALUES (?, ?, ?)', data).then(() => {
           console.log('DB: JsonPendiente añadido');
         });
         console.log('DB: Respuesta JsonPendiente', respuesta);
@@ -416,7 +418,7 @@ export class DatabaseService {
   
   async borrarJSONPendiente(id) {
 
-    const respuestaBD = await this.storage.executeSql('DELETE FROM jsonPendientesTable WHERE IdJSONPend = ?', [id]);
+    const respuestaBD = await this.storage.executeSql('DELETE FROM enviosPendientesTable WHERE IdEnvioPendiente = ?', [id]);
   }
 
 }

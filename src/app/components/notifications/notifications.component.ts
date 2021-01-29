@@ -34,7 +34,7 @@ export class NotificationsComponent implements OnInit {
 
     await this.db.obtenerTodasNotificacion().then( async res => {
 
-      console.log('FICHAR: respuestaBD motivos: ', res);
+      console.log('FICHAR: respuestaBD notificacions: ', res);
       this.listaMensajes = res;
       if(res.length == 0) {
         this.getSinNotificaciones();
@@ -42,7 +42,7 @@ export class NotificationsComponent implements OnInit {
       this.usuarioService.dismiss();
     }).catch(() => {
       this.usuarioService.dismiss();
-      console.log('FICHAR ERROR: Obtener Lista Motivos');
+      console.log('FICHAR ERROR: Obtener Lista notificacions');
       this.getSinNotificaciones();
     });
     // AQUI CARGO LISTA NOTIFICACION DE BD

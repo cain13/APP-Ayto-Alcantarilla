@@ -42,7 +42,7 @@ export class NotificacionesPage implements OnInit {
 
     await this.db.obtenerTodasNotificacion().then( async res => {
 
-      console.log('FICHAR: respuestaBD motivos: ', res);
+      console.log('FICHAR: respuestaBD notificacions: ', res);
       this.listaMensajes = res;
       if (res.length === 0) {
         this.getSinNotificaciones();
@@ -50,7 +50,7 @@ export class NotificacionesPage implements OnInit {
       this.usuarioService.dismiss();
     }).catch(() => {
       this.usuarioService.dismiss();
-      console.log('FICHAR ERROR: Obtener Lista Motivos');
+      console.log('FICHAR ERROR: Obtener Lista notificacions');
       this.getSinNotificaciones();
     });
     // AQUI CARGO LISTA NOTIFICACION DE BD
@@ -74,6 +74,12 @@ export class NotificacionesPage implements OnInit {
 
   delete(notificacion: Notificacion) {
     this.db.BorrarNotificacion(notificacion.IdNotificacion);
+    console.log('notificacion.Leido  === 0', notificacion.Leido  === 0);
+    if( notificacion.Leido  === 0) {
+
+      this.notificacionesService.RestaUnaNotificaciones();
+
+    }
     this.usuarioService.presentToast('Notificación eliminada correctamente.');
     this.modalCtrl.dismiss();
   }

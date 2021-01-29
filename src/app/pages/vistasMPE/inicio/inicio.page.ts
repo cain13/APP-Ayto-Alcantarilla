@@ -100,44 +100,19 @@ export class InicioPage implements OnInit {
 
       this.usuario = this.usuarioService.getUsuario();
 
-
-   /*  try {
-    } catch (error) {
-      this.dataBaseService.estadoBD().then( async () => {
-
-        console.log('BLANCO: Comprobamos si hay ultimo usuario...');
-        await this.dataBaseService.obtenerUltimoUsuario().then( ultimoUsuario => {
-          if (ultimoUsuario === null) {
-            console.log('No hay usuarios en la BD');
-            this.navCtrl.navigateRoot('/walkthrough');
-  
-          } else {
-  
-            this.usuario = {
-              UserName: ultimoUsuario.UserName,
-              Password: ultimoUsuario.Password,
-              IdEmpleado: ultimoUsuario.IdEmpleado,
-              HorasSemanales: ultimoUsuario.HorasSemanales,
-              NombreCompleto: ultimoUsuario.NombreCompleto,
-              Telefono: ultimoUsuario.Telefono,
-              Email: ultimoUsuario.Email
-            };
-  
-           this.usuarioService.guardarUsuario(this.usuario);
-           console.log('Usuario: ', ultimoUsuario);
-           this.menuCtrl.enable(true, 'menuTrabajadores');
-           this.menuCtrl.enable(false, 'menuCompleto');
-           console.log('BLANCO: Si hay usuario en BD: ', this.usuario);
-          }
-        });
-      })
-    } */
   }
 
   async ngOnInit() {
 
+    await this.usuarioService.present('Cargando datos...');
+    await this.usuarioService.enviarEnviosPendientes().then(data => {
+      console.log('envios pendientes mandados correctamente');
+    }).catch(error => {
 
-     await this.usuarioService.enviarEnviosPendientes();
+      console.log('ERROR AL MANDAR JSON PENDIENTE: ', error);
+
+    });
+    await this.usuarioService.dismiss();
     /* await this.usuarioService.present('Cargando datos...');
     await this.noticiasService.getNoticias(this.usuario.IdUsuario).then( resp => {
 

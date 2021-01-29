@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { DatabaseService } from '../../services/database.service';
-import { Notificacion } from '../../interfaces/usuario-interfaces';
+import { Notificacion, UsuarioLoginApi } from '../../interfaces/usuario-interfaces';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-message',
@@ -19,18 +20,25 @@ export class MessagePage implements OnInit {
         Icono: '',
         Ruta:''
   };
+
+  usuario: UsuarioLoginApi;
+
+  fecha: Date;
  
   messageID: any = this.route.snapshot.paramMap.get('id');
 
   constructor(
     public route: ActivatedRoute,
-    public db: DatabaseService
-  ) { }
+    public db: DatabaseService,
+    private usuarioService: UsuarioService
+  ) { 
+    this.usuario = this.usuarioService.getUsuario();
+  }
 
   async ngOnInit() {
-
+    
     console.log("messageID ",this.messageID);
-    await this.db.obtenerNotificacion(this.messageID).then((noti) => {
+    await this.db.obtenerNotificacion(this.messageID, this.usuario.UserName, this.usuario.Password).then((noti) => {
       this.message = {
         IdNotificacion: noti.IdNotificacion,
         Titulo: noti.Titulo,
@@ -40,6 +48,8 @@ export class MessagePage implements OnInit {
         Icono: noti.Icono,
         Ruta: noti.Ruta
       };
+
+      this.fecha = new Date (this.message.Fecha);
     });
   }
 
