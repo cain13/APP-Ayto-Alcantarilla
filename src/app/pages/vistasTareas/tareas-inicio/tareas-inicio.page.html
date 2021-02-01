@@ -5,10 +5,10 @@
 
       <ion-row class="ion-no-padding" style="margin-top: 1px !important; margin-bottom: 0px !important; ">
 
-        <ion-col size="2" class="ion-no-padding">
-         <!--  <ion-button color="light" fill="clear" >
+        <ion-col size="2" class="ion-no-padding" (click)="diaAnterior()">
+          <ion-button color="light" fill="clear" >
             <ion-icon slot="start" name="chevron-back-outline" ></ion-icon>
-          </ion-button> -->
+          </ion-button>
         </ion-col>
 
         <ion-col size="8" class="ion-no-padding" style="padding-top: 1px !important;" (click)="picker.open()">
@@ -30,10 +30,10 @@
           </ion-label>
         </ion-col>
 
-        <ion-col size="2" class="ion-no-padding" >
-         <!--  <ion-button color="light" fill="clear">
+        <ion-col size="2" class="ion-no-padding" (click)="diaSiguiente()">
+          <ion-button color="light" fill="clear">
             <ion-icon slot="start" name="chevron-forward-outline"></ion-icon>
-          </ion-button> -->
+          </ion-button>
         </ion-col>
         
       </ion-row>

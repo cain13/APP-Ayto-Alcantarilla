@@ -7,6 +7,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import * as moment from 'moment';
 import { NotificacionesService } from '../../../services/notificaciones.service';
+import { Usuario } from '../../../interfaces/servicos-interfaces';
 
 @Component({
   selector: 'app-notificaciones',
@@ -61,6 +62,7 @@ export class NotificacionesPage implements OnInit {
 
       const notificacion: Notificacion = {
         IdNotificacion: 1,
+        IdNotificacionAPI: 1,
         Titulo: 'No tienes notificaciones',
         Icono: 'notifications-off-outline',
         Ruta: '/',
@@ -88,20 +90,29 @@ export class NotificacionesPage implements OnInit {
   getMessages() {
     this.messages = this.messageService.getMessages();
   }
-   MarcarComoLeidas() {
-    this.db.marcarTodasNotificacionLeidas();
-    this.usuarioService.presentToast('Todas las notificaciones han sido marcadas como leídas');
-    this.modalCtrl.dismiss();
-    console.log('Usuario Notificaciones ', this.usuario);
-    /* if (this.usuario.Tipo !== 'TRABAJADOR') {
-      this.navController.navigateRoot('/tab-inicio');
+   async MarcarComoLeidas() {
+    this.usuarioService.present('Actualizando notificaciones...');
+    
+    await this.db.marcarTodasNotificacionesLeidasAPI(this.usuario.UserName, this.usuario.Password).then( async resp => {
+      console.log('MARCAR TODAS API OK: ');
+      await this.db.marcarTodasNotificacionLeidas();
+      this.notificacionesService.marcarNotificacionesTodasLeidas();
+      this.usuarioService.presentToast('Todas las notificaciones han sido marcadas como leídas');
+      this.modalCtrl.dismiss();
+      this.usuarioService.dismiss();
+      console.log('Usuario Notificaciones ', this.usuario);
+      /* if (this.usuario.Tipo !== 'TRABAJADOR') {
+        this.navController.navigateRoot('/tab-inicio');
 
-    } else {
-      this.navController.navigateRoot('/tab-inicio');
-    } */
-    this.navController.navigateRoot('/tab-inicio');
+      } else {
+        this.navController.navigateRoot('/tab-inicio');
+      } */
+      this.navController.navigateRoot('/inicio');
 
-    this.notificacionesService.marcarNotificacionesTodasLeidas();
+    });
+    
+
+    
   }
 
   abrirNotificacion(not: Notificacion) {

@@ -15,13 +15,14 @@ export class IncidenciasService {
 
   constructor(private http: HttpClient) { }
   
-  async enviarIncidencia(userName: string,pass: string, idTipoIncidencia: number, fechaHoy: string, descripcion: string, idTarea: number) {
+  async enviarIncidencia(userName: string,pass: string, idTipoIncidencia: number, fechaHoy: string, descripcion: string, titulo: string, idTarea: number) {
 
     const incidencia: Incidencia = {
       UserName: userName,
       Password: pass,
       Descripcion: descripcion,
       FechaIncidencia: fechaHoy,
+      Titulo: titulo,
       IdEventoServicio: idTarea,
       IdIncidencia: idTipoIncidencia
     };
@@ -29,7 +30,7 @@ export class IncidenciasService {
     return await this.http.post<RespuestaAPIBasica>(url, incidencia, {headers: this.header}).timeout(7000).toPromise();
   }
 
-  async enviarIncidenciaPendientesAPI(userName: string,pass: string, idTipoIncidencia: number, fechaHoy: string, descripcion: string, idTarea: number){
+  async enviarIncidenciaPendientesAPI(userName: string,pass: string, idTipoIncidencia: number, fechaHoy: string, descripcion: string, titulo: string,idTarea: number){
     
     const incidencia: Incidencia = {
       UserName: userName,
@@ -37,7 +38,8 @@ export class IncidenciasService {
       Descripcion: descripcion,
       FechaIncidencia: fechaHoy,
       IdEventoServicio: idTarea,
-      IdIncidencia: idTipoIncidencia
+      IdIncidencia: idTipoIncidencia,
+      Titulo: titulo
     };
 
     console.log('Incidencia Pendiente: ', incidencia);

@@ -61,7 +61,7 @@ export class UsuarioService {
         Token: token
       };
 
-      return await this.http.post<UsuarioLoginApi>(`${url}/Ayto/Login`, usuario, {headers: this.header}).timeout(7000).toPromise();
+      return await this.http.post<UsuarioLoginApi>(`${url}/Ayto/Login`, usuario, {headers: this.header}).timeout(20000).toPromise();
 
     }
 

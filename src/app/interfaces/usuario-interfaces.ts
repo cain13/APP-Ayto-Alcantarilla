@@ -11,13 +11,15 @@ export interface UsuarioLoginApi {
     HorasSemanales: number;
     Email: string;
     Telefono: string;
-    TipoIncidencias?: TipoIncidencia[]
-    NotificacionesPendientes?: NotificacionesPendientes[]
+    TipoIncidencias?: TipoIncidencia[];
+    NotificacionesPendientes?: NotificacionesPendientes[];
+    TomarLocalizacion?: boolean;
 }
 
 export interface NotificacionesPendientes {
 
     IdNotificacion: number;
+    IdNotificacionAPI: number;
     Titulo: string;
     Mensaje: string;
     Fecha: string;
@@ -65,6 +67,7 @@ export interface EnviosPendientes {
 
 export interface Notificacion {
     IdNotificacion?: number;
+    IdNotificacionAPI: number;
     Titulo: string;
     Mensaje: string;
     Leido: number;

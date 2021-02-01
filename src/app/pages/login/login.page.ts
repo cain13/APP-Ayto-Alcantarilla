@@ -215,7 +215,6 @@ export class LoginPage implements OnInit {
       this.usuarioService.dismiss();
       this.usuarioService.presentAlert('Datos Incorrectos', 'Compruebe sus datos de nuevo.', '');
 
-      this.navCtrl.navigateRoot('/inicio');
 
     } else {
 
@@ -238,7 +237,7 @@ export class LoginPage implements OnInit {
       this.usuarioService.dismiss();
 
 
-      this.navCtrl.navigateRoot('/inicio');
+      this.navCtrl.navigateRoot('/tareas-inicio');
 
 
     }

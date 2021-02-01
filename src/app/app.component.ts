@@ -71,17 +71,23 @@ export class AppComponent {
         icon: 'clipboard-outline'
       },
       {
+        title: 'Incidencias',
+        url: '/contacto-mpe',
+        direct: 'forward',
+        icon: 'chatbubbles-outline'
+      }
+     /*  {
         title: 'Tareas',
         url: '/tareas-inicio',
         direct: 'forward',
         icon: 'document-outline'
-      },
+      }, 
       {
         title: 'Planificación',
         url: '/construccion',
         direct: 'forward',
         icon: 'timer-outline'
-      }
+      }*/
 
     ];
 
@@ -208,6 +214,7 @@ export class AppComponent {
 
             const notificacion: Notificacion = {
               IdNotificacion: 1,
+              IdNotificacionAPI: 1,
               Fecha: moment().locale('es').format(),
               Titulo: '',
               Mensaje: '',
@@ -257,6 +264,7 @@ export class AppComponent {
             console.log('Received Segundo in background: ', data);
             const notificacion: Notificacion = {
               IdNotificacion: 1,
+              IdNotificacionAPI: 1,
               Fecha: moment().locale('es').format(),
               Titulo: '',
               Mensaje: '',
@@ -298,6 +306,7 @@ export class AppComponent {
 
             const notificacion: Notificacion = {
               Fecha: moment().locale('es').format(),
+              IdNotificacionAPI: 0,
               Titulo: '',
               Mensaje: '',
               Icono: '',
@@ -412,7 +421,7 @@ export class AppComponent {
   }
 
   inicioMenu() {
-    this.navCtrl.navigateRoot('inicio');
+    this.navCtrl.navigateRoot('tareas-inicio');
   }  
 
   editarPerfil() {

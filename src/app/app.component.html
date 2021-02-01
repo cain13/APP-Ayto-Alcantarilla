@@ -38,18 +38,21 @@
 
       <ion-content class="bg-profile">
         <ion-list>
+          <ion-list-header color="dark" mode="md">
+            <ion-label>Inicio</ion-label>
+          </ion-list-header>
           <ion-menu-toggle auto-hide="false" >
             <ion-item  color="primary" (click)="inicioMenu()">
-              <ion-icon slot="start" name="home-outline" color="light"></ion-icon>
+              <ion-icon slot="start" name="document-outline" color="light"></ion-icon>
               <ion-label>
-                 Inicio
+                 Tareas
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
         <ion-list mode="md">
           <ion-list-header color="dark" mode="md">
-            <ion-label>Vigilancia de la Salud</ion-label>
+            <ion-label>Secciones</ion-label>
           </ion-list-header>
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPagesTrabajador" >
@@ -82,12 +85,12 @@
             </ion-label>
           </ion-item>
 
-          <ion-item  color="primary" (click)="contactoMpe()">
+          <!-- <ion-item  color="primary" (click)="contactoMpe()">
             <ion-icon slot="start" name="chatbubbles-outline" color="light"></ion-icon>
             <ion-label>
               Contactar 
             </ion-label>
-          </ion-item>
+          </ion-item> -->
 
           <ion-item  color="primary" (click)="cerrarSesion()">
             <ion-icon slot="start" name="power-outline" color="light"></ion-icon>
@@ -117,12 +120,12 @@
             </ion-label>
           </ion-item>
             
-          <ion-item  color="primary" (click)="terminosCondiciones()">
+          <!-- <ion-item  color="primary" (click)="terminosCondiciones()">
             <ion-icon slot="start" name="newspaper-outline" color="light"></ion-icon>
             <ion-label>
                 Términos y Condiciones
             </ion-label>
-          </ion-item>
+          </ion-item> -->
 
         </ion-list>
       </ion-content>

@@ -13,6 +13,7 @@ import { UsuarioService } from '../../services/usuario.service';
 export class MessagePage implements OnInit {
   message: Notificacion = {
     IdNotificacion: 0,
+    IdNotificacionAPI: 0,
         Titulo:'',
         Leido:1,
         Mensaje:'',
@@ -41,6 +42,7 @@ export class MessagePage implements OnInit {
     await this.db.obtenerNotificacion(this.messageID, this.usuario.UserName, this.usuario.Password).then((noti) => {
       this.message = {
         IdNotificacion: noti.IdNotificacion,
+        IdNotificacionAPI: noti.IdNotificacionAPI,
         Titulo: noti.Titulo,
         Leido: noti.Leido,
         Mensaje: noti.Mensaje,

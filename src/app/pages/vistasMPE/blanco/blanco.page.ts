@@ -54,7 +54,7 @@ export class BlancoPage implements OnInit {
          this.menuCtrl.enable(true, 'menuTrabajadores');
          this.menuCtrl.enable(false, 'menuCompleto');
          console.log('BLANCO: Si hay usuario en BD: ', this.usuario);
-         this.navCtrl.navigateRoot('/inicio');
+         this.navCtrl.navigateRoot('/tareas-inicio');
 
          /* if ( this.usuario.Tipo === 'CLIENTE') {
           console.log('ACCEDEMOS COMO CLIENTE');

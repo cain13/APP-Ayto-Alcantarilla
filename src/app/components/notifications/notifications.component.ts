@@ -52,6 +52,7 @@ export class NotificationsComponent implements OnInit {
 
       const Notificacion: Notificacion = {
         IdNotificacion: 1,
+        IdNotificacionAPI: 1,
         Titulo: 'No tienes notificaciones',
         Icono: 'notifications-off-outline',
         Ruta: '/',
