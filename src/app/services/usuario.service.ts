@@ -61,7 +61,7 @@ export class UsuarioService {
         Token: token
       };
 
-      return await this.http.post<UsuarioLoginApi>(`${url}/Ayto/Login`, usuario, {headers: this.header}).timeout(7000).toPromise();
+      return await this.http.post<UsuarioLoginApi>(`${url}/Ayto/Login`, usuario, {headers: this.header}).timeout(20000).toPromise();
 
     }
 
@@ -130,52 +130,60 @@ export class UsuarioService {
       let enviosPendientes: EnviosPendientes[] = [];
       
       await this.dataBaseService.obtenerTodosJsonPendientes().then( data => {
-
+        console.log('DB JSON PENDIENTE 1: ', data);
         enviosPendientes = data;
-
+        console.log('DB JSON PENDIENTE 2: ', enviosPendientes);
       }).catch( error => {
 
         console.log('ERROR, envios pendientes db');
 
       });
+      console.log('enviosPendientes.length !== 0: ', enviosPendientes.length !== 0);
       if (enviosPendientes.length !== 0) {
 
         let objetoJson: any;
+        console.log('enviosPendientes.length !== 0: ', enviosPendientes.length !== 0);
 
         for(let envio of enviosPendientes) {
-          console.log('envio pendiente: ', objetoJson);
+          console.log('envio pendiente 222: ', envio);
           const contenido = JSON.parse(envio.Contenido);
-          if( envio.TipoJsonPendiente.toLocaleUpperCase() === 'FIRMA') {
+          console.log('CONTENIDO: ', contenido);
+          console.log('TIPO NOTIFICACION: ', envio.TipoJsonPendiente.toLocaleUpperCase());
+          switch (envio.TipoJsonPendiente.toLocaleUpperCase()) {
+            case 'FIRMA':
+              objetoJson = {
+                IdUsuario: contenido.IdUsuario,
+                IdTarea: contenido.IdTarea,
+                FirmaBase64: contenido.FirmaBase64
+              }
+              
+              break;
+            
+            case 'NOTIFICACION':
+              objetoJson = {
+                IdNotificacion: contenido.IdNotificacion,
+              }
+              break;
 
-            objetoJson = {
-              IdUsuario: contenido.IdUsuario,
-              IdTarea: contenido.IdTarea,
-              FirmaBase64: contenido.FirmaBase64
-            }
-
-          } else if (envio.TipoJsonPendiente.toLocaleUpperCase() === 'NOTIFICACION'){
-
-            objetoJson = {
-              IdNotificacion: contenido.IdNotificacion,
-            }
-
-
-          } else {
-
-            objetoJson = {
-              UserName: contenido.UserName,
-              IdTipoIncidencia: contenido. IdTipoIncidencia,
-              Descripcion: contenido.Descripcion,
-              IdEventoServicio: contenido.IdEventoServicio,
-              FechaIncidencia: contenido.FechaIncidencia
-            }
-
+            case 'INCIDENCIA':
+              objetoJson = {
+                UserName: contenido.UserName,
+                IdTipoIncidencia: contenido. IdTipoIncidencia,
+                Descripcion: contenido.Descripcion,
+                IdEventoServicio: contenido.IdEventoServicio,
+                FechaIncidencia: contenido.FechaIncidencia
+              }
+              break;
+          
+            default:
+              console.log('TIPO JSON PENDIENTE DFEAULT: ', envio.TipoJsonPendiente.toLocaleUpperCase())
+              break;
           }
-
+          
           
           console.log('envio pendiente: ', objetoJson);
           await this.http.post<RespuestaAPIBasica>(envio.Url, objetoJson).toPromise().then( async data => {
-            console.log('Envio pendiente enviado correctamente: ', contenido);
+            console.log('Envio pendiente enviado correctamente 555: ', contenido);
             await this.dataBaseService.borrarJSONPendiente(envio.IdEnvioPendiente).then(data => {
 
               console.log('Envio Pendiente eliminado')

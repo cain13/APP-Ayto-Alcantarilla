@@ -3,6 +3,7 @@ export interface Incidencia {
     Password: string;
     IdIncidencia: number;
     Descripcion: string;
+    Titulo?: string;
     IdEventoServicio: number;
     FechaIncidencia: string;
 }

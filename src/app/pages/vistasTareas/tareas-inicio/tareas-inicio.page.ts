@@ -41,83 +41,7 @@ export class TareasInicioPage implements OnInit {
       Nombre: 'Pepe Moreno Muñoz',
     }
   ]
-  /* listaTareas: Tarea[] = [
-    {
-      Descripcion: 'COMIDA, LIMPIEZA Y ASEO',
-      DireccionTarea: 'C/ Ramón y Cajal nº 32 - 1º B',
-      Edad: 81,
-      Grado: 2,
-      HoraInicio: '8:00',
-      HoraFin: '9:00',
-      IdEmpleado: 225,
-      IdEstado: 0,
-      IdEventoServicio: 5,
-      Nombre: 'JOSE NAVARRETE MARTINEZ',
-      SubtareasLista: this.subtareasEjemplo,
-      TelefonoCliente: '968555112',
-      ViveSolo: 'SI',
-      IdPersonaAsistida: 1,
-      PersonaContacto1: '666123453',
-      HorasSemanales: 7.5,
-      AuxiliarTitular: 'Juana Gonzalez Ruiz',
-      TelAuxiliarTitular: '685425565'
 
-    },
-    {
-      Descripcion: 'Atención personal, apoyo al aseo, tareas domésticas básicas y acompañamiento dentro y fuera del domicilio.',
-      DireccionTarea: 'C/Mayor 190 3ºA',
-      Edad: 45,
-      Grado: 1,
-      HoraInicio: '9:15',
-      HoraFin: '10:45',
-      IdEmpleado: 225,
-      IdEstado: 1,
-      IdTarea: 5,
-      Nombre: 'DIEGO ROSIQUE MENARGUEZ',
-      SubtareasLista: null,
-      TelefonoCliente: '968111222',
-      ViveSolo: 'NO',
-      IdPersonaAsistida: 2,
-      PersonaContacto1: '666123453',
-      PersonaContacto2: '678951233',
-      HorasSemanales: 5,
-      Latitud: 37.9694,
-      Longitud: -1.2171
-    },
-    {
-      Descripcion: 'Apoyo a aseo y atención doméstica. Hacer camas Limpieza vivienda. Tender ropa y acompañamiento a compras si precisa',
-      DireccionTarea: 'C/ Santiago, 41 - bajo',
-      Edad: 81,
-      Grado: 2,
-      HoraInicio: '11:00',
-      HoraFin: '12:00',
-      IdEmpleado: 225,
-      IdEstado: 2,
-      IdTarea: 5,
-      Nombre: 'ANTONIA MENGUAL JIMENEZ',
-      SubtareasLista: this.subtareasEjemplo,
-      TelefonoCliente: '968555112',
-      ViveSolo: 'SI',
-      IdPersonaAsistida: 1
-
-    },
-    {
-      Descripcion: 'Apoyo a aseo y atención doméstica. Hacer camas Limpieza vivienda. Tender ropa y acompañamiento a compras si precisa',
-      DireccionTarea: 'C/ Santiago, 41 - bajo',
-      Edad: 81,
-      Grado: 2,
-      HoraInicio: '17:15',
-      HoraFin: '19:45',
-      IdEmpleado: 225,
-      IdEstado: 2,
-      IdTarea: 5,
-      Nombre: 'ANA Mª VÁZQUEZ SÁNCHEZ',
-      SubtareasLista: this.subtareasEjemplo,
-      TelefonoCliente: '968555112',
-      ViveSolo: 'SI',
-      IdPersonaAsistida: 1
-    }
-  ]; */
   estadosTarea: EstadoTarea[] = [
     {
       Nombre: 'Terminada',
@@ -145,6 +69,7 @@ export class TareasInicioPage implements OnInit {
   datePicker: Date = new Date();
   verfechaInicial: boolean = true;
   isTareaVacia: boolean = false;
+  fecha: Date;
 
   constructor(private tareasService: TareasService,
               private usuarioService: UsuarioService,
@@ -156,9 +81,33 @@ export class TareasInicioPage implements OnInit {
               }
 
   async ngOnInit() {
-    await this.usuarioService.present('Cargando tareas...');
 
+    await this.usuarioService.present('Cargando datos...');
+
+    await this.usuarioService.loginAPI(this.usuario.UserName, this.usuario.Password, null).then( resp => {
+
+      console.log('Login Correcto API.');
+      this.ComprobarRespuestDeAPI(resp);
+
+    }).catch(error => {
+
+      console.log('Error al hacer login api: ', error);
+
+
+    });
+
+
+
+    await this.usuarioService.enviarEnviosPendientes().then(data => {
+      console.log('Envios pendientes mandados correctamente');
+    }).catch(error => {
+
+      console.log('ERROR AL MANDAR JSON PENDIENTE: ', error);
+
+    });
+    
     console.log('FECHA: ', moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ'));
+
     await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
       console.log('RESPUESTA API GET TAREAS: ', resp)
       if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
@@ -219,6 +168,34 @@ export class TareasInicioPage implements OnInit {
 
   }
 
+
+  ComprobarRespuestDeAPI(res: UsuarioLoginApi) {
+
+
+    const JSONrespuesta = JSON.stringify(res);
+
+    if (!JSONrespuesta.includes('Respuesta>k__BackingField')) {
+      const pass = this.usuario.Password;
+      try {
+
+        this.usuario = JSON.parse(res.toString());
+
+      } catch (error) {
+
+        this.usuario = res;
+
+      }
+      this.usuario.Password = pass;
+      console.log('LOGIN-DNI: Usuario de API: ', this.usuario);
+      
+      this.usuarioService.guardarUsuarioBD(this.usuario); // this.botonHuella.checked);
+      console.log('LOGIN: ', this.usuario);
+
+
+    }
+
+  }
+
   addIncidencia(tarea: Servicio) {
     this.tareasService.guardarTarea(tarea);
     this.lista.closeSlidingItems();
@@ -239,9 +216,8 @@ export class TareasInicioPage implements OnInit {
     console.log('FECHA mandada: ', moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ'));
 
     await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
-      console.log('RESPUESTA API GET TAREAS: ', resp)
+      console.log('resp: ', resp)
       if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
-
         this.tareas = resp.Servicios;
         console.log('THIS. TAREAS: ', this.tareas);
         if(this.tareas.length !== 0) {
@@ -257,7 +233,6 @@ export class TareasInicioPage implements OnInit {
           this.usuarioService.dismiss();  
 
         }
-        
       } else {
 
         this.usuarioService.dismiss();
@@ -433,15 +408,24 @@ export class TareasInicioPage implements OnInit {
 
   async actualizar() {
     await this.usuarioService.present('Actualizando tareas...');
-    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('AAAA-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
-
+    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
+      console.log('resp: ', resp)
       if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
-
         this.tareas = resp.Servicios;
-        this.definirEstado(this.tareas[0]);
-        this.tareasService.setListaTareas(this.tareas);
-        this.usuarioService.dismiss();
+        console.log('THIS. TAREAS: ', this.tareas);
+        if(this.tareas.length !== 0) {
 
+          this.definirEstado(this.tareas[0]);
+          this.isTareaVacia = false;
+          this.tareasService.setListaTareas(this.tareas);
+          this.usuarioService.dismiss();  
+
+        } else {
+
+          this.isTareaVacia = true;
+          this.usuarioService.dismiss();  
+
+        }
       } else {
 
         this.usuarioService.dismiss();
@@ -472,15 +456,24 @@ export class TareasInicioPage implements OnInit {
     this.datePicker = aux;
     console.log(this.datePicker);
 
-    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('AAAA-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
-
+    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
+      console.log('resp: ', resp)
       if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
-
         this.tareas = resp.Servicios;
-        this.definirEstado(this.tareas[0]);
-        this.tareasService.setListaTareas(this.tareas);
-        this.usuarioService.dismiss();
+        console.log('THIS. TAREAS: ', this.tareas);
+        if(this.tareas.length !== 0) {
 
+          this.definirEstado(this.tareas[0]);
+          this.isTareaVacia = false;
+          this.tareasService.setListaTareas(this.tareas);
+          this.usuarioService.dismiss();  
+
+        } else {
+
+          this.isTareaVacia = true;
+          this.usuarioService.dismiss();  
+
+        }
       } else {
 
         this.usuarioService.dismiss();
@@ -510,15 +503,25 @@ export class TareasInicioPage implements OnInit {
     this.datePicker = new Date(aux.toString()); */
     this.datePicker = aux;
     console.log(this.datePicker);
-    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('AAAA-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
-
+    console.log('moment: ', moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ'));
+    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
+      console.log('resp: ', resp)
       if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
-
         this.tareas = resp.Servicios;
-        this.definirEstado(this.tareas[0]);
-        this.tareasService.setListaTareas(this.tareas);
-        this.usuarioService.dismiss();
+        console.log('THIS. TAREAS: ', this.tareas);
+        if(this.tareas.length !== 0) {
 
+          this.definirEstado(this.tareas[0]);
+          this.isTareaVacia = false;
+          this.tareasService.setListaTareas(this.tareas);
+          this.usuarioService.dismiss();  
+
+        } else {
+
+          this.isTareaVacia = true;
+          this.usuarioService.dismiss();  
+
+        }
       } else {
 
         this.usuarioService.dismiss();
@@ -542,15 +545,24 @@ export class TareasInicioPage implements OnInit {
   async doRefresh(event) {
 
     await this.usuarioService.present('Actualizando tareas...');
-    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('AAAA-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
-
+    await this.tareasService.obtenerListaTareas(this.usuario.UserName,this.usuario.Password, moment(this.datePicker).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')).then( resp => {
+      console.log('resp: ', resp)
       if(resp.Respuesta.toString().toLocaleUpperCase() === 'OK') {
-
         this.tareas = resp.Servicios;
-        this.definirEstado(this.tareas[0]);
-        this.tareasService.setListaTareas(this.tareas);
-        this.usuarioService.dismiss();
+        console.log('THIS. TAREAS: ', this.tareas);
+        if(this.tareas.length !== 0) {
 
+          this.definirEstado(this.tareas[0]);
+          this.isTareaVacia = false;
+          this.tareasService.setListaTareas(this.tareas);
+          this.usuarioService.dismiss();  
+
+        } else {
+
+          this.isTareaVacia = true;
+          this.usuarioService.dismiss();  
+
+        }
       } else {
 
         this.usuarioService.dismiss();

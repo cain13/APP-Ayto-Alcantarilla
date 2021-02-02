@@ -18,7 +18,7 @@
             <label> Por favor indique sus datos para poder contactar con usted, y/o poder enviarles notificaciones por SMS o Email.</label>        
           </ion-col>
         </ion-row>
-        <form [formGroup]="contactameForm" class="list-form">
+        <form [formGroup]="contactameForm" class="list-form"><!-- 
           <ion-item>
             <ion-label color="dark" position="stacked">Nombre:</ion-label>
             <ion-input color="dark" type="text" >{{Nombre}}</ion-input>
@@ -30,7 +30,7 @@
           <ion-item>
             <ion-label color="dark" position="stacked">Email:</ion-label>
             <ion-input color="dark" type="text" formControlName="email"></ion-input>
-          </ion-item>
+          </ion-item> -->
           <ion-item>
             <ion-label color="dark" position="stacked">Asunto:</ion-label>
             <ion-input text="wrap" color="dark" type="text" formControlName="asunto"></ion-input>
@@ -42,7 +42,7 @@
         </form>
         <ion-row style="background: #FFE294!important; padding:10px !important;">
           <ion-col >
-            <label>  Puede contactar con el Ayto. en:</label>        
+            <label>  Puede contactar con servicos sociales del ayuntamiento de Alcantarilla mediante:</label>        
           </ion-col>
         </ion-row>
         <ion-list class="ion-margin-bottom">
@@ -51,14 +51,14 @@
             <ion-label color="dark" position="stacked"></ion-label>
           </ion-item> -->
 
-          <ion-item style="width: max-content !important; height: max-content !important;" lines="none"  href="mailto:ayuntamiento@ayto-alcantarilla.es">
+          <ion-item style="width: max-content !important; height: max-content !important;" lines="none"  href="mailto:serviciossociales@ayto-alcantarilla.es">
             <ion-label color="dark" position="stacked">Email de Contacto:</ion-label>
-            <ion-label color="dark" position="stacked" style="width: 100%; " href="mailto:ayuntamiento@ayto-alcantarilla.es">ayuntamiento@ayto-alcantarilla.es</ion-label>
+            <ion-label color="dark" position="stacked" style="width: 100%; " href="mailto:serviciossociales@ayto-alcantarilla.es">serviciossociales@ayto-alcantarilla.es</ion-label>
           </ion-item>
 
-          <ion-item style="width: max-content !important; height: max-content !important;" lines="none" *ngIf="!EsGuardiaCivil" href="tel:968 89 82 00">
+          <ion-item style="width: max-content !important; height: max-content !important;" lines="none" *ngIf="!EsGuardiaCivil" href="tel:968 89 80 65">
             <ion-label color="dark" position="stacked">Teléfono:</ion-label>
-            <ion-label color="dark" position="stacked" style="width: 100%; ">902 30 66 30</ion-label>
+            <ion-label color="dark" position="stacked" style="width: 100%; ">968 898 065</ion-label>
           </ion-item>
 
         </ion-list>
@@ -69,6 +69,6 @@
 <ion-footer class="no-padding">
   <ion-button [disabled]="!contactameForm.valid" icon-left size="large" expand="full" color="dark" (click)="enviarConsulta()" tappable>
     <ion-icon slot="start" name="arrow-redo-outline"></ion-icon>
-    Enviar consulta
+    Enviar Incidencia
   </ion-button>
 </ion-footer>

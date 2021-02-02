@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { EnviosPendientes, Notificacion, NotificacionesPendientes, RespuestaAPIBasica, UsuarioLoginApi } from '../interfaces/usuario-interfaces';
 import { TipoIncidencia } from '../interfaces/interfacesTareas';
+import { UsuarioService } from './usuario.service';
 
 const url =  'https://intranet-ayto.com/api';
 
@@ -86,9 +87,9 @@ export class DatabaseService {
           console.log('DB: Tabla USUARIOS vacia'); }).catch(() => { console.log('DB: ERROR AL BORRAR TABLAS USUARIO'); });
 
         // tslint:disable-next-line: max-line-length
-        const data = [usuario.UserName, usuario.Password, usuario.IdEmpleado, usuario.HorasSemanales, usuario.NombreCompleto, usuario.Telefono, usuario.Email];
+        const data = [usuario.UserName, usuario.Password, usuario.IdEmpleado, usuario.HorasSemanales, usuario.NombreCompleto, usuario.Telefono, usuario.Email, usuario.TomarLocalizacion];
         // tslint:disable-next-line: max-line-length
-        const respuesta = this.storage.executeSql('INSERT INTO usuariosTable (UserName, Pass, IdEmpleado, HorasSemanales, NombreCompleto, Telefono, Email) VALUES (?, ?, ?, ?, ?, ?, ?)', data).then(() => {
+        const respuesta = this.storage.executeSql('INSERT INTO usuariosTable (UserName, Pass, IdEmpleado, HorasSemanales, NombreCompleto, Telefono, Email, TomarLocalizacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Usuario creado');
 
         });
@@ -105,7 +106,10 @@ export class DatabaseService {
   guardarArrayIncidencias(arrayIncidencias: TipoIncidencia[]) {
 
     console.log('DB:arrayIncidencias 0');
-    this.estadoBD().then(async () => {
+
+    if( arrayIncidencias !== null || arrayIncidencias !== undefined){
+
+      this.estadoBD().then(async () => {
         console.log('DB:addUsuario 1');
 
         this.storage.executeSql('DELETE FROM incidenciasTable').then(() => {
@@ -133,6 +137,9 @@ export class DatabaseService {
       console.log('Error al añadir el usuario a la bd: ', error);
 
     });
+
+    }
+    
 
   }
 
@@ -179,7 +186,8 @@ export class DatabaseService {
         HorasSemanales: res.rows.item(0).HorasSemanales,
         NombreCompleto: res.rows.item(0).NombreCompleto,
         Telefono: res.rows.item(0).Telefono,
-        Email: res.rows.item(0).Email
+        Email: res.rows.item(0).Email,
+        TomarLocalizacion: res.rows.item(0).TomarLocalizacion
       };
     } else { return null; }
 
@@ -191,6 +199,7 @@ export class DatabaseService {
 
       const notificacion : Notificacion = {
 
+        IdNotificacionAPI: notPendiente.IdNotificacion,
         Titulo: notPendiente.Titulo,
         Mensaje: notPendiente.Mensaje,
         Leido: 0,
@@ -201,8 +210,8 @@ export class DatabaseService {
       }
 
       this.estadoBD().then(async () => {
-        const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
-        const respuesta = await this.storage.executeSql('INSERT INTO notificacion (Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?)', data).then(() => {
+        const data = [notificacion.IdNotificacionAPI, notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
+        const respuesta = await this.storage.executeSql('INSERT INTO notificacionTable (IdNotificacionAPI, Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Notificacion añadida');
 
 
@@ -218,7 +227,7 @@ export class DatabaseService {
     console.log('notificacion 2: ',notificacion);
     this.estadoBD().then(async () => {
         const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
-        const respuesta = await this.storage.executeSql('INSERT INTO notificacion (Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?)', data).then(() => {
+        const respuesta = await this.storage.executeSql('INSERT INTO notificacionTable (Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Notificacion añadida');
 
 
@@ -258,28 +267,96 @@ export class DatabaseService {
 
   }
 
+  
+   async marcarTodasNotificacionesLeidasAPI(username, password) {
+
+    const sql = 'SELECT * FROM notificacionTable WHERE Leido = 0';
+    
+
+    let notificacion: Notificacion;
+    let aux: any
+    try {
+
+      const response = await this.storage.executeSql(sql, []);
+      const notificaciones: Notificacion[] = [];
+      for (let index = 0; index < response.rows.length; index++) {
+        notificaciones.push(response.rows.item(index));
+      }
+
+      for ( const not of notificaciones ) {
+        const notificacion = {
+          UserName: username,
+          Password: password,
+          IdNotificacion: not.IdNotificacionAPI
+        }
+        await this.httpClient.post<RespuestaAPIBasica>(`${url}/Ayto/NotificacionLeida`, notificacion, {headers: this.header}).timeout(20000).toPromise().then( data => {
+          console.log('CHECK NOTIFICACION API, ', data);
+          if (data.Respuesta.toString().toLocaleUpperCase() !== 'OK') {
+
+             aux = {
+              UserName: username,
+              Password: password,
+              IdNotificacion: not.IdNotificacionAPI
+            };
+
+            console.log('ERROR AL MANDAR NOTIFICACION API, ', data);
+            const contenido = JSON.stringify(notificacion);
+            const urlPendiente = 'https://intranet-ayto.com/api/Ayto/NotificacionLeida';
+            const tipoJsonPendiente = 'NOTIFICACION';
+      
+            this.addJsonPendiente(urlPendiente, contenido,  tipoJsonPendiente);
+          }
+
+    
+        }).catch( error => {
+          console.log('ERROR AL MANDAR NOTIFICACION API 2, ', error);
+
+           aux = {
+              UserName: username,
+              Password: password,
+              IdNotificacion: not.IdNotificacionAPI
+            };
+          const contenido = JSON.stringify(notificacion);
+          const urlPendiente = 'https://intranet-ayto.com/api/Ayto/NotificacionLeida';
+          const tipoJsonPendiente = 'NOTIFICACION';
+    
+          this.addJsonPendiente(urlPendiente, contenido,  tipoJsonPendiente);     
+    
+        });
+
+
+      }
+     
+      return Promise.resolve<Notificacion[]>(notificaciones);
+    } catch (error) {
+      console.log('errorrrrrr: ', error);
+      Promise.reject(error);
+    }
+
+  }
+
 
   async marcarTodasNotificacionLeidas(): Promise<Notificacion> {
     const data = [1, 0];
     // tslint:disable-next-line: max-line-length
-    const res = await this.storage.executeSql('UPDATE notificacion SET Leido=? WHERE Leido = ?', data);
+    const res = await this.storage.executeSql('UPDATE notificacionTable SET Leido=? WHERE Leido = ?', data);
     return null;
   }
 
-  async marcarNotificacionLeida(id) {
+  async  marcarNotificacionLeida(id) {
     const data = [1, id];
     // tslint:disable-next-line: max-line-length
-    const res = await this.storage.executeSql('UPDATE notificacion SET Leido=? WHERE IdNotificacion = ?', data);
+    const res = await this.storage.executeSql('UPDATE notificacionTable SET Leido=? WHERE IdNotificacion = ?', data);
 
   }
 
-  async obtenerNotificacion(id): Promise<Notificacion> {
+  async obtenerNotificacion(id,username: string, password: string): Promise<Notificacion> {
     const res =  await this.storage.executeSql('SELECT * FROM notificacionTable WHERE IdNotificacion=' + id, []);
 
     const not = {
-
-      IdNotificacion: id
-
+      UserName: username,
+      Password: password,
+      IdNotificacion: res.rows.item(0).IdNotificacionAPI
     }
 
     let notificacion: Notificacion;
@@ -290,6 +367,7 @@ export class DatabaseService {
     if (res.rows.length !== 0) {
       notificacion =  {
         IdNotificacion: res.rows.item(0).IdNotificacion,
+        IdNotificacionAPI: res.rows.item(0).IdNotificacionAPI,
         Titulo: res.rows.item(0).Titulo,
         Mensaje: res.rows.item(0).Mensaje,
         Leido: res.rows.item(0).Leido,
@@ -300,16 +378,17 @@ export class DatabaseService {
     } else { 
       notificacion = null; 
     }
+    console.log('obtener Notificacion: ', not)
     
     await this.httpClient.post<RespuestaAPIBasica>(`${url}/Ayto/NotificacionLeida`, not, {headers: this.header}).timeout(7000).toPromise().then( data => {
-
+      console.log('obtener Notificacion: THEN ', data)
       if (data.Respuesta.toString().toLocaleUpperCase() !== 'OK') {
          aux = {
-
+          UserName: username,
+          Password: password,
           IdNotificacion: id
-  
         };
-        console.log('ERROR AL MANDAR NOTIFICACION API, ', data.Mensaje);
+        console.log('ERROR AL MANDAR NOTIFICACION API, ', data);
         const contenido = JSON.stringify(notificacion);
         const urlPendiente = 'https://intranet-ayto.com/api/Ayto/NotificacionLeida';
         const tipoJsonPendiente = 'NOTIFICACION';
@@ -318,9 +397,10 @@ export class DatabaseService {
       }
 
     }).catch( error => {
-
+      console.log('obtener Notificacion: CATCH', error)
       aux = {
-
+        UserName: username,
+        Password: password,
         IdNotificacion: id
 
       };
@@ -388,7 +468,7 @@ export class DatabaseService {
   
     this.estadoBD().then(async () => {
         const data = [urlEnvio, contenido, tipoJsonPendiente];
-        const respuesta = await this.storage.executeSql('INSERT INTO enviosPendientes (UrlEnvio, Contenido, TipoJsonPendiente) VALUES (?, ?, ?)', data).then(() => {
+        const respuesta = await this.storage.executeSql('INSERT INTO enviosPendientesTable (UrlEnvio, Contenido, TipoJsonPendiente) VALUES (?, ?, ?)', data).then(() => {
           console.log('DB: JsonPendiente añadido');
         });
         console.log('DB: Respuesta JsonPendiente', respuesta);
@@ -416,7 +496,7 @@ export class DatabaseService {
   
   async borrarJSONPendiente(id) {
 
-    const respuestaBD = await this.storage.executeSql('DELETE FROM jsonPendientesTable WHERE IdJSONPend = ?', [id]);
+    const respuestaBD = await this.storage.executeSql('DELETE FROM enviosPendientesTable WHERE IdEnvioPendiente = ?', [id]);
   }
 
 }

@@ -67,7 +67,7 @@ export class IncidenciasPage implements OnInit {
     console.log('Descripicon: ', this.incidenciasForm.value.descripcion);
     console.log('idTarea: ', this.tarea.IdEventoServicio);
 
-    await this.incidenciasService.enviarIncidencia(userName, pass,tipoIncidencia, fechaHoy, descripcion, idTarea).then( data => {
+    await this.incidenciasService.enviarIncidencia(userName, pass,tipoIncidencia, fechaHoy, descripcion, null, idTarea).then( data => {
 
       if(data.Respuesta.toString().toLocaleUpperCase() !== 'OK') {
 
@@ -77,7 +77,7 @@ export class IncidenciasPage implements OnInit {
           Descripcion: descripcion,
           FechaIncidencia: fechaHoy,
           IdEventoServicio: idTarea,
-          IdIncidencia: tipoIncidencia
+          IdIncidencia: tipoIncidencia,
         };
 
         const contenido = JSON.stringify(incidencia);

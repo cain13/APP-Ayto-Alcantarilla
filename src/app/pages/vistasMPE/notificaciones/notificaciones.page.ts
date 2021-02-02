@@ -7,6 +7,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { DatabaseService } from 'src/app/services/database.service';
 import * as moment from 'moment';
 import { NotificacionesService } from '../../../services/notificaciones.service';
+import { Usuario } from '../../../interfaces/servicos-interfaces';
 
 @Component({
   selector: 'app-notificaciones',
@@ -42,7 +43,7 @@ export class NotificacionesPage implements OnInit {
 
     await this.db.obtenerTodasNotificacion().then( async res => {
 
-      console.log('FICHAR: respuestaBD motivos: ', res);
+      console.log('FICHAR: respuestaBD notificacions: ', res);
       this.listaMensajes = res;
       if (res.length === 0) {
         this.getSinNotificaciones();
@@ -50,7 +51,7 @@ export class NotificacionesPage implements OnInit {
       this.usuarioService.dismiss();
     }).catch(() => {
       this.usuarioService.dismiss();
-      console.log('FICHAR ERROR: Obtener Lista Motivos');
+      console.log('FICHAR ERROR: Obtener Lista notificacions');
       this.getSinNotificaciones();
     });
     // AQUI CARGO LISTA NOTIFICACION DE BD
@@ -61,6 +62,7 @@ export class NotificacionesPage implements OnInit {
 
       const notificacion: Notificacion = {
         IdNotificacion: 1,
+        IdNotificacionAPI: 1,
         Titulo: 'No tienes notificaciones',
         Icono: 'notifications-off-outline',
         Ruta: '/',
@@ -74,6 +76,12 @@ export class NotificacionesPage implements OnInit {
 
   delete(notificacion: Notificacion) {
     this.db.BorrarNotificacion(notificacion.IdNotificacion);
+    console.log('notificacion.Leido  === 0', notificacion.Leido  === 0);
+    if( notificacion.Leido  === 0) {
+
+      this.notificacionesService.RestaUnaNotificaciones();
+
+    }
     this.usuarioService.presentToast('Notificación eliminada correctamente.');
     this.modalCtrl.dismiss();
   }
@@ -82,20 +90,29 @@ export class NotificacionesPage implements OnInit {
   getMessages() {
     this.messages = this.messageService.getMessages();
   }
-   MarcarComoLeidas() {
-    this.db.marcarTodasNotificacionLeidas();
-    this.usuarioService.presentToast('Todas las notificaciones han sido marcadas como leídas');
-    this.modalCtrl.dismiss();
-    console.log('Usuario Notificaciones ', this.usuario);
-    /* if (this.usuario.Tipo !== 'TRABAJADOR') {
-      this.navController.navigateRoot('/tab-inicio');
+   async MarcarComoLeidas() {
+    this.usuarioService.present('Actualizando notificaciones...');
+    
+    await this.db.marcarTodasNotificacionesLeidasAPI(this.usuario.UserName, this.usuario.Password).then( async resp => {
+      console.log('MARCAR TODAS API OK: ');
+      await this.db.marcarTodasNotificacionLeidas();
+      this.notificacionesService.marcarNotificacionesTodasLeidas();
+      this.usuarioService.presentToast('Todas las notificaciones han sido marcadas como leídas');
+      this.modalCtrl.dismiss();
+      this.usuarioService.dismiss();
+      console.log('Usuario Notificaciones ', this.usuario);
+      /* if (this.usuario.Tipo !== 'TRABAJADOR') {
+        this.navController.navigateRoot('/tab-inicio');
 
-    } else {
-      this.navController.navigateRoot('/tab-inicio');
-    } */
-    this.navController.navigateRoot('/tab-inicio');
+      } else {
+        this.navController.navigateRoot('/tab-inicio');
+      } */
+      this.navController.navigateRoot('/inicio');
 
-    this.notificacionesService.marcarNotificacionesTodasLeidas();
+    });
+    
+
+    
   }
 
   abrirNotificacion(not: Notificacion) {

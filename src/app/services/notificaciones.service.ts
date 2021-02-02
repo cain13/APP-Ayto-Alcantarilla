@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DatabaseService } from './database.service';
 import { Observable, Subject } from 'rxjs';
 import { Notificacion } from '../interfaces/usuario-interfaces';
+import { UsuarioService } from './usuario.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class NotificacionesService {
   notificacionMantoux: any;
 
 
-  constructor(private db: DatabaseService,
+  constructor(private db: DatabaseService, private usuarioService: UsuarioService
           ) { }
 
   aumentarNotificaciones() {
@@ -58,6 +59,12 @@ export class NotificacionesService {
       console.log('aumentarNot: ', this.numNot);
   }
 
+  RestaUnaNotificaciones() {
+    this.numNot = this.numNot - 1;
+    this.numNotificaciones$.next(this.numNot);
+    console.log('aumentarNot: ', this.numNot);
+  }
+
   getNotifiaciones$(): Observable<number> {
     console.log('this.numNotificaciones$.asObservable(): ', this.numNotificaciones$.asObservable());
     return this.numNotificaciones$.asObservable();
@@ -66,7 +73,7 @@ export class NotificacionesService {
 
   async getNotificacion(id): Promise<Notificacion> {
     let notificacion: Notificacion;
-    await this.db.obtenerNotificacion(id).then((noti) => {
+    await this.db.obtenerNotificacion(id, this.usuarioService.getUsuario().UserName, this.usuarioService.getUsuario().Password).then((noti) => {
       notificacion = noti;
     });
     return notificacion;
