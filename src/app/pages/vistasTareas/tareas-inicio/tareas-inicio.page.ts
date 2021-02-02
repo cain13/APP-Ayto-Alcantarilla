@@ -69,6 +69,7 @@ export class TareasInicioPage implements OnInit {
   datePicker: Date = new Date();
   verfechaInicial: boolean = true;
   isTareaVacia: boolean = false;
+  fecha: Date;
 
   constructor(private tareasService: TareasService,
               private usuarioService: UsuarioService,

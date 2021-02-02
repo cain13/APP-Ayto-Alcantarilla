@@ -38,6 +38,7 @@ export interface Servicio {
     HoraAD:              number;
     HoraAP:              number;
     HoraMunicipal:       number;
+    Computable:          boolean;
 }
 
 export interface Colectivo {

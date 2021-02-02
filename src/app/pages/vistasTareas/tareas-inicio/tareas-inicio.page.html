@@ -5,13 +5,13 @@
 
       <ion-row class="ion-no-padding" style="margin-top: 1px !important; margin-bottom: 0px !important; ">
 
-        <ion-col size="2" class="ion-no-padding" (click)="diaAnterior()">
+        <ion-col size="2"  style="padding-left: 10px !important;" class="ion-no-padding" (click)="diaAnterior()">
           <ion-button color="light" fill="clear" >
             <ion-icon slot="start" name="chevron-back-outline" ></ion-icon>
           </ion-button>
         </ion-col>
 
-        <ion-col size="8" class="ion-no-padding" style="padding-top: 1px !important;" (click)="picker.open()">
+        <ion-col size="8" class="ion-no-padding" style="padding-top: 12px !important;" (click)="picker.open()">
           <ion-label style="text-align: center; padding-top: 1px !important;">
             
             <strong><ion-datetime #picker color="light"
@@ -19,7 +19,7 @@
                                           displayFormat="DD/MM/YYYY" 
                                           placeholder = "HOY"
                                           [(ngModel)]="datePicker"
-                                          value="Hoy"
+                                          value="{{datePicker}}"
                                           [monthNames]="mesesEnEspanol" 
                                           (ionChange)="filtrarPorFecha()"
                                           doneText="Filtrar" 
@@ -30,9 +30,9 @@
           </ion-label>
         </ion-col>
 
-        <ion-col size="2" class="ion-no-padding" (click)="diaSiguiente()">
+        <ion-col size="2" class="ion-no-padding"  (click)="diaSiguiente()">
           <ion-button color="light" fill="clear">
-            <ion-icon slot="start" name="chevron-forward-outline"></ion-icon>
+            <ion-icon slot="start" name="chevron-forward-outline" ></ion-icon>
           </ion-button>
         </ion-col>
         
@@ -99,7 +99,7 @@
 
       <ion-item-sliding *ngFor="let tarea of tareas; let i = index">
         
-        <ion-item-options side="start">
+        <ion-item-options side="start" >
           <ion-item-option color="primary"(click)="firmar(tarea)">
               <ion-icon slot="icon-only" name="create-outline" (click)="firmar(tarea)"></ion-icon>
           </ion-item-option>
@@ -127,7 +127,7 @@
 
     <ion-row *ngIf="isTareaVacia" style="background: #FFE294!important; padding:10px !important;">
       <ion-col>
-        <label> Actualmente no tiene servicios para este día.</label>        
+        <label>Actualmente no tiene servicios para este día.</label>        
         </ion-col>
     </ion-row>
 
