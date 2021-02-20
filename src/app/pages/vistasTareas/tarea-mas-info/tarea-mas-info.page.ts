@@ -48,72 +48,79 @@ export class TareaMasInfoPage implements OnInit {
 
   async addUbicacion() {
 
-
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: 'Introduzca Código.',
-      inputs: [
-        {
-          name: 'name1',
-          type: 'text',
-          placeholder: 'Código'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            alert.dismiss();
-            console.log('Confirm Cancel Inicio');
+    if (this.usuario.TomarLocalizacion !== null && this.usuario.TomarLocalizacion !== undefined && this.usuario.TomarLocalizacion === true) {
+      const alert = await this.alertController.create({
+        cssClass: 'my-custom-class',
+        header: 'Introduzca Código.',
+        inputs: [
+          {
+            name: 'name1',
+            type: 'text',
+            placeholder: 'Código'
           }
-        }, {
-          text: 'Ok',
-          handler: async (data) => {
-            console.log('Confirm añadir ubi: ', data.name1);
-            /* await this.usuarioService.present('Añadiendo ubicación...');
-            this.geolocation.getCurrentPosition().then( async (pos) => {
-              await this.tareaService.addUbicacionAPI(pos.coords.latitude, pos.coords.longitude, data.name1, this.tarea.IdUsuario).then( async respuesta => {
-
-                if (!respuesta.Ok) {
-                  await alert.dismiss();
+        ],
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+              alert.dismiss();
+              console.log('Confirm Cancel Inicio');
+            }
+          }, {
+            text: 'Ok',
+            handler: async (data) => {
+              console.log('Confirm añadir ubi: ', data.name1);
+              /* await this.usuarioService.present('Añadiendo ubicación...');
+              this.geolocation.getCurrentPosition().then( async (pos) => {
+                await this.tareaService.addUbicacionAPI(pos.coords.latitude, pos.coords.longitude, data.name1, this.tarea.IdUsuario).then( async respuesta => {
+  
+                  if (!respuesta.Ok) {
+                    await alert.dismiss();
+                    this.usuarioService.dismiss();
+                    this.usuarioService.presentAlert('Error', 'No ha sido posible añadir ubicación', 'Intentelo de nuevo más tarde');
+  
+                  } else {
+  
+                    await alert.dismiss();
+                    this.usuarioService.dismiss();
+                    this.usuarioService.presentAlert('Ubicación añadida correctamente', '', '');
+                    console.log('Error GPS: ', respuesta);
+  
+  
+                  }
+  
+                }).catch( error => {
+  
+                  alert.dismiss();
                   this.usuarioService.dismiss();
-                  this.usuarioService.presentAlert('Error', 'No ha sido posible añadir ubicación', 'Intentelo de nuevo más tarde');
-
-                } else {
-
-                  await alert.dismiss();
-                  this.usuarioService.dismiss();
-                  this.usuarioService.presentAlert('Ubicación añadida correctamente', '', '');
-                  console.log('Error GPS: ', respuesta);
-
-
-                }
-
+                  this.usuarioService.presentAlert('Error', 'No ha sido posible añadir ubicación', 'Compruebe su conexión a internet.');
+                  console.log('Error GPS: ', error);
+  
+                })
+          
+                console.log(pos);
               }).catch( error => {
-
                 alert.dismiss();
                 this.usuarioService.dismiss();
-                this.usuarioService.presentAlert('Error', 'No ha sido posible añadir ubicación', 'Compruebe su conexión a internet.');
+                this.usuarioService.presentAlert('Error', 'No ha sido posible acceder a su ubicación', 'Intentelo de nuevo más tarde');
                 console.log('Error GPS: ', error);
-
-              })
-        
-              console.log(pos);
-            }).catch( error => {
-              alert.dismiss();
-              this.usuarioService.dismiss();
-              this.usuarioService.presentAlert('Error', 'No ha sido posible acceder a su ubicación', 'Intentelo de nuevo más tarde');
-              console.log('Error GPS: ', error);
-
-            }); */
-            
+  
+              }); */
+              
+            }
           }
-        }
-      ]
-    });
-    await alert.present();
+        ]
+      });
+      await alert.present();
+
+    } else {
+
+      this.usuarioService.presentAlert('Error', 'No tiene permisos para añadir una nueva ubicación', '');
+
+    }
+    
     
   }
 
