@@ -107,7 +107,7 @@ export class NotificacionesPage implements OnInit {
       } else {
         this.navController.navigateRoot('/tab-inicio');
       } */
-      this.navController.navigateRoot('/inicio');
+      this.navController.navigateRoot('/tareas-inicio');
 
     });
     

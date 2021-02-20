@@ -105,7 +105,7 @@
           </ion-item-option>
         </ion-item-options>
 
-        <ion-item tappable [class]="definirEstado(tarea) === 1? 'cardEstadoEnCurso' : ( definirEstado(tarea) === 0? 'cardEstadoTerminada' : 'cardEstadoAbierta')" (click)="masInformacion(tarea)"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item *ngIf="tarea.Computable === null || tarea.Computable === undefined || tarea.Computable !== true" tappable [class]="definirEstado(tarea) === 1? 'cardEstadoEnCurso' : ( definirEstado(tarea) === 0? 'cardEstadoTerminada' : 'cardEstadoAbierta')" (click)="masInformacion(tarea)"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-label>
             <h2>
               <ion-text color="dark"><strong>{{tarea.Usuario.Nombre}} {{tarea.Usuario.ApellidosCompletos}}</strong></ion-text>

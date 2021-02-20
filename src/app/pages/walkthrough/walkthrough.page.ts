@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavController, IonSlides, MenuController } from '@ionic/angular';
+import { UsuarioService } from '../../services/usuario.service';
+import { DatabaseService } from '../../services/database.service';
+import { UsuarioLoginApi } from 'src/app/interfaces/usuario-interfaces';
 
 @Component({
   selector: 'app-walkthrough',
@@ -18,6 +21,9 @@ export class WalkthroughPage implements OnInit {
   };
   dir: String = 'ltr';
   contadorVistas = 0;
+
+  
+  usuario: UsuarioLoginApi;
 
   slideList: Array<any> = [
     /* {
@@ -43,7 +49,10 @@ export class WalkthroughPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     public menuCtrl: MenuController,
-    public router: Router
+    public router: Router,
+    private usuarioService: UsuarioService,
+    private databaseService: DatabaseService,
+ 
   ) {
     this.menuCtrl.enable(false);
   }
@@ -51,7 +60,37 @@ export class WalkthroughPage implements OnInit {
   ionViewWillEnter() {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.usuarioService.dismiss();
+    this.databaseService.estadoBD().then( async () => {
+
+      console.log('BLANCO: Comprobamos si hay ultimo usuario...');
+      await this.databaseService.obtenerUltimoUsuario().then( ultimoUsuario => {
+
+        if (ultimoUsuario === null) {
+          console.log('No hay usuarios en la BD');
+          this.navCtrl.navigateRoot('/walkthrough');
+
+        } else {
+
+          this.usuario = {
+            UserName: ultimoUsuario.UserName,
+            Password: ultimoUsuario.Password,
+            IdEmpleado: ultimoUsuario.IdEmpleado,
+            NombreCompleto: ultimoUsuario.NombreCompleto,
+            HorasSemanales: ultimoUsuario.HorasSemanales,
+            Telefono: ultimoUsuario.Telefono,
+            Email: ultimoUsuario.Email,
+            TomarLocalizacion: ultimoUsuario.TomarLocalizacion,
+          };
+
+          this.usuarioService.guardarUsuario(this.usuario);
+
+          console.log('BLANCO: Si hay usuario en BD: ', this.usuario);
+          this.navCtrl.navigateRoot('/tareas-inicio');
+        }
+      });
+    });
   }
   
   /*

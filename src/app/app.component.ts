@@ -390,7 +390,7 @@ export class AppComponent {
       await this.CerrarPopoOvr();
       if (this.routerOutlet.canGoBack()) {
         console.log('Vista Fichar');
-        this.navCtrl.navigateRoot('/inicio');
+        this.navCtrl.navigateRoot('/tareas-inicio');
       } else {
         await this.CerrarPopoOvr();
         if (this.HayModal === false && Date.now() - this.lastBack > 500) {

@@ -211,7 +211,7 @@ export class LoginPage implements OnInit {
 
 
     const JSONrespuesta = JSON.stringify(res);
-    if (JSONrespuesta.includes('Respuesta>k__BackingField')) {
+    if (JSONrespuesta.toUpperCase().includes('ERROR')) {
       this.usuarioService.dismiss();
       this.usuarioService.presentAlert('Datos Incorrectos', 'Compruebe sus datos de nuevo.', '');
 

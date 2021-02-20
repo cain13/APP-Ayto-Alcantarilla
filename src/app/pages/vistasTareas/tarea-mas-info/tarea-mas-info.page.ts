@@ -71,10 +71,10 @@ export class TareaMasInfoPage implements OnInit {
         }, {
           text: 'Ok',
           handler: async (data) => {
-            console.log('Confirm Password Inicio');
-            //await this.usuarioService.present('Añadiendo ubicación...');
+            console.log('Confirm añadir ubi: ', data.name1);
+            /* await this.usuarioService.present('Añadiendo ubicación...');
             this.geolocation.getCurrentPosition().then( async (pos) => {
-              /* await this.tareaService.addUbicacionAPI(pos.coords.latitude, pos.coords.longitude, data.name1, this.tarea.IdUsuario).then( async respuesta => {
+              await this.tareaService.addUbicacionAPI(pos.coords.latitude, pos.coords.longitude, data.name1, this.tarea.IdUsuario).then( async respuesta => {
 
                 if (!respuesta.Ok) {
                   await alert.dismiss();
@@ -98,7 +98,7 @@ export class TareaMasInfoPage implements OnInit {
                 this.usuarioService.presentAlert('Error', 'No ha sido posible añadir ubicación', 'Compruebe su conexión a internet.');
                 console.log('Error GPS: ', error);
 
-              }) */
+              })
         
               console.log(pos);
             }).catch( error => {
@@ -107,7 +107,7 @@ export class TareaMasInfoPage implements OnInit {
               this.usuarioService.presentAlert('Error', 'No ha sido posible acceder a su ubicación', 'Intentelo de nuevo más tarde');
               console.log('Error GPS: ', error);
 
-            });
+            }); */
             
           }
         }

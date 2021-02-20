@@ -30,7 +30,7 @@ export interface UsuarioLoginAPP {
 
     UserName: string;
     Password: string;
-    Token: String
+    Token: String;
 }
 
 export interface RespuestaAPIBasica {
