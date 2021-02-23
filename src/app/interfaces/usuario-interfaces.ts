@@ -14,6 +14,7 @@ export interface UsuarioLoginApi {
     TipoIncidencias?: TipoIncidencia[];
     NotificacionesPendientes?: NotificacionesPendientes[];
     TomarLocalizacion?: boolean;
+    EsAdministrador: boolean;
 }
 
 export interface NotificacionesPendientes {
@@ -33,10 +34,30 @@ export interface UsuarioLoginAPP {
     Token: String;
 }
 
+export interface UsuarioUbicaciones {
+
+    UserName: string;
+    Password: string;
+}
+
 export interface RespuestaAPIBasica {
 
     Respuesta: string;
     Mensaje?: string;
+
+}
+
+export interface ListaUsuariosApi {
+
+    Usuarios: UsuarioAPI[];
+    Respuesta: string;
+    Mensaje?: string;
+}
+
+export interface UsuarioAPI {
+
+    NombreCompleto: string;
+    IdUsuario: number;
 
 }
 

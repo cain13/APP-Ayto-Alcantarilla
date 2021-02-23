@@ -192,9 +192,6 @@ export class LoginPage implements OnInit {
   async getDatosLogin() {
     
     await this.usuarioService.present('Comprobando acceso...');
-    this.menuCtrl.enable(true, 'menuTrabajadores');
-    this.menuCtrl.enable(false, 'menuGuardiaCivil');
-    this.menuCtrl.enable(false, 'menuCompleto');
 
     this.pass = this.onLoginForm.value.password;
 
@@ -232,6 +229,18 @@ export class LoginPage implements OnInit {
       
       this.usuarioService.guardarUsuarioBD(this.usuario); // this.botonHuella.checked);
       console.log('LOGIN: ', this.usuario);
+
+      if (this.usuario.EsAdministrador) {
+
+        this.menuCtrl.enable(false, 'menuTrabajadores');
+        this.menuCtrl.enable(true, 'menuAdministrador');
+
+       } else {
+
+        this.menuCtrl.enable(true, 'menuTrabajadores');
+        this.menuCtrl.enable(false, 'menuAdministrador');
+
+       }
 
 
       this.usuarioService.dismiss();

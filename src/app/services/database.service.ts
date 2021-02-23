@@ -87,9 +87,9 @@ export class DatabaseService {
           console.log('DB: Tabla USUARIOS vacia'); }).catch(() => { console.log('DB: ERROR AL BORRAR TABLAS USUARIO'); });
 
         // tslint:disable-next-line: max-line-length
-        const data = [usuario.UserName, usuario.Password, usuario.IdEmpleado, usuario.HorasSemanales, usuario.NombreCompleto, usuario.Telefono, usuario.Email, usuario.TomarLocalizacion];
+        const data = [usuario.UserName, usuario.Password, usuario.IdEmpleado, usuario.HorasSemanales, usuario.NombreCompleto, usuario.Telefono, usuario.Email, usuario.TomarLocalizacion, usuario.EsAdministrador];
         // tslint:disable-next-line: max-line-length
-        const respuesta = this.storage.executeSql('INSERT INTO usuariosTable (UserName, Pass, IdEmpleado, HorasSemanales, NombreCompleto, Telefono, Email, TomarLocalizacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', data).then(() => {
+        const respuesta = this.storage.executeSql('INSERT INTO usuariosTable (UserName, Pass, IdEmpleado, HorasSemanales, NombreCompleto, Telefono, Email, TomarLocalizacion, EsAdministrador) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Usuario creado');
 
         });
@@ -187,7 +187,8 @@ export class DatabaseService {
         NombreCompleto: res.rows.item(0).NombreCompleto,
         Telefono: res.rows.item(0).Telefono,
         Email: res.rows.item(0).Email,
-        TomarLocalizacion: res.rows.item(0).TomarLocalizacion
+        TomarLocalizacion: res.rows.item(0).TomarLocalizacion,
+        EsAdministrador: res.rows.item(0).EsAdministrador
       };
     } else { return null; }
 

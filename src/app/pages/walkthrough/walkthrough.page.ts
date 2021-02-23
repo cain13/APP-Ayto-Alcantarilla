@@ -82,6 +82,7 @@ export class WalkthroughPage implements OnInit {
             Telefono: ultimoUsuario.Telefono,
             Email: ultimoUsuario.Email,
             TomarLocalizacion: ultimoUsuario.TomarLocalizacion,
+            EsAdministrador: ultimoUsuario.EsAdministrador
           };
 
           this.usuarioService.guardarUsuario(this.usuario);

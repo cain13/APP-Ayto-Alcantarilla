@@ -46,13 +46,26 @@ export class BlancoPage implements OnInit {
             HorasSemanales: ultimoUsuario.HorasSemanales,
             NombreCompleto: ultimoUsuario.NombreCompleto,
             Telefono: ultimoUsuario.Telefono,
-            Email: ultimoUsuario.Email
+            Email: ultimoUsuario.Email,
+            EsAdministrador: ultimoUsuario.EsAdministrador
           };
 
          this.usuarioService.guardarUsuario(this.usuario);
          console.log('Usuario: ', ultimoUsuario);
-         this.menuCtrl.enable(true, 'menuTrabajadores');
-         this.menuCtrl.enable(false, 'menuCompleto');
+
+         if (this.usuario.EsAdministrador) {
+
+          this.menuCtrl.enable(false, 'menuTrabajadores');
+          this.menuCtrl.enable(true, 'menuAdministrador');
+
+         } else {
+
+          this.menuCtrl.enable(true, 'menuTrabajadores');
+          this.menuCtrl.enable(false, 'menuAdministrador');
+
+         }
+
+        
          console.log('BLANCO: Si hay usuario en BD: ', this.usuario);
          this.navCtrl.navigateRoot('/tareas-inicio');
 

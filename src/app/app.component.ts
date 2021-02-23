@@ -32,7 +32,7 @@ export class AppComponent {
   @ViewChild(IonRouterOutlet, { static : true }) routerOutlet: IonRouterOutlet;
   lastBack = Date.now();
   public usuario: UsuarioLoginApi;
-  public appPages: Array<Pages>;
+  public appPagesAdministrador: Array<Pages>;
   public appPagesVSAll: Array<Pages>;
   
   public appPagesTrabajador: Array<Pages>;
@@ -171,25 +171,25 @@ export class AppComponent {
       }
     ];
 
-    this.appPages = [
+    this.appPagesAdministrador = [
       {
-        title: 'Buscar Centro MPE',
+        title: 'Calendario',
         url: '/construccion',
         direct: 'forward',
-        icon: 'map-outline'
+        icon: 'clipboard-outline'
       },
       {
-        title: 'Centros Favoritos',
-        url: '/construccion',
+        title: 'Incidencias',
+        url: '/contacto-mpe',
         direct: 'forward',
-        icon: 'heart'
-      }, {
-        title: 'Configuración',
-        url: '/construccion',
+        icon: 'chatbubbles-outline'
+      },
+      {
+        title: 'Ubicaciones',
+        url: '/ubicaciones',
         direct: 'forward',
-        icon: 'person-outline'
+        icon: 'location-outline'
       }
-
     ];
 
     

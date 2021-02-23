@@ -11,10 +11,11 @@ export interface Visita {
 
 export interface DatosAddUbicacion {
 
-    IdUsuario: number;
+    UserName: string;
+    Password: string;
     Latitud: number;
     Longitud: number;
-    Pin: string;
+    IdUsuario: number;
 
 }
 
