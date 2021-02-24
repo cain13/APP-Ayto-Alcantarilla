@@ -53,7 +53,7 @@ export class BlancoPage implements OnInit {
          this.usuarioService.guardarUsuario(this.usuario);
          console.log('Usuario: ', ultimoUsuario);
 
-         if (this.usuario.EsAdministrador) {
+         if (this.usuario.EsAdministrador.toString().toUpperCase() === 'TRUE') {
 
           this.menuCtrl.enable(false, 'menuTrabajadores');
           this.menuCtrl.enable(true, 'menuAdministrador');
