@@ -230,7 +230,7 @@ export class LoginPage implements OnInit {
       this.usuarioService.guardarUsuarioBD(this.usuario); // this.botonHuella.checked);
       console.log('LOGIN: ', this.usuario);
 
-      if (this.usuario.EsAdministrador) {
+      if (this.usuario.EsAdministrador.toString().toUpperCase() === 'TRUE' ){
 
         this.menuCtrl.enable(false, 'menuTrabajadores');
         this.menuCtrl.enable(true, 'menuAdministrador');

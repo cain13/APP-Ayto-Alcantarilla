@@ -48,7 +48,7 @@ export class TareaMasInfoPage implements OnInit {
 
   async addUbicacion() {
 
-    if (this.usuario.TomarLocalizacion !== null && this.usuario.TomarLocalizacion !== undefined && this.usuario.TomarLocalizacion === true) {
+    if (this.usuario.TomarLocalizacion !== null && this.usuario.TomarLocalizacion !== undefined && this.usuario.TomarLocalizacion.toString().toUpperCase() === 'TRUE') {
   
       await this.usuarioService.present('Añadiendo ubicación...');
       this.geolocation.getCurrentPosition().then( async (pos) => {
