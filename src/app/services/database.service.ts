@@ -194,41 +194,67 @@ export class DatabaseService {
 
   }
 
-  addNotificacionesPendientes(arrayNotificacionesPendientes: NotificacionesPendientes[]) {
+  async addNotificacionesPendientes(arrayNotificacionesPendientes: NotificacionesPendientes[]) {
 
-    for( const notPendiente of arrayNotificacionesPendientes) {
+    let notificacionesBD: Notificacion[];
 
-      const notificacion : Notificacion = {
+    await this.obtenerTodasNotificacion().then( resp => {
 
-        IdNotificacionAPI: notPendiente.IdNotificacion,
-        Titulo: notPendiente.Titulo,
-        Mensaje: notPendiente.Mensaje,
-        Leido: 0,
-        Fecha: notPendiente.Fecha,
-        Icono: 'mail-outline',
-        Ruta: '/message/'
+      if(resp.length === 0) {
+
+        notificacionesBD = null
+
+      } else {
+
+        notificacionesBD = resp;
+
+        for( const notPendiente of arrayNotificacionesPendientes) {
+
+          const notificacion : Notificacion = {
+    
+            IdNotificacionAPI: notPendiente.IdNotificacion,
+            Titulo: notPendiente.Titulo,
+            Mensaje: notPendiente.Mensaje,
+            Leido: 0,
+            Fecha: notPendiente.Fecha,
+            Icono: 'mail-outline',
+            Ruta: '/message/'
+    
+          }
+
+          if ( notificacionesBD.find( not => not.IdNotificacionAPI === notificacion.IdNotificacionAPI) === undefined) {
+            this.estadoBD().then(async () => {
+              const data = [notificacion.IdNotificacionAPI, notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono, notificacion.IdNotificacionAPI];
+              const respuesta = await this.storage.executeSql('INSERT INTO notificacionTable (IdNotificacionAPI, Titulo, Mensaje, Leido, Fecha, Ruta, Icono, IdNotificacionAPI) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', data).then(() => {
+                console.log('DB: Notificacion añadida');
+      
+      
+              });
+              console.log('DB: Respuesta Notificacion', respuesta);
+            });
+          } else {
+
+            console.log('Notificacion ya en base de datos');
+
+          }
+    
+         
+    
+        }
 
       }
 
-      this.estadoBD().then(async () => {
-        const data = [notificacion.IdNotificacionAPI, notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
-        const respuesta = await this.storage.executeSql('INSERT INTO notificacionTable (IdNotificacionAPI, Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?, ?)', data).then(() => {
-          console.log('DB: Notificacion añadida');
+    })
 
-
-        });
-        console.log('DB: Respuesta Notificacion', respuesta);
-    });
-
-    }
+    
 
   }
 
   addNotificacion(notificacion: Notificacion) {
     console.log('notificacion 2: ',notificacion);
     this.estadoBD().then(async () => {
-        const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono];
-        const respuesta = await this.storage.executeSql('INSERT INTO notificacionTable (Titulo, Mensaje, Leido, Fecha, Ruta, Icono) VALUES (?, ?, ?, ?, ?, ?)', data).then(() => {
+        const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono, notificacion.IdNotificacionAPI];
+        const respuesta = await this.storage.executeSql('INSERT INTO notificacionTable (Titulo, Mensaje, Leido, Fecha, Ruta, Icono, IdNotificacionAPI) VALUES (?, ?, ?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Notificacion añadida');
 
 
@@ -380,6 +406,7 @@ export class DatabaseService {
       notificacion = null; 
     }
     console.log('obtener Notificacion: ', not)
+
     
     await this.httpClient.post<RespuestaAPIBasica>(`${url}/Ayto/NotificacionLeida`, not, {headers: this.header}).timeout(7000).toPromise().then( data => {
       console.log('obtener Notificacion: THEN ', data)

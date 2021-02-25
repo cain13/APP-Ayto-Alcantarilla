@@ -228,27 +228,9 @@ export class AppComponent {
             notificacion.Mensaje = data['Mensaje'];
             notificacion.Icono = 'mail-outline';
             notificacion.Ruta = '/message/';
+            notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
             
             this.notificacion = notificacion;
-
-            /* if (data['TipoUsuario'].toString().includes('TECNICO')) {
-
-              switch (notificacion.TipoDocumento.toUpperCase()) {
-                case 'INFORMACION':
-                  notificacion.Icono = 'mail-outline';
-                  notificacion.Ruta = '/message/';
-                  break;
-                case 'TAREA':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/tareas-inicio';
-                  break;
-                
-                default:
-                  notificacion.Icono = 'alert-circle-outline';
-                  notificacion.Ruta = '/inicio';
-                  break;
-              }
-            } */
 
             this.db.addNotificacion(notificacion);
         //  this.db.ModificarRutaNotificacion();
@@ -278,26 +260,9 @@ export class AppComponent {
             notificacion.Mensaje = data['Mensaje'];
             notificacion.Icono = 'mail-outline';
             notificacion.Ruta = '/message/';
+            notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
             this.notificacion = notificacion;
 
-            /* if (data['TipoUsuario'].toString().includes('TECNICO')) {
-
-              switch (notificacion.TipoDocumento.toUpperCase()) {
-                case 'INFORMACION':
-                  notificacion.Icono = 'mail-outline';
-                  notificacion.Ruta = '/message/';
-                  break;
-                case 'TAREA':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/tareas-inicio';
-                  break;
-                
-                default:
-                  notificacion.Icono = 'alert-circle-outline';
-                  notificacion.Ruta = '/inicio';
-                  break;
-              }
-            } */
             this.db.addNotificacion(notificacion);
             this.notificacionesService.SumaUnaNotificaciones();
 
@@ -318,30 +283,12 @@ export class AppComponent {
             notificacion.Titulo = data['Titulo'];
             notificacion.Leido = 0;
             notificacion.Mensaje = data['Mensaje'];
-
+            notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
             this.notificacion = notificacion;
             
             notificacion.Icono = 'mail-outline';
             notificacion.Ruta = '/message/';
 
-           /*  if (data['TipoUsuario'].toString().includes('TECNICO')) {
-
-              switch (notificacion.TipoDocumento.toUpperCase()) {
-                case 'INFORMACION':
-                  notificacion.Icono = 'mail-outline';
-                  notificacion.Ruta = '/message/';
-                  break;
-                case 'TAREA':
-                  notificacion.Icono = 'document-text-outline';
-                  notificacion.Ruta = '/tareas-inicio';
-                  break;
-                
-                default:
-                  notificacion.Icono = 'alert-circle-outline';
-                  notificacion.Ruta = '/inicio';
-                  break;
-              }
-            } */
             this.db.addNotificacion(notificacion);
             this.notificacionesService.SumaUnaNotificaciones();
             this.usuarioService.presentAlertNotificaciones('NUEVA NOTIFICACIÓN!!', 'Tiene una notificación nueva!!', '');
@@ -370,18 +317,6 @@ export class AppComponent {
         this.translate.setTranslations(translations);
       });
     });
-
-    /* this.platform.pause.subscribe(() => {
-
-      if (!this.usuarioService.desactivarSegundoPlano) {
-        console.log('PASAMOS A SEGUNDO PLANO');
-        this.navCtrl.navigateRoot('');
-      }
-
-    });
-    this.platform.resume.subscribe(() => {
-      console.log('VUELVE A PRIMER PLANO');
-    }); */
 
   }
 
