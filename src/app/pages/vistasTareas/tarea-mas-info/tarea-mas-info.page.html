@@ -11,7 +11,7 @@
   <ion-card>
     <img class="ion-padding" src="assets/img/logoAlcantarillaTransparente.png" />
     <ion-card-header>
-      <ion-card-subtitle>Grado {{tarea.Grado}}</ion-card-subtitle>
+      <ion-card-subtitle>Grado {{tarea.Grado.Descripcion}}</ion-card-subtitle>
       <ion-card-title>{{tarea.Usuario.Nombre}} {{tarea.Usuario.ApellidosCompletos}}</ion-card-title>
     </ion-card-header>
     <ion-card-content style="margin-top: 0px;">
@@ -152,9 +152,9 @@
     Como llegar
   </ion-button>
 
-  <ion-button *ngIf="tarea.Usuario.Latitud === null || tarea.Usuario.Longitud === null || tarea.Usuario.Latitud === undefined || tarea.Usuario.Longitud === undefined" icon-left size="large" expand="full" color="success" (click)="addUbicacion()" tappable>
+  <ion-button *ngIf="puedeUbi" icon-left size="large" expand="full" color="verdeAddUbi" (click)="addUbicacion()" tappable>
     <ion-icon slot="start" name="map-outline"></ion-icon>
-    Añadir Ubicación
+    Actualizar Ubicación
   </ion-button>
 
   <ion-button *ngIf="tarea.Usuario.Telefono1 !== null && tarea.Usuario.Telefono1 !== undefined" icon-left size="large" expand="full" color="primary" href="tel:{{tarea.Usuario.Telefono1.toString()}}" tappable>

@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NotificacionesPage } from '../pages/vistasMPE/notificaciones/notificaciones.page';
 import 'rxjs/add/operator/timeout';
 import { TipoIncidencia } from '../interfaces/interfacesTareas';
+import { NotificacionesService } from './notificaciones.service';
 
 const url =  'https://intranet-ayto.com/api';
 
@@ -47,7 +48,8 @@ export class UsuarioService {
     private alertCtrl: AlertController,
     private http: HttpClient,
     private modalCtrl: ModalController,
-    private navController: NavController,
+    private navController: NavController/* ,
+    private notificacionesService: NotificacionesService */
     ) { }
 
   //#region  FUNCIONS LOGIN
@@ -60,6 +62,7 @@ export class UsuarioService {
         Password: password,
         Token: token
       };
+      console.log('Usuario: ', usuario);
 
       return await this.http.post<UsuarioLoginApi>(`${url}/Ayto/Login`, usuario, {headers: this.header}).timeout(20000).toPromise();
 
@@ -110,7 +113,9 @@ export class UsuarioService {
 
         }
 
-        this.dataBaseService.addNotificacionesPendientes(user.NotificacionesPendientes);
+        console.log('Notificaciones Pendintes login: ', notificacionesPendientes);
+
+        this.dataBaseService.addNotificacionesPendientes(notificacionesPendientes);
 
       }
       

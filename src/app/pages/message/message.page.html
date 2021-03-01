@@ -13,14 +13,14 @@
       <ion-card-header>
           <ion-card-subtitle>{{fecha | date: 'dd/MM/yyyy HH:mm'}} ∙ por <strong>Servicios Sociales</strong></ion-card-subtitle>
           <ion-card-title>
-            <ion-text color="primary">
+            <ion-text color="primary" *ngIf="message.Titulo !== null || message.Titulo !== undefined">
               {{message.Titulo}}
             </ion-text>
           </ion-card-title>
       </ion-card-header>
         <ion-card-content>
 					<p class="ion-margin-top">
-            <ion-text color="primary">
+            <ion-text color="primary" *ngIf="message.Mensaje !== null || message.Mensaje !== undefined">
               {{message.Mensaje}}
             </ion-text>
           </p>

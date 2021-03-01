@@ -59,6 +59,13 @@ export class NotificacionesService {
       console.log('aumentarNot: ', this.numNot);
   }
 
+  AcutalizaNumNotificaciones(numNotificaciones: number) {
+    this.numNot = numNotificaciones;
+    this.numNotificaciones$.next(this.numNot);
+    console.log('aumentarNot: ', this.numNot);
+}
+
+
   RestaUnaNotificaciones() {
     this.numNot = this.numNot - 1;
     this.numNotificaciones$.next(this.numNot);

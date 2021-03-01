@@ -7,6 +7,7 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { EnviosPendientes, Notificacion, NotificacionesPendientes, RespuestaAPIBasica, UsuarioLoginApi } from '../interfaces/usuario-interfaces';
 import { TipoIncidencia } from '../interfaces/interfacesTareas';
 import { UsuarioService } from './usuario.service';
+import { NotificacionesService } from './notificaciones.service';
 
 const url =  'https://intranet-ayto.com/api';
 
@@ -83,13 +84,13 @@ export class DatabaseService {
     this.estadoBD().then(async () => {
         console.log('DB:addUsuario 1');
 
-        this.storage.executeSql('DELETE FROM usuariosTable').then(() => {
+        await this.storage.executeSql('DELETE FROM usuariosTable').then(() => {
           console.log('DB: Tabla USUARIOS vacia'); }).catch(() => { console.log('DB: ERROR AL BORRAR TABLAS USUARIO'); });
 
         // tslint:disable-next-line: max-line-length
         const data = [usuario.UserName, usuario.Password, usuario.IdEmpleado, usuario.HorasSemanales, usuario.NombreCompleto, usuario.Telefono, usuario.Email, usuario.TomarLocalizacion, usuario.EsAdministrador];
         // tslint:disable-next-line: max-line-length
-        const respuesta = this.storage.executeSql('INSERT INTO usuariosTable (UserName, Pass, IdEmpleado, HorasSemanales, NombreCompleto, Telefono, Email, TomarLocalizacion, EsAdministrador) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', data).then(() => {
+        const respuesta = await this.storage.executeSql('INSERT INTO usuariosTable (UserName, Pass, IdEmpleado, HorasSemanales, NombreCompleto, Telefono, Email, TomarLocalizacion, EsAdministrador) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', data).then(() => {
           console.log('DB: Usuario creado');
 
         });
@@ -197,9 +198,45 @@ export class DatabaseService {
   async addNotificacionesPendientes(arrayNotificacionesPendientes: NotificacionesPendientes[]) {
 
     let notificacionesBD: Notificacion[];
+    
 
-    await this.obtenerTodasNotificacion().then( resp => {
 
+    this.estadoBD().then(async () => {
+      console.log('DB:addUsuario 1');
+
+      await this.storage.executeSql('DELETE FROM notificacionTable WHERE Leido = 0').then(() => {
+        console.log('DB: Tabla USUARIOS vacia'); }).catch(() => { console.log('DB: ERROR AL BORRAR TABLAS USUARIO'); });
+
+      // tslint:disable-next-line: max-line-length
+
+      for( const notPendiente of arrayNotificacionesPendientes) {
+
+        const notificacion : Notificacion = {
+  
+          IdNotificacionAPI: notPendiente.IdNotificacion,
+          Titulo: notPendiente.Titulo,
+          Mensaje: notPendiente.Mensaje,
+          Leido: 0,
+          Fecha: notPendiente.Fecha,
+          Icono: 'mail-outline',
+          Ruta: '/message/'
+  
+        }
+        const data = [notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono, notificacion.IdNotificacionAPI];
+        const respuesta = await this.storage.executeSql('INSERT INTO notificacionTable (Titulo, Mensaje, Leido, Fecha, Ruta, Icono, IdNotificacionAPI) VALUES (?, ?, ?, ?, ?, ?, ?)', data).then(() => {
+          console.log('DB: Notificacion añadida');
+        }).catch(error => {
+          console.log('Error al añadir not pendiente: ', error);
+          
+        });
+
+      }
+    });
+  }
+
+
+    /* await this.obtenerTodasNotificacion().then( resp => {
+      console.log('resp 55: ', resp);
       if(resp.length === 0) {
 
         notificacionesBD = null
@@ -208,6 +245,7 @@ export class DatabaseService {
 
         notificacionesBD = resp;
 
+        console.log('notificacionesBD: ', notificacionesBD);
         for( const notPendiente of arrayNotificacionesPendientes) {
 
           const notificacion : Notificacion = {
@@ -221,8 +259,9 @@ export class DatabaseService {
             Ruta: '/message/'
     
           }
-
+          console.log('notificaciones boolean: ',  notificacionesBD.find( not => not.IdNotificacionAPI === notificacion.IdNotificacionAPI) === undefined);
           if ( notificacionesBD.find( not => not.IdNotificacionAPI === notificacion.IdNotificacionAPI) === undefined) {
+           
             this.estadoBD().then(async () => {
               const data = [notificacion.IdNotificacionAPI, notificacion.Titulo, notificacion.Mensaje, notificacion.Leido, notificacion.Fecha, notificacion.Ruta, notificacion.Icono, notificacion.IdNotificacionAPI];
               const respuesta = await this.storage.executeSql('INSERT INTO notificacionTable (IdNotificacionAPI, Titulo, Mensaje, Leido, Fecha, Ruta, Icono, IdNotificacionAPI) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', data).then(() => {
@@ -238,17 +277,11 @@ export class DatabaseService {
 
           }
     
-         
-    
         }
 
       }
 
-    })
-
-    
-
-  }
+    }) */
 
   addNotificacion(notificacion: Notificacion) {
     console.log('notificacion 2: ',notificacion);

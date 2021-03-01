@@ -20,6 +20,7 @@ export class TareaMasInfoPage implements OnInit {
   tarea: Servicio;
   telefono: string;
   usuario: UsuarioLoginApi;
+  puedeUbi: boolean;
   constructor(private tareaService: TareasService,
               private alertController: AlertController,
               private geolocation: Geolocation,
@@ -31,6 +32,15 @@ export class TareaMasInfoPage implements OnInit {
     this.tarea = this.tareaService.getTarea();
     this.telefono = this.tarea.Usuario.Telefono1;
     this.usuario = this.usuarioService.getUsuario();
+    if (this.usuario.TomarLocalizacion !== null && this.usuario.TomarLocalizacion !== undefined && this.usuario.TomarLocalizacion.toString().toLocaleUpperCase() === 'TRUE') {
+
+      this.puedeUbi = true;
+
+    } else {
+
+      this.puedeUbi = false;
+
+    }
     console.log('TAREA: ', this.tarea);
     console.log('Telefono: ', this.telefono);
 

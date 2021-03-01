@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit, ViewWillEnter {
                 private actionSheetController: ActionSheetController,
                 private socialSharing: SocialSharing) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.platform.ready().then(() => {
       console.log('Width: ' + this.platform.width());
       console.log('Height: ' + this.platform.height());
@@ -50,8 +50,7 @@ export class HeaderComponent implements OnInit, ViewWillEnter {
     });
 
     this.usuario = this.usuarioService.getUsuario();
-
-
+    
     this.notificacionesService.aumentarNotificaciones();
     this.cantidad$ = this.notificacionesService.getNotifiaciones$();
     this.cantidad$.subscribe(num => {

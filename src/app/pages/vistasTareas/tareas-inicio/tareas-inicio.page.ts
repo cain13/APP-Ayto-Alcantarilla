@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 import { DatabaseService } from '../../../services/database.service';
 import { Servicio } from 'src/app/interfaces/servicos-interfaces';
+import { NotificacionesService } from '../../../services/notificaciones.service';
 
 
 @Component({
@@ -71,23 +72,34 @@ export class TareasInicioPage implements OnInit {
   isTareaVacia: boolean = false;
   fecha: Date;
 
+  tokenAPI: string;
+
   constructor(private tareasService: TareasService,
               private usuarioService: UsuarioService,
               private navCtrl: NavController,
-              private dataBaseService: DatabaseService
+              private dataBaseService: DatabaseService,
+              private notificacionesService: NotificacionesService,
+              private fcm: FCM
               ) { 
                 this.usuario = this.usuarioService.getUsuario();
 
               }
 
   async ngOnInit() {
+    
+    await this.fcm.getToken().then(token => {
+      console.log('TOKEN: ', token);
+      this.tokenAPI = token;
+    });
 
     await this.usuarioService.present('Cargando datos...');
+    console.log('usuario mandado:', this.usuario.UserName, this.usuario.Password, this.tokenAPI);
 
-    await this.usuarioService.loginAPI(this.usuario.UserName, this.usuario.Password, null).then( resp => {
+    await this.usuarioService.loginAPI(this.usuario.UserName, this.usuario.Password, this.tokenAPI).then( resp => {
 
       console.log('Login Correcto API.');
       this.ComprobarRespuestDeAPI(resp);
+      this.notificacionesService.AcutalizaNumNotificaciones(resp.NotificacionesPendientes.length);
 
     }).catch(error => {
 
@@ -95,6 +107,7 @@ export class TareasInicioPage implements OnInit {
 
 
     });
+
 
 
 
