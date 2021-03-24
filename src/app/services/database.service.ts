@@ -106,7 +106,7 @@ export class DatabaseService {
 
   guardarArrayIncidencias(arrayIncidencias: TipoIncidencia[]) {
 
-    console.log('DB:arrayIncidencias 0');
+    console.log('DB:arrayIncidencias 0: ', arrayIncidencias);
 
     if( arrayIncidencias !== null || arrayIncidencias !== undefined){
 
@@ -117,12 +117,13 @@ export class DatabaseService {
           console.log('DB: Tabla Incidencias vacia'); }).catch(() => { console.log('DB: ERROR AL BORRAR TABLAS INCIDENCIAS'); });
 
         // tslint:disable-next-line: max-line-length
-
+        
         for (const incidencia of arrayIncidencias) {
 
-          const data = [incidencia.IdIncidencia, incidencia.Nombre];
+          const data = [incidencia.IdTipoIncidencia, incidencia.Titulo, incidencia.Orden];
+          console.log('data: ',data)
           // tslint:disable-next-line: max-line-length
-          const respuesta = this.storage.executeSql('INSERT INTO incidenciasTable (IdIncidenciaAPI, NombreIncidencia) VALUES (?, ?)', data).then(() => {
+          const respuesta = this.storage.executeSql('INSERT INTO incidenciasTable (IdIncidenciaAPI, Titulo, Orden) VALUES (?, ?, ?)', data).then(() => {
             console.log('DB: Incidencia creado');
   
           }).catch(error => {

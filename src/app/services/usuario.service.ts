@@ -18,16 +18,7 @@ const url =  'https://intranet-ayto.com/api';
 })
 export class UsuarioService {
 
-  listaTipoIncidencias: TipoIncidencia[] = [
-    {
-    IdIncidencia: 0,
-    Nombre: 'Usuario Ausente'
-  },
-  {
-    IdIncidencia: 1,
-    Nombre: 'Otros'
-  }
-];
+  
 
   version = 'Versión 1.0.0';
   usuario: UsuarioLoginApi;

@@ -64,12 +64,12 @@ export class AppComponent {
 
     this.appPagesTrabajador = [
 
-      {
+      /* {
         title: 'Calendario',
         url: '/construccion',
         direct: 'forward',
         icon: 'clipboard-outline'
-      },
+      }, */
       {
         title: 'Incidencias',
         url: '/contacto-mpe',

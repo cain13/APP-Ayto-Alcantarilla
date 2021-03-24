@@ -6,6 +6,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { UsuarioLoginApi, Notificacion } from '../../../interfaces/usuario-interfaces';
 import { IncidenciasService } from '../../../services/incidencias.service';
 import { DatabaseService } from '../../../services/database.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-contacto-mpe',
@@ -27,7 +28,8 @@ export class ContactoMpePage implements OnInit {
   constructor(    private formBuilder: FormBuilder,
                   private usuarioService: UsuarioService,
                   private incidenciasService: IncidenciasService,
-                  private databaseService: DatabaseService
+                  private databaseService: DatabaseService,
+                  private navController: NavController
     ) { }
 
   ngOnInit() {
@@ -77,6 +79,7 @@ export class ContactoMpePage implements OnInit {
         this.databaseService.addJsonPendiente(url, contenido, tipoJsonPendiente);
       }
       this.usuarioService.dismiss();
+      
 
     }).catch(error => {
 
@@ -101,7 +104,8 @@ export class ContactoMpePage implements OnInit {
 
     });
 
-    this.usuarioService.presentToast('Incidencia mandada correctamente.')
+    this.usuarioService.presentToast('Incidencia mandada correctamente.');
+    this.navController.navigateRoot('tareas-inicio');
 
   }
 

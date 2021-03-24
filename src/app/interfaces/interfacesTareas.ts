@@ -56,8 +56,10 @@ export interface RespuestaTiposIncidenciasAPI {
 
 export interface TipoIncidencia {
 
-    IdIncidencia: number;
-    Nombre: string;
+    IdTipoIncidencia: number;
+    IdIncidenciaAPI?: number;
+    Titulo: string;
+    Orden: number;
 
 }
 

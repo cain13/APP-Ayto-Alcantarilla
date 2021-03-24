@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavController, LoadingController, ToastController, AlertController } from '@ionic/angular';
+import { ModalController, NavController, LoadingController, ToastController, AlertController, MenuController } from '@ionic/angular';
 import { TranslateProvider } from '../../providers';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { CambiarPasswordPage } from '../vistasMPE/cambiar-password/cambiar-password.page';
@@ -35,11 +35,12 @@ export class EditProfilePage implements OnInit {
     private usuarioService: UsuarioService,
     private alertController: AlertController,
     private formBuilder: FormBuilder,
+    private menuCtrl: MenuController
 
     ) { }
 
   ngOnInit() {
-
+    this.menuCtrl.close();
     this.Nombre = this.usuarioService.usuario.NombreCompleto;
     this.Tipo = this.usuarioService.usuario.UserName;
     this.usuario = this.usuarioService.getUsuario();

@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { Incidencia } from 'src/app/interfaces/incidencia-interfaces';
 import { DatabaseService } from '../../../services/database.service';
 import { Servicio } from '../../../interfaces/servicos-interfaces';
+import { MenuController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-incidencias',
@@ -23,7 +24,7 @@ export class IncidenciasPage implements OnInit {
   descripcion: string = '';
   nombre: string;
 
-  tipoIncidenciaSeleccionada: number = 0;
+  tipoIncidenciaSeleccionada: TipoIncidencia;
   listaTiposIncidencias: TipoIncidencia[] = []
   tarea: Servicio;
 
@@ -31,11 +32,16 @@ export class IncidenciasPage implements OnInit {
               private formBuilder: FormBuilder,
               private tareasService: TareasService,
               private incidenciasService: IncidenciasService,
-              private databaseService: DatabaseService) { }
+              private databaseService: DatabaseService,
+              private navController: NavController,
+              private menuCtrl: MenuController) { }
 
   ngOnInit() {
+    this.menuCtrl.close();
     this.listaTiposIncidencias = this.tareasService.getListaIncidencias();
+    console.log('this.listaTiposIncidencias: ',this.listaTiposIncidencias);
     this.tarea = this.tareasService.getTarea();
+    console.log('tarea: ',this.tarea);
     this.usuario = this.usuarioService.getUsuario();
     this.nombre = this.usuario.NombreCompleto;
     this.incidenciasForm = this.formBuilder.group({
@@ -58,17 +64,22 @@ export class IncidenciasPage implements OnInit {
 
     const userName = this.usuario.UserName;
     const pass = this.usuario.Password;
-    const tipoIncidencia = this.incidenciasForm.value.tipoIncidencia;
+    console.log('this.tipoIncidenciaSeleccionada.toString(): ', this.listaTiposIncidencias[0].Titulo)
+    console.log('ddd', this.incidenciasForm.value.tipoIncidencia);
+    console.log(this.tipoIncidenciaSeleccionada);
+    const tipoIncidencia = this.tipoIncidenciaSeleccionada.IdIncidenciaAPI;
     const descripcion = this.incidenciasForm.value.descpricion;
     const idTarea = this.tarea.IdEventoServicio;
     const fechaHoy = moment().format();
     console.log('Nombre: ', this.incidenciasForm.value.nombre);
-    console.log('TipoIncidencia: ', this.incidenciasForm.value.tipoIncidencia);
+    console.log('TipoIncidencia: ', tipoIncidencia);
     console.log('Descripicon: ', this.incidenciasForm.value.descripcion);
     console.log('idTarea: ', this.tarea.IdEventoServicio);
 
+    await this.usuarioService.present('Enviando Incidencia...');
     await this.incidenciasService.enviarIncidencia(userName, pass,tipoIncidencia, fechaHoy, descripcion, null, idTarea).then( data => {
 
+      console.log('Respuesta api incidencias: ', data);
       if(data.Respuesta.toString().toLocaleUpperCase() !== 'OK') {
 
         const incidencia: Incidencia = {
@@ -86,6 +97,8 @@ export class IncidenciasPage implements OnInit {
 
         this.databaseService.addJsonPendiente(url, contenido, tipoJsonPendiente);
       }
+
+      this.usuarioService.dismiss();
 
     }).catch(error => {
 
@@ -107,6 +120,8 @@ export class IncidenciasPage implements OnInit {
       this.databaseService.addJsonPendiente(url, contenido, tipoJsonPendiente);
 
     })
+
+    this.navController.navigateRoot('tareas-inicio');
 
   }
 
