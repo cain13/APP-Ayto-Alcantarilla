@@ -119,6 +119,8 @@ export class IncidenciasPage implements OnInit {
 
       this.databaseService.addJsonPendiente(url, contenido, tipoJsonPendiente);
 
+      this.usuarioService.dismiss();
+
     })
 
     this.navController.navigateRoot('tareas-inicio');

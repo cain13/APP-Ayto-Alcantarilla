@@ -11,8 +11,8 @@
   <ion-card>
     <img class="ion-padding" src="assets/img/logoAlcantarillaTransparente.png" />
     <ion-card-header>
-      <ion-card-subtitle>Grado {{tarea.Grado.Descripcion}}</ion-card-subtitle>
-      <ion-card-title>{{tarea.Usuario.Nombre}} {{tarea.Usuario.ApellidosCompletos}}</ion-card-title>
+      <ion-card-subtitle *ngIf="tarea.Grado.Descripcion !== null && tarea.Grado.Descripcion !== undefined">Grado {{tarea.Grado.Descripcion}}</ion-card-subtitle>
+      <ion-card-title *ngIf="tarea.Usuario.Nombre !== null && tarea.Usuario.ApellidosCompletos !== null && tarea.Usuario.Nombre !== undefined && tarea.Usuario.ApellidosCompletos !== undefined">{{tarea.Usuario.Nombre}} {{tarea.Usuario.ApellidosCompletos}}</ion-card-title>
     </ion-card-header>
     <ion-card-content style="margin-top: 0px;">
       <ion-grid >
@@ -52,7 +52,7 @@
                   
         <!-- NOMBRE AUXILIAR TITULAR -->
 
-        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Usuario.EmpleadoTitular !== null && tarea.Usuario.EmpleadoTitular !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Usuario.EmpleadoTitular.NombreCompleto !== null && tarea.Usuario.EmpleadoTitular.NombreCompleto  !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
           <ion-label>
             <h2>
               <ion-text style="color: #7e7e7e !important;"><strong>Auxiliar Titular:</strong></ion-text>
