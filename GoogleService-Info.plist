@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>903349440158-ksnt5gpbetal783o9p2o6688hvhi1qjs.apps.googleusercontent.com</string>
+	<string>903349440158-52plprq429qdp17pjudirgei0hkm5d26.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.903349440158-ksnt5gpbetal783o9p2o6688hvhi1qjs</string>
+	<string>com.googleusercontent.apps.903349440158-52plprq429qdp17pjudirgei0hkm5d26</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCVsnM7fda5du2oS5cym5Iy12Dlw2T1DE4</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.abmcloudsolutions.aytoalcantarilla</string>
+	<string>com.abmcloudsolutions.alcantarillaayto</string>
 	<key>PROJECT_ID</key>
 	<string>app-aytoalcantarilla</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:903349440158:ios:dc9734a6bc30bb3d29758f</string>
+	<string>1:903349440158:ios:abe6e27c37bb98cd29758f</string>
 	<key>DATABASE_URL</key>
 	<string>https://app-aytoalcantarilla.firebaseio.com</string>
 </dict>
