@@ -39,6 +39,7 @@ export class LoginPage implements OnInit {
   plataforma: string;
   EsGuardiaCivil = false;
   mostrarTerminosModal = false;
+  tienePermisosFCM: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -59,11 +60,19 @@ export class LoginPage implements OnInit {
 
 
   ngOnInit() {
-
-    this.fcm.getToken().then(token => {
+    this.fcm.requestPushPermission().then( resp => {
+      this.tienePermisosFCM = resp;
+      console.log('reso: ', resp);
+      this.fcm.getToken().then(token => {
       console.log('TOKEN: ', token);
       this.tokenAPI = token;
     });
+    }).catch( error => {
+
+      console.log('Error permisos push: ', error);
+
+    })
+    
 
     this.usuario = this.usuarioService.getUsuario();
 
@@ -192,10 +201,6 @@ export class LoginPage implements OnInit {
   async getDatosLogin() {
     
     await this.usuarioService.present('Comprobando acceso...');
-    this.menuCtrl.enable(true, 'menuTrabajadores');
-    this.menuCtrl.enable(false, 'menuGuardiaCivil');
-    this.menuCtrl.enable(false, 'menuCompleto');
-
     this.pass = this.onLoginForm.value.password;
 
     await this.usuarioService.loginAPI(this.onLoginForm.value.usuario, this.onLoginForm.value.password, this.tokenAPI).then( res => {
@@ -211,11 +216,9 @@ export class LoginPage implements OnInit {
 
 
     const JSONrespuesta = JSON.stringify(res);
-    if (JSONrespuesta.includes('Respuesta>k__BackingField')) {
+    if (JSONrespuesta.toUpperCase().includes('ERROR')) {
       this.usuarioService.dismiss();
       this.usuarioService.presentAlert('Datos Incorrectos', 'Compruebe sus datos de nuevo.', '');
-
-
     } else {
 
       try {
@@ -227,6 +230,19 @@ export class LoginPage implements OnInit {
         this.usuario = res;
 
       }
+
+      if (this.usuario.EsAdministrador.toString().toUpperCase() === 'TRUE') {
+
+        this.menuCtrl.enable(false, 'menuTrabajadores');
+        this.menuCtrl.enable(true, 'menuAdministrador');
+
+       } else {
+
+        this.menuCtrl.enable(true, 'menuTrabajadores');
+        this.menuCtrl.enable(false, 'menuAdministrador');
+
+       }
+       
       this.usuario.Password = this.pass;
       console.log('LOGIN-DNI: Usuario de API: ', this.usuario);
       

@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-text color="light">Ayto. Alcantarilla</ion-text>
+    </ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="grisAyto" class="ion-no-padding" style="padding-bottom: 1px !important; padding-top: 1px !important;">
+    <ion-searchbar style="padding-right: 8px; padding-top: 15px !important;" [(ngModel)]="searchKey" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)" placeholder="Buscar tarea"></ion-searchbar>
+    <ion-buttons slot="end" > 
+      <ion-button size="small" style="margin-top: 2mm; margin-right: 2mm;" shape="round" color="primary" (click)="actualizar()">
+        <ion-icon style="margin-top: 5px !important; margin-right: 4px !important;" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+
+  <ion-list #lista class="ion-no-padding">
+    <!-- <ion-list-header color="secondary">
+      <h1 style="color: #FFFF;"><strong>Usuarios Activos</strong></h1>
+    </ion-list-header> -->
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-item-sliding *ngFor="let user of arrayUsuarios">
+
+      <ion-item> <!--(click)="goCheckout(invoice.id)">-->
+        <ion-avatar slot="start">
+          <img src="../../../assets/img/ionProperty-ico.png">
+        </ion-avatar>
+        <ion-label>
+          <h2 style="font-size: x-large;"><strong>{{user.NombreCompleto.split(" ")[0]}}</strong></h2>
+          <h3>{{user.NombreCompleto.split(" ")[1]}} {{usuario.NombreCompleto.split(" ")[2]}}</h3>
+        </ion-label>
+      </ion-item>        
+
+      <ion-item-options side="end">
+        <ion-item-option color="success" (click)="addUbicacion(user)">
+          <ion-icon slot="icon-only" name="location-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+
+    </ion-item-sliding>
+
+  </ion-list>
+
+
+</ion-content>

@@ -1,20 +1,19 @@
-<ion-header>
-  <app-header></app-header>
-  <ion-toolbar color="secondary" class="ion-no-padding" style="margin-bottom: 0px !important;">
-    <ion-grid class="ion-no-padding" style="text-align: center; margin-bottom: 0px !important;">
-
-      <ion-row class="ion-no-padding" style="margin-top: 1px !important; margin-bottom: 0px !important; ">
-
-        <ion-col size="2"  style="padding-left: 10px !important;" class="ion-no-padding" (click)="diaAnterior()">
+<app-header style="margin-bottom: 0cm !important; padding-bottom: 0cm !important;"></app-header>
+<ion-content class="ion-no-padding">
+  
+  <ion-toolbar class="ion-no-padding" color="secondary">
+    <ion-grid class="ion-no-padding" style="text-align: center; margin-top: 5px;">
+      <ion-row class="ion-no-padding">
+        <ion-col size="2" style="padding-left: 10px !important;" class="ion-no-padding" (click)="diaAnterior()">
           <ion-button color="light" fill="clear" >
             <ion-icon slot="start" name="chevron-back-outline" ></ion-icon>
           </ion-button>
         </ion-col>
 
-        <ion-col size="8" class="ion-no-padding" style="padding-top: 12px !important;" (click)="picker.open()">
-          <ion-label style="text-align: center; padding-top: 1px !important;">
+        <ion-col mode="md" size="8" class="ion-no-padding"  (click)="picker.open()">
+          <ion-label mode="md" style="text-align: center; padding-top: 1px !important;">
             
-            <strong><ion-datetime #picker color="light"
+            <strong mode="md"><ion-datetime #picker color="light"
                                           pickerFormat="DD MMMM YYYY" 
                                           displayFormat="DD/MM/YYYY" 
                                           placeholder = "HOY"
@@ -25,7 +24,7 @@
                                           doneText="Filtrar" 
                                           cancelText="Cancelar" 
                                           class="ion-no-padding"
-                                          style = "color: #ffffff;"> 
+                                          style = "color: #ffffff; margin-top: 16px;"> 
             </ion-datetime></strong>  
           </ion-label>
         </ion-col>
@@ -34,6 +33,7 @@
           <ion-button color="light" fill="clear">
             <ion-icon slot="start" name="chevron-forward-outline" ></ion-icon>
           </ion-button>
+          
         </ion-col>
         
       </ion-row>
@@ -41,19 +41,14 @@
     </ion-grid>
     
   </ion-toolbar>
-  <ion-toolbar color="grisAyto" class="ion-no-padding">
-    <ion-searchbar style="margin-top: 2mm; margin-bottom: 2mm;" [(ngModel)]="searchKey" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)" placeholder="Buscar Certificado"></ion-searchbar>
+  <ion-toolbar color="grisAyto" class="ion-no-padding" style="padding-bottom: 1px !important; padding-top: 1px !important;">
+    <ion-searchbar style="padding-right: 8px; padding-top: 15px !important;" [(ngModel)]="searchKey" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)" placeholder="Buscar tarea"></ion-searchbar>
     <ion-buttons slot="end" > 
-      <ion-button size="small" shape="round" color="primary" (click)="actualizar()">
-        <ion-icon name="refresh-outline"></ion-icon>
+      <ion-button size="small" style="margin-top: 2mm; margin-right: 2mm;" shape="round" color="primary" (click)="actualizar()">
+        <ion-icon style="margin-top: 5px !important; margin-right: 4px !important;" name="refresh-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
-
-
-<ion-content class="ion-no-padding">
-
   <!-- <ion-list mode="md">
     <ion-list-header color="primary" >
       <div class="ion-align-items-center" (click)="abirFiltros()">
@@ -116,7 +111,7 @@
         </ion-item>        
 
         <ion-item-options side="end">
-          <ion-item-option color="danger" (click)="addIncidencia(i)">
+          <ion-item-option color="danger" (click)="addIncidencia(tarea)">
             <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
           </ion-item-option>
         </ion-item-options>

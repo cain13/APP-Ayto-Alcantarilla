@@ -32,7 +32,7 @@ export class AppComponent {
   @ViewChild(IonRouterOutlet, { static : true }) routerOutlet: IonRouterOutlet;
   lastBack = Date.now();
   public usuario: UsuarioLoginApi;
-  public appPages: Array<Pages>;
+  public appPagesAdministrador: Array<Pages>;
   public appPagesVSAll: Array<Pages>;
   
   public appPagesTrabajador: Array<Pages>;
@@ -64,12 +64,12 @@ export class AppComponent {
 
     this.appPagesTrabajador = [
 
-      {
+      /* {
         title: 'Calendario',
         url: '/construccion',
         direct: 'forward',
         icon: 'clipboard-outline'
-      },
+      }, */
       {
         title: 'Incidencias',
         url: '/contacto-mpe',
@@ -122,8 +122,6 @@ export class AppComponent {
         direct: 'forward',
         icon: 'timer-outline'
       },
-
-
     ]; */
 
     this.appPagesVSAll = [
@@ -171,25 +169,25 @@ export class AppComponent {
       }
     ];
 
-    this.appPages = [
+    this.appPagesAdministrador = [
       {
-        title: 'Buscar Centro MPE',
+        title: 'Calendario',
         url: '/construccion',
         direct: 'forward',
-        icon: 'map-outline'
+        icon: 'clipboard-outline'
       },
       {
-        title: 'Centros Favoritos',
-        url: '/construccion',
+        title: 'Incidencias',
+        url: '/contacto-mpe',
         direct: 'forward',
-        icon: 'heart'
-      }, {
-        title: 'Configuración',
-        url: '/construccion',
+        icon: 'chatbubbles-outline'
+      },
+      {
+        title: 'Ubicaciones',
+        url: '/ubicaciones',
         direct: 'forward',
-        icon: 'person-outline'
+        icon: 'location-outline'
       }
-
     ];
 
     
@@ -228,11 +226,11 @@ export class AppComponent {
             notificacion.Mensaje = data['Mensaje'];
             notificacion.Icono = 'mail-outline';
             notificacion.Ruta = '/message/';
+            notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
             
             this.notificacion = notificacion;
 
             /* if (data['TipoUsuario'].toString().includes('TECNICO')) {
-
               switch (notificacion.TipoDocumento.toUpperCase()) {
                 case 'INFORMACION':
                   notificacion.Icono = 'mail-outline';
@@ -278,10 +276,10 @@ export class AppComponent {
             notificacion.Mensaje = data['Mensaje'];
             notificacion.Icono = 'mail-outline';
             notificacion.Ruta = '/message/';
+            notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
             this.notificacion = notificacion;
 
             /* if (data['TipoUsuario'].toString().includes('TECNICO')) {
-
               switch (notificacion.TipoDocumento.toUpperCase()) {
                 case 'INFORMACION':
                   notificacion.Icono = 'mail-outline';
@@ -318,6 +316,7 @@ export class AppComponent {
             notificacion.Titulo = data['Titulo'];
             notificacion.Leido = 0;
             notificacion.Mensaje = data['Mensaje'];
+            notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
 
             this.notificacion = notificacion;
             
@@ -325,7 +324,6 @@ export class AppComponent {
             notificacion.Ruta = '/message/';
 
            /*  if (data['TipoUsuario'].toString().includes('TECNICO')) {
-
               switch (notificacion.TipoDocumento.toUpperCase()) {
                 case 'INFORMACION':
                   notificacion.Icono = 'mail-outline';
@@ -372,12 +370,10 @@ export class AppComponent {
     });
 
     /* this.platform.pause.subscribe(() => {
-
       if (!this.usuarioService.desactivarSegundoPlano) {
         console.log('PASAMOS A SEGUNDO PLANO');
         this.navCtrl.navigateRoot('');
       }
-
     });
     this.platform.resume.subscribe(() => {
       console.log('VUELVE A PRIMER PLANO');
@@ -390,7 +386,7 @@ export class AppComponent {
       await this.CerrarPopoOvr();
       if (this.routerOutlet.canGoBack()) {
         console.log('Vista Fichar');
-        this.navCtrl.navigateRoot('/inicio');
+        this.navCtrl.navigateRoot('/tareas-inicio');
       } else {
         await this.CerrarPopoOvr();
         if (this.HayModal === false && Date.now() - this.lastBack > 500) {

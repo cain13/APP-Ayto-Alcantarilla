@@ -11,10 +11,11 @@ export interface Visita {
 
 export interface DatosAddUbicacion {
 
-    IdUsuario: number;
+    UserName: string;
+    Password: string;
     Latitud: number;
     Longitud: number;
-    Pin: string;
+    IdUsuario: number;
 
 }
 
@@ -55,8 +56,10 @@ export interface RespuestaTiposIncidenciasAPI {
 
 export interface TipoIncidencia {
 
-    IdIncidencia: number;
-    Nombre: string;
+    IdTipoIncidencia: number;
+    IdIncidenciaAPI?: number;
+    Titulo: string;
+    Orden: number;
 
 }
 

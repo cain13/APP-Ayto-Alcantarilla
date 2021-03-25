@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { NotificacionesPage } from '../notificaciones/notificaciones.page';
-import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 
 import {
   trigger,

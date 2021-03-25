@@ -25,7 +25,7 @@
           <ion-item>
             <ion-label color="dark" position="stacked">Tipo Incidencia:</ion-label>
             <ion-select formControlName="tipoIncidencia" [(ngModel)]="tipoIncidenciaSeleccionada" color="dark">
-              <ion-select-option color="dark" *ngFor="let incidencia of listaTiposIncidencias" [value]=incidencia.IdIncidencia>{{incidencia.Nombre}}</ion-select-option>
+              <ion-select-option color="dark" *ngFor="let incidencia of listaTiposIncidencias" [value]="incidencia">{{incidencia.Titulo}}</ion-select-option>
             </ion-select>
           </ion-item>
           <ion-item style="padding-bottom: 5px;">

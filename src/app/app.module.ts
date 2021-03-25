@@ -67,6 +67,7 @@ import { ComponentsModule } from './components/components.module';
 
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 
 
@@ -124,6 +125,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SocialSharing,
     Geolocation,
     ComponentsModule,
+    InAppBrowser
     
   ],
   bootstrap: [AppComponent]

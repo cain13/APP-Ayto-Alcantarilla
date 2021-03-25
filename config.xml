@@ -1,13 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.abmcloudsolutions.aytoalcantarilla" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Ayto. Alcantarilla</name>
-    <description>Ayto. Alcantarilla | Gestión</description>
+    <name>Gestión Alcantarilla</name>
+    <description>Departamentos Alcantarilla | Gestión</description>
     <author email="soporte@abmcloudsolutions.com" href="https://www.abmcloudsolutions.com/">ABM Cloud Solutions</author>
     <content src="index.html" />
     <access origin="*" />
-    <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
-        <application android:usesCleartextTraffic="true" />
-    </edit-config>
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -47,6 +44,15 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <platform name="ios">
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+            <string>Necesita acceso a su ubicación para realizar esta acción.</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysAndWhenInUseUsageDescription">
+            <string>Necesita acceso a su ubicación para realizar esta acción.</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysUsageDescription">
+            <string>Necesita acceso a su ubicación para realizar esta acción.</string>
+        </edit-config>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />

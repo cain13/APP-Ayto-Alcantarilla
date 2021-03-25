@@ -35,6 +35,7 @@ export class NotificacionesPage implements OnInit {
 
 
   async ngOnInit() {
+    console.log('ngOnInit notificaciones');
     this.usuario = this.usuarioService.getUsuario();
     await this.getNotificaciones();
   }

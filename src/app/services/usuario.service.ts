@@ -17,16 +17,7 @@ const url =  'https://intranet-ayto.com/api';
 })
 export class UsuarioService {
 
-  listaTipoIncidencias: TipoIncidencia[] = [
-    {
-    IdIncidencia: 0,
-    Nombre: 'Usuario Ausente'
-  },
-  {
-    IdIncidencia: 1,
-    Nombre: 'Otros'
-  }
-];
+  
 
   version = 'Versión 1.0.0';
   usuario: UsuarioLoginApi;
@@ -97,7 +88,7 @@ export class UsuarioService {
       this.usuario = user;
       this.dataBaseService.addUsuario(user);
       this.dataBaseService.guardarArrayIncidencias(user.TipoIncidencias);
-
+      console.log('NOTIFICACIONES PENDIENTES LOGIN: ', user.NotificacionesPendientes);
       if(user.NotificacionesPendientes !== null && user.NotificacionesPendientes !== undefined) {
         let notificacionesPendientes: NotificacionesPendientes[] = []
         if (Array.isArray(user.NotificacionesPendientes)) {
@@ -109,7 +100,7 @@ export class UsuarioService {
           notificacionesPendientes.push(notificacionesPendientes[0]);
 
         }
-
+        console.log('NOTIFICACIONES PENDIENTES 2: ', user.NotificacionesPendientes);
         this.dataBaseService.addNotificacionesPendientes(user.NotificacionesPendientes);
 
       }

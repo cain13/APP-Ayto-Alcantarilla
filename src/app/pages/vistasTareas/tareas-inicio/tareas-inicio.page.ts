@@ -3,13 +3,13 @@ import { TareasService } from '../../../services/tareas.service';
 import { UsuarioService } from '../../../services/usuario.service';
 import { RespuestaTareasAPI, Tarea, EstadoTarea, Visita, Subtarea, TipoIncidencia } from '../../../interfaces/interfacesTareas';
 import { IonList, NavController } from '@ionic/angular';
-import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 
 
 import * as moment from 'moment';
 import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 import { DatabaseService } from '../../../services/database.service';
 import { Servicio } from 'src/app/interfaces/servicos-interfaces';
+import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 
 
 @Component({
@@ -70,11 +70,13 @@ export class TareasInicioPage implements OnInit {
   verfechaInicial: boolean = true;
   isTareaVacia: boolean = false;
   fecha: Date;
+  tokenAPI: string;
 
   constructor(private tareasService: TareasService,
               private usuarioService: UsuarioService,
               private navCtrl: NavController,
-              private dataBaseService: DatabaseService
+              private dataBaseService: DatabaseService,
+              private fcm: FCM
               ) { 
                 this.usuario = this.usuarioService.getUsuario();
 
@@ -84,7 +86,13 @@ export class TareasInicioPage implements OnInit {
 
     await this.usuarioService.present('Cargando datos...');
 
-    await this.usuarioService.loginAPI(this.usuario.UserName, this.usuario.Password, null).then( resp => {
+    await this.fcm.getToken().then(token => {
+      console.log('TOKEN: ', token);
+      this.tokenAPI = token;
+    });
+
+
+    await this.usuarioService.loginAPI(this.usuario.UserName, this.usuario.Password, this.tokenAPI).then( resp => {
 
       console.log('Login Correcto API.');
       this.ComprobarRespuestDeAPI(resp);

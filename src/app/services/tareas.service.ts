@@ -33,17 +33,18 @@ export class TareasService {
   }
 
 
-  async addUbicacionAPI(latitud: number, longitud: number, pin: string, idUsuario: number): Promise<RespuestaAPIBasica> {
+  async addUbicacionAPI(username: string, pass: string,latitud: number, longitud: number, idUsuario: number): Promise<RespuestaAPIBasica> {
 
     const datosAddUbicacion: DatosAddUbicacion = {
 
-      IdUsuario: idUsuario,
+      UserName: username,
+      Password: pass,
       Latitud: latitud,
       Longitud: longitud,
-      Pin: pin
+      IdUsuario: idUsuario
     };
-    return await this.http.post<RespuestaAPIBasica>(`${url}/TareaApi/GetApiListaTareas`, datosAddUbicacion).toPromise();
-
+    console.log('datosAddUbicacion', datosAddUbicacion);
+    return await this.http.post<RespuestaAPIBasica>(`${url}/Ayto/AddUbicacion`, datosAddUbicacion).toPromise();
   }
 
   guardarListaIncidencias( listaIncidencias: TipoIncidencia[]) {

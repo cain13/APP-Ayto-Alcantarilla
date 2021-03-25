@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>903349440158-ksnt5gpbetal783o9p2o6688hvhi1qjs.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.903349440158-ksnt5gpbetal783o9p2o6688hvhi1qjs</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCVsnM7fda5du2oS5cym5Iy12Dlw2T1DE4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>903349440158</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.abmcloudsolutions.aytoalcantarilla</string>
+	<key>PROJECT_ID</key>
+	<string>app-aytoalcantarilla</string>
+	<key>STORAGE_BUCKET</key>
+	<string>app-aytoalcantarilla.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:903349440158:ios:dc9734a6bc30bb3d29758f</string>
+	<key>DATABASE_URL</key>
+	<string>https://app-aytoalcantarilla.firebaseio.com</string>
+</dict>
+</plist>

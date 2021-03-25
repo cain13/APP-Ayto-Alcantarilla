@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS usuariosTable (
 	NombreCompleto TEXT DEFAULT NULL,
 	Telefono TEXT DEFAULT NULL,
 	Email TEXT DEFAULT NULL,
-	TomarLocalizacion BOOLEAN DEFAULT NULL
+	TomarLocalizacion BOOLEAN DEFAULT NULL,
+	EsAdministrador BOOLEAN DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS enviosPendientesTable (
@@ -32,5 +33,6 @@ CREATE TABLE IF NOT EXISTS notificacionTable (
 CREATE TABLE IF NOT EXISTS incidenciasTable (
 	IdIncidencia INTEGER PRIMARY KEY AUTOINCREMENT,
 	IdIncidenciaAPI INTEGER  NOT NULL,
-	NombreIncidencia TEXT  DEFAULT NULL
+	Titulo TEXT  DEFAULT NULL,
+	Orden INTEGER DEFAULT NULL
 );
