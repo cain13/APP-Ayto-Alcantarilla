@@ -52,8 +52,8 @@
                   
         <!-- NOMBRE AUXILIAR TITULAR -->
 
-        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Usuario.EmpleadoTitular.NombreCompleto !== null && tarea.Usuario.EmpleadoTitular.NombreCompleto  !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
-          <ion-label>
+        <ion-item lines= "none" class="ion-no-padding" *ngIf="tarea.Usuario.EmpleadoTitular !== null && tarea.Usuario.EmpleadoTitular  !== undefined"> <!--(click)="goCheckout(invoice.id)">-->
+          <ion-label *ngIf="tarea.Usuario.EmpleadoTitular.NombreCompleto !== null && tarea.Usuario.EmpleadoTitular.NombreCompleto  !== undefined">
             <h2>
               <ion-text style="color: #7e7e7e !important;"><strong>Auxiliar Titular:</strong></ion-text>
             </h2>
