@@ -52,6 +52,7 @@ export class TareaMasInfoPage implements OnInit {
     const urlDestino: string = 'https://www.google.com/maps/dir/?api=1&destination='+this.tarea.Usuario.Latitud+','+this.tarea.Usuario.Longitud+'&travelmode=driving';
 
     window.open(urlDestino, '_system');
+    
 
 
   }

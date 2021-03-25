@@ -8,6 +8,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:903349440158:android:a8e078151b2c630b29758f",
+        "android_client_info": {
+          "package_name": "com.abmcloudsolutions.alcantarillaayto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "903349440158-2skltq2t9an6q39kja43seut4k39cksp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXdbBoqH09Q6P6cAEOdYtuapVWPNbnwxk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "903349440158-2skltq2t9an6q39kja43seut4k39cksp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "903349440158-52plprq429qdp17pjudirgei0hkm5d26.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.abmcloudsolutions.alcantarillaayto"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:903349440158:android:51027f0c69bbfb7529758f",
         "android_client_info": {
           "package_name": "com.abmcloudsolutions.aytoalcantarilla"
@@ -30,6 +66,13 @@
             {
               "client_id": "903349440158-2skltq2t9an6q39kja43seut4k39cksp.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "903349440158-52plprq429qdp17pjudirgei0hkm5d26.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.abmcloudsolutions.alcantarillaayto"
+              }
             }
           ]
         }

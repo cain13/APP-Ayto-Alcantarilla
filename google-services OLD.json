@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "903349440158",
+    "firebase_url": "https://app-aytoalcantarilla.firebaseio.com",
+    "project_id": "app-aytoalcantarilla",
+    "storage_bucket": "app-aytoalcantarilla.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903349440158:android:51027f0c69bbfb7529758f",
+        "android_client_info": {
+          "package_name": "com.abmcloudsolutions.aytoalcantarilla"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "903349440158-2skltq2t9an6q39kja43seut4k39cksp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXdbBoqH09Q6P6cAEOdYtuapVWPNbnwxk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "903349440158-2skltq2t9an6q39kja43seut4k39cksp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
