@@ -1,8 +1,7 @@
 {
   "name": "AyuntamientoAlcantarilla",
   "integrations": {
-    "cordova": {},
-    "capacitor": {}
+    "cordova": {}
   },
   "type": "angular",
   "id": "ca339cf9"

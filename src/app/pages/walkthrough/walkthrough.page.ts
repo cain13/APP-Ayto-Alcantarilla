@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavController, IonSlides, MenuController } from '@ionic/angular';
 import { UsuarioService } from '../../services/usuario.service';
@@ -12,7 +12,7 @@ import { UsuarioLoginApi } from 'src/app/interfaces/usuario-interfaces';
 })
 
 export class WalkthroughPage implements OnInit {
-  @ViewChild('mySlider') slider: IonSlides;
+  @ViewChildren('mySlider') slider: IonSlides;
   
   showSkip = true;
   slideOpts = {

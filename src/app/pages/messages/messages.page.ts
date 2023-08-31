@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, ViewChildren } from '@angular/core';
 import { IonItemSliding } from '@ionic/angular';
 import { MessageService } from '../../providers/message/message.service';
 
@@ -10,7 +10,7 @@ import { MessageService } from '../../providers/message/message.service';
 export class MessagesPage implements OnInit {
   messages: Array<any> = [];
 
-  @ViewChild('slidingList') slidingList: IonItemSliding;
+  @ViewChildren('slidingList') slidingList: IonItemSliding;
 
   constructor(public messageService: MessageService) { }
 
