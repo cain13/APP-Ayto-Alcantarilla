@@ -4,10 +4,10 @@ import { CambiarPassword, MandarTokenAPI, UsuarioLoginApi, UsuarioLoginAPP, Resp
 import { DatabaseService } from './database.service';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { NotificacionesPage } from '../pages/vistasMPE/notificaciones/notificaciones.page';
+// import { NotificacionesPage } from '../pages/vistasMPE/notificaciones/notificaciones.page';
 import 'rxjs/add/operator/timeout';
 import { TipoIncidencia } from '../interfaces/interfacesTareas';
-import { NotificacionesService } from './notificaciones.service';
+// import { NotificacionesService } from './notificaciones.service';
 
 const url =  'https://intranet-ayto.com/api';
 
@@ -233,12 +233,12 @@ export class UsuarioService {
 
     
 
-    async notifications() {
-      const modal = await this.modalCtrl.create({
-        component: NotificacionesPage
-          });
-      return await modal.present();
-    }
+    // async notifications() {
+    //   const modal = await this.modalCtrl.create({
+    //     component: NotificacionesPage
+    //       });
+    //   return await modal.present();
+    // }
 
    //#region FUNCIONS RUTINARIAS
 
@@ -258,28 +258,28 @@ export class UsuarioService {
       toast.present();
     }
 
-    async presentAlertNotificaciones(titulo: string, subtitulo: string, mensaje: string) {
-      console.log('presentAlert');
-      const alert = await this.alertCtrl.create({
-        header: titulo,
-        subHeader: subtitulo,
-        message: mensaje,
-        buttons: [
-          {
-            text: 'Ver más tarde',
-            handler: (blah) => {
-              console.log('Lanzamos ver mas tarde');
-            }
-          }, {
-            text: 'Ver ahora',
-            handler: async () => {
-              await this.notifications();
-            }
-          }
-        ]
-      });
-      await alert.present();
-    }
+    // async presentAlertNotificaciones(titulo: string, subtitulo: string, mensaje: string) {
+    //   console.log('presentAlert');
+    //   const alert = await this.alertCtrl.create({
+    //     header: titulo,
+    //     subHeader: subtitulo,
+    //     message: mensaje,
+    //     buttons: [
+    //       {
+    //         text: 'Ver más tarde',
+    //         handler: (blah) => {
+    //           console.log('Lanzamos ver mas tarde');
+    //         }
+    //       }, {
+    //         text: 'Ver ahora',
+    //         handler: async () => {
+    //           await this.notifications();
+    //         }
+    //       }
+    //     ]
+    //   });
+    //   await alert.present();
+    // }
 
 
     async presentAlertSalir(titulo: string, subtitulo: string, mensaje: string): Promise<boolean>  {

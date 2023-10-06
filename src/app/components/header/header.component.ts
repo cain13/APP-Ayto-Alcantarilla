@@ -4,7 +4,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { ViewWillEnter, MenuController, ModalController, Platform, ActionSheetController } from '@ionic/angular';
 import { NotificacionesService } from '../../services/notificaciones.service';
 import { NotificacionesPage } from 'src/app/pages/vistasMPE/notificaciones/notificaciones.page';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+// import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { UsuarioLoginApi } from '../../interfaces/usuario-interfaces';
 
 
@@ -32,7 +32,8 @@ export class HeaderComponent implements OnInit, ViewWillEnter {
                 private modalCtrl: ModalController,
                 private platform: Platform,
                 private actionSheetController: ActionSheetController,
-                private socialSharing: SocialSharing) { }
+                // private socialSharing: SocialSharing
+                ) { }
 
   async ngOnInit() {
     this.platform.ready().then(() => {
@@ -52,7 +53,7 @@ export class HeaderComponent implements OnInit, ViewWillEnter {
     this.usuario = this.usuarioService.getUsuario();
     
     this.notificacionesService.aumentarNotificaciones();
-    this.cantidad$ = this.notificacionesService.getNotifiaciones$();
+    // this.cantidad$ = this.notificacionesService.getNotifiaciones$();
     this.cantidad$.subscribe(num => {
       console.log('Hola1: ', num);
       this.cantidad = num; });
@@ -66,7 +67,7 @@ export class HeaderComponent implements OnInit, ViewWillEnter {
 
     this.notificacionesService.aumentarNotificaciones();
     console.log('Cantidad$ Notificacioens 222: ', this.cantidad);
-    this.cantidad$ = this.notificacionesService.getNotifiaciones$();
+    // this.cantidad$ = this.notificacionesService.getNotifiaciones$();
     this.cantidad$.subscribe(num => this.cantidad = num);
     console.log('Cantidad$ Notificacioens: ', this.cantidad);
     this.menuCtrl.enable(true);
@@ -91,57 +92,57 @@ export class HeaderComponent implements OnInit, ViewWillEnter {
         handler: () => {
           console.log('Lanzamos Facebook');
             // Sharing via email is possible
-            this.socialSharing.shareViaFacebook('https://mpeprevencion.com/qr-appmpe.html', null, null).then( () => {
-              console.log('Then Lanzamos Facebook');
-            }).catch( error => {
-              console.log('error Facebook', error);
-            });
+            // this.socialSharing.shareViaFacebook('https://mpeprevencion.com/qr-appmpe.html', null, null).then( () => {
+            //   console.log('Then Lanzamos Facebook');
+            // }).catch( error => {
+            //   console.log('error Facebook', error);
+            // });
         }
       }, {
         text: 'Twitter',
         icon: 'logo-twitter',
         handler: () => {
           console.log('Lanzamos Twitter');
-          this.socialSharing.shareViaTwitter(this.textoCompartirAPP, 'https://mpecronos.com/Documentos/Descarga/icn-app-mpe.jpg', this.urlCompartirAPP).then( () => {
+          // this.socialSharing.shareViaTwitter(this.textoCompartirAPP, 'https://mpecronos.com/Documentos/Descarga/icn-app-mpe.jpg', this.urlCompartirAPP).then( () => {
 
 
 
-          }).catch( error => {
-            console.log('Lanzamos Twitter error', error);
-            this.usuarioService.presentAlert('Error', 'No tiene la app de Twitter en su móvil', 'Descarguela y pruebe de nuevo, gracias.');
+          // }).catch( error => {
+          //   console.log('Lanzamos Twitter error', error);
+          //   this.usuarioService.presentAlert('Error', 'No tiene la app de Twitter en su móvil', 'Descarguela y pruebe de nuevo, gracias.');
 
-            });
+          // });
           }
         }, {
           text: 'Whatsapp',
           icon: 'logo-whatsapp',
           handler: () => {
             console.log('Lanzamos Whatsapp');
-            this.socialSharing.shareViaWhatsApp(this.textoCompartirAPP, 'https://mpecronos.com/Documentos/Descarga/icn-app-mpe.jpg', this.urlCompartirAPP).then( () => {
+          //   this.socialSharing.shareViaWhatsApp(this.textoCompartirAPP, 'https://mpecronos.com/Documentos/Descarga/icn-app-mpe.jpg', this.urlCompartirAPP).then( () => {
 
 
 
-            }).catch( error => {
+          //   }).catch( error => {
 
-            console.log('Lanzamos Whatsapp error', error);
-            this.usuarioService.presentAlert('Error', 'No tiene la app de Whatsapp en su móvil', 'Descarguela y pruebe de nuevo, gracias.');
+          //   console.log('Lanzamos Whatsapp error', error);
+          //   this.usuarioService.presentAlert('Error', 'No tiene la app de Whatsapp en su móvil', 'Descarguela y pruebe de nuevo, gracias.');
 
 
-          });
+          // });
         }
       }, {
         text: 'Email',
         icon: 'mail-outline',
         handler: () => {
           console.log('Lanzamos Email');
-          this.socialSharing.shareViaEmail(this.textoCompartirAPP + ':' + this.urlCompartirAPP, 'Descarga la App de prevención de Grupo MPE', null).then( () => {
+          // this.socialSharing.shareViaEmail(this.textoCompartirAPP + ':' + this.urlCompartirAPP, 'Descarga la App de prevención de Grupo MPE', null).then( () => {
 
 
-            }).catch( error => {
+          //   }).catch( error => {
 
 
 
-            });
+          //   });
           }
         }, {
           text: 'Cancelar',

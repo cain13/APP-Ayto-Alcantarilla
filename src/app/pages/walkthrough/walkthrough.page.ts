@@ -69,7 +69,8 @@ export class WalkthroughPage implements OnInit {
 
         if (ultimoUsuario === null) {
           console.log('No hay usuarios en la BD');
-          this.navCtrl.navigateRoot('/walkthrough');
+          // this.navCtrl.navigateRoot('/walkthrough');
+          this.navCtrl.navigateRoot('/login');
 
         } else {
 

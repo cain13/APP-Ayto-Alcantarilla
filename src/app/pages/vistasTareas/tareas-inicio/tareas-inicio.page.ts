@@ -3,7 +3,7 @@ import { TareasService } from '../../../services/tareas.service';
 import { UsuarioService } from '../../../services/usuario.service';
 import { RespuestaTareasAPI, Tarea, EstadoTarea, Visita, Subtarea, TipoIncidencia } from '../../../interfaces/interfacesTareas';
 import { IonList, NavController } from '@ionic/angular';
-import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
+// import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 
 
 import * as moment from 'moment';
@@ -79,7 +79,7 @@ export class TareasInicioPage implements OnInit {
               private navCtrl: NavController,
               private dataBaseService: DatabaseService,
               private notificacionesService: NotificacionesService,
-              private fcm: FCM
+              // private fcm: FCM
               ) { 
                 this.usuario = this.usuarioService.getUsuario();
 
@@ -87,10 +87,10 @@ export class TareasInicioPage implements OnInit {
 
   async ngOnInit() {
     
-    await this.fcm.getToken().then(token => {
-      console.log('TOKEN: ', token);
-      this.tokenAPI = token;
-    });
+    // await this.fcm.getToken().then(token => {
+    //   console.log('TOKEN: ', token);
+    //   this.tokenAPI = token;
+    // });
 
     await this.usuarioService.present('Cargando datos...');
     console.log('usuario mandado:', this.usuario.UserName, this.usuario.Password, this.tokenAPI);

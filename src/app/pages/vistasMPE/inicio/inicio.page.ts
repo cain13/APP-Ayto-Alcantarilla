@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { NotificacionesPage } from '../notificaciones/notificaciones.page';
-import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
+// import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 
 import {
   trigger,
@@ -18,7 +18,7 @@ import {
 } from '@angular/animations';
 import { PopoverAvisarEditPerfilComponent } from '../../../components/popover-avisar-edit-perfil/popover-avisar-edit-perfil.component';
 import * as moment from 'moment';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+// import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { DatabaseService } from '../../../services/database.service';
 import { UsuarioLoginApi } from '../../../interfaces/usuario-interfaces';
 import { Noticia } from 'src/app/interfaces/noticias-interfaces';

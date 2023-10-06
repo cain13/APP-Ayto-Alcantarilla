@@ -11,13 +11,13 @@ import { environment } from '../environments/environment';
 
 import { Pages } from './interfaces/pages';
 import { UsuarioService } from './services/usuario.service';
-import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
+// import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 import { DatabaseService } from './services/database.service';
 import { Notificacion, UsuarioLoginApi } from './interfaces/usuario-interfaces';
 import { NotificacionesService } from './services/notificaciones.service';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+// import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import * as moment from 'moment';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+// import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 
 
@@ -52,13 +52,13 @@ export class AppComponent {
     private usuarioService: UsuarioService,
     private navCtrl: NavController,
     private db: DatabaseService,
-    private fcm: FCM,
+    // private fcm: FCM,
     private notificacionesService: NotificacionesService,
     public actionSheetController: ActionSheetController,
-    private socialSharing: SocialSharing,
+    // private socialSharing: SocialSharing,
     private popoverController: PopoverController,
     private alertCtrl: AlertController,
-    private localNotifications: LocalNotifications
+    // private localNotifications: LocalNotifications
     // public router: Router
   ) {
 
@@ -186,9 +186,9 @@ export class AppComponent {
       },
       {
         title: 'Ubicaciones',
-        url: '/ubicaciones',
-        direct: 'forward',
-        icon: 'location-outline'
+      url: '/ubicaciones',
+      direct: 'forward',
+      icon: 'location-outline'
       }
     ];
 
@@ -204,97 +204,97 @@ export class AppComponent {
       setTimeout(() => {
 
 
-        this.fcm.getInitialPushPayload().then(data => {
-            console.log('data app closed ', data);
-            if (data === undefined || data === null) {
-              return;
-            }
-            console.log('Received app closed: ', data);
-            console.log('TipoUsuario ' + data['TipoUsuario']);
+        // this.fcm.getInitialPushPayload().then(data => {
+        //     console.log('data app closed ', data);
+        //     if (data === undefined || data === null) {
+        //       return;
+        //     }
+        //     console.log('Received app closed: ', data);
+        //     console.log('TipoUsuario ' + data['TipoUsuario']);
 
-            const notificacion: Notificacion = {
-              IdNotificacion: 1,
-              IdNotificacionAPI: 1,
-              Fecha: moment().locale('es').format(),
-              Titulo: '',
-              Mensaje: '',
-              Icono: '',
-              Leido: 0,
-              Ruta: '',
-            };
+        //     const notificacion: Notificacion = {
+        //       IdNotificacion: 1,
+        //       IdNotificacionAPI: 1,
+        //       Fecha: moment().locale('es').format(),
+        //       Titulo: '',
+        //       Mensaje: '',
+        //       Icono: '',
+        //       Leido: 0,
+        //       Ruta: '',
+        //     };
 
-            notificacion.Titulo = data['Titulo'];
-            notificacion.Leido = 0;
-            notificacion.Mensaje = data['Mensaje'];
-            notificacion.Icono = 'mail-outline';
-            notificacion.Ruta = '/message/';
-            notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
+        //     notificacion.Titulo = data['Titulo'];
+        //     notificacion.Leido = 0;
+        //     notificacion.Mensaje = data['Mensaje'];
+        //     notificacion.Icono = 'mail-outline';
+        //     notificacion.Ruta = '/message/';
+        //     notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
             
-            this.notificacion = notificacion;
+        //     this.notificacion = notificacion;
 
-            this.db.addNotificacion(notificacion);
-        //  this.db.ModificarRutaNotificacion();
-            this.notificacionesService.SumaUnaNotificaciones();
-        });
+        //     this.db.addNotificacion(notificacion);
+        // //  this.db.ModificarRutaNotificacion();
+        //     this.notificacionesService.SumaUnaNotificaciones();
+        // });
 
 
-        this.fcm.onNotification().subscribe(data => {
-          if (data === undefined || data === null) {
-            return;
-          }
-          if (data.wasTapped) {
-            console.log('Received Segundo in background: ', data);
-            const notificacion: Notificacion = {
-              IdNotificacion: 1,
-              IdNotificacionAPI: 1,
-              Fecha: moment().locale('es').format(),
-              Titulo: '',
-              Mensaje: '',
-              Icono: '',
-              Leido: 0,
-              Ruta: '',
-            };
+        // this.fcm.onNotification().subscribe(data => {
+        //   if (data === undefined || data === null) {
+        //     return;
+        //   }
+        //   if (data.wasTapped) {
+        //     console.log('Received Segundo in background: ', data);
+        //     const notificacion: Notificacion = {
+        //       IdNotificacion: 1,
+        //       IdNotificacionAPI: 1,
+        //       Fecha: moment().locale('es').format(),
+        //       Titulo: '',
+        //       Mensaje: '',
+        //       Icono: '',
+        //       Leido: 0,
+        //       Ruta: '',
+        //     };
 
-            notificacion.Titulo = data['Titulo'];
-            notificacion.Leido = 0;
-            notificacion.Mensaje = data['Mensaje'];
-            notificacion.Icono = 'mail-outline';
-            notificacion.Ruta = '/message/';
-            notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
-            this.notificacion = notificacion;
+        //     notificacion.Titulo = data['Titulo'];
+        //     notificacion.Leido = 0;
+        //     notificacion.Mensaje = data['Mensaje'];
+        //     notificacion.Icono = 'mail-outline';
+        //     notificacion.Ruta = '/message/';
+        //     notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
+        //     this.notificacion = notificacion;
 
-            this.db.addNotificacion(notificacion);
-            this.notificacionesService.SumaUnaNotificaciones();
+        //     this.db.addNotificacion(notificacion);
+        //     this.notificacionesService.SumaUnaNotificaciones();
 
-          } else {
-            console.log('Received primer plano: ', data);
+        //   } else {
+        //     console.log('Received primer plano: ', data);
 
-            const notificacion: Notificacion = {
-              Fecha: moment().locale('es').format(),
-              IdNotificacionAPI: 0,
-              Titulo: '',
-              Mensaje: '',
-              Icono: '',
-              Leido: 0,
-              Ruta: '',
+        //     const notificacion: Notificacion = {
+        //       Fecha: moment().locale('es').format(),
+        //       IdNotificacionAPI: 0,
+        //       Titulo: '',
+        //       Mensaje: '',
+        //       Icono: '',
+        //       Leido: 0,
+        //       Ruta: '',
               
-            };
+        //     };
 
-            notificacion.Titulo = data['Titulo'];
-            notificacion.Leido = 0;
-            notificacion.Mensaje = data['Mensaje'];
-            notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
-            this.notificacion = notificacion;
+        //     notificacion.Titulo = data['Titulo'];
+        //     notificacion.Leido = 0;
+        //     notificacion.Mensaje = data['Mensaje'];
+        //     notificacion.IdNotificacionAPI = data['IdNotificacionAPI'];
+        //     this.notificacion = notificacion;
             
-            notificacion.Icono = 'mail-outline';
-            notificacion.Ruta = '/message/';
+        //     notificacion.Icono = 'mail-outline';
+        //     notificacion.Ruta = '/message/';
 
-            this.db.addNotificacion(notificacion);
-            this.notificacionesService.SumaUnaNotificaciones();
-            this.usuarioService.presentAlertNotificaciones('NUEVA NOTIFICACIÓN!!', 'Tiene una notificación nueva!!', '');
+        //     this.db.addNotificacion(notificacion);
+        //     this.notificacionesService.SumaUnaNotificaciones();
+        //     this.usuarioService.presentAlertNotificaciones('NUEVA NOTIFICACIÓN!!', 'Tiene una notificación nueva!!', '');
 
-          }
-        });
+        //   }
+        // });
 
         this.statusBar.styleDefault();
 
@@ -431,13 +431,13 @@ export class AppComponent {
 
               console.log('CREAMOS NOT DE LAS 8:00: ', new Date(año, mes, dia, 8, 0).toLocaleString());
 
-              this.localNotifications.schedule({
-                id: Math.round(Math.random() * 10000),
-                title: 'Recuerde: Prueba Médica Mantoux',
-                text: 'ALERTA: Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
-                trigger: { at: new Date(año, mes, dia, 8, 0), count: 9999  },
+              // this.localNotifications.schedule({
+              //   id: Math.round(Math.random() * 10000),
+              //   title: 'Recuerde: Prueba Médica Mantoux',
+              //   text: 'ALERTA: Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
+              //   trigger: { at: new Date(año, mes, dia, 8, 0), count: 9999  },
 
-              });
+              // });
 
             } else {
 
@@ -457,13 +457,13 @@ export class AppComponent {
 
               console.log('CREAMOS NOT DE LAS 11:00: ', new Date(año, mes, dia, 11, 0).toLocaleString());
 
-              this.localNotifications.schedule({
-                id: Math.round(Math.random() * 10000),
-                title: 'Recuerde: Prueba Médica Mantoux',
-                text: 'ALERTA: Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
-                trigger: { at: new Date(año, mes, dia, 11, 0), count: 9999  },
+              // this.localNotifications.schedule({
+              //   id: Math.round(Math.random() * 10000),
+              //   title: 'Recuerde: Prueba Médica Mantoux',
+              //   text: 'ALERTA: Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
+              //   trigger: { at: new Date(año, mes, dia, 11, 0), count: 9999  },
 
-              });
+              // });
 
 
             } else {
@@ -484,13 +484,13 @@ export class AppComponent {
 
               console.log('CREAMOS NOT DE LAS 14:00: ', new Date(año, mes, dia, 14, 0).toLocaleString());
 
-              this.localNotifications.schedule({
-                id: Math.round(Math.random() * 10000),
-                title: 'Recuerde: Prueba Médica Mantoux',
-                text: 'ALERTA: Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
-                trigger: { at: new Date(año, mes, dia, 14, 0), count: 9999  },
+              // this.localNotifications.schedule({
+              //   id: Math.round(Math.random() * 10000),
+              //   title: 'Recuerde: Prueba Médica Mantoux',
+              //   text: 'ALERTA: Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
+              //   trigger: { at: new Date(año, mes, dia, 14, 0), count: 9999  },
 
-              });
+              // });
 
 
             } else {
@@ -509,13 +509,13 @@ export class AppComponent {
             if (fechaActual < moment(notificacionHora17)) {
               console.log('CREAMOS NOT DE LAS 17:00: ', new Date(año, mes, dia, 17, 0).toLocaleString());
 
-              this.localNotifications.schedule({
-                id: Math.round(Math.random() * 10000),
-                title: 'Recuerde: Prueba Médica Mantoux',
-                text: 'ALERTA: Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
-                trigger: { at: new Date(año, mes, dia, 17, 0), count: 9999  },
+              // this.localNotifications.schedule({
+              //   id: Math.round(Math.random() * 10000),
+              //   title: 'Recuerde: Prueba Médica Mantoux',
+              //   text: 'ALERTA: Le recordamos que durante el día de hoy debe realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
+              //   trigger: { at: new Date(año, mes, dia, 17, 0), count: 9999  },
 
-              });
+              // });
 
 
             } else {
@@ -556,13 +556,13 @@ export class AppComponent {
 
               console.log('CREAMOS NOT DE LAS 8:00: ', new Date(año2, mes2, dia2, 8, 0).toLocaleString());
 
-              this.localNotifications.schedule({
-                id: Math.round(Math.random() * 10000),
-                title: 'Recuerde: Prueba Médica Mantoux',
-                text: 'ALERTA: Le recordamos que hoy es el último día para realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
-                trigger: { at: new Date(año2, mes2, dia2, 8, 0), count: 9999  },
+              // this.localNotifications.schedule({
+              //   id: Math.round(Math.random() * 10000),
+              //   title: 'Recuerde: Prueba Médica Mantoux',
+              //   text: 'ALERTA: Le recordamos que hoy es el último día para realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
+              //   trigger: { at: new Date(año2, mes2, dia2, 8, 0), count: 9999  },
 
-              });
+              // });
 
             } else {
 
@@ -581,13 +581,13 @@ export class AppComponent {
 
               console.log('CREAMOS NOT DE LAS 11:00 DIA DOS: ', new Date(año2, mes2, dia2, 2, 0).toLocaleString());
 
-              this.localNotifications.schedule({
-                id: Math.round(Math.random() * 10000),
-                title: 'Recuerde: Prueba Médica Mantoux',
-                text: 'ALERTA: Le recordamos que hoy es el último día para realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
-                trigger: { at: new Date(año2, mes2, dia2, 11, 0), count: 9999  },
+              // this.localNotifications.schedule({
+              //   id: Math.round(Math.random() * 10000),
+              //   title: 'Recuerde: Prueba Médica Mantoux',
+              //   text: 'ALERTA: Le recordamos que hoy es el último día para realizarse la fotografía para su diagnóstico de la prueba de Mantoux',
+              //   trigger: { at: new Date(año2, mes2, dia2, 11, 0), count: 9999  },
 
-              });
+              // });
 
 
             } else {
@@ -607,12 +607,12 @@ export class AppComponent {
             if (fechaActual < moment(notificacionHora14)) {
               console.log('CREAMOS NOT DE LAS 14:00 DIA DOS: ', new Date(año2, mes2, dia2, 14, 0).toLocaleString());
 
-              this.localNotifications.schedule({
-                id: Math.round(Math.random() * 10000),
-                title: 'Recuerde: Prueba Médica Mantoux',
-                text: 'ALERTA: Le recordamos que pasado el plazo de 72 horas y no proceder a la realización de la fotografía para su diagnóstico, dicha prueba se considerará invalida sin ninguna responsabilidad para Grupo MPE.',
-                trigger: { at: new Date(año2, mes2, dia2, 14, 0), count: 9999  },
-              });
+              // this.localNotifications.schedule({
+              //   id: Math.round(Math.random() * 10000),
+              //   title: 'Recuerde: Prueba Médica Mantoux',
+              //   text: 'ALERTA: Le recordamos que pasado el plazo de 72 horas y no proceder a la realización de la fotografía para su diagnóstico, dicha prueba se considerará invalida sin ninguna responsabilidad para Grupo MPE.',
+              //   trigger: { at: new Date(año2, mes2, dia2, 14, 0), count: 9999  },
+              // });
 
             } else {
 
@@ -631,12 +631,12 @@ export class AppComponent {
 
               console.log('CREAMOS NOT DE LAS 17:00 DIA DOS: ', new Date(año2, mes2, dia2, 17, 0).toLocaleString());
 
-              this.localNotifications.schedule({
-                id: Math.round(Math.random() * 10000),
-                title: 'Recuerde: Prueba Médica Mantoux',
-                text: 'ALERTA: Le recordamos que pasado el plazo de 72 horas y no proceder a la realización de la fotografía para su diagnóstico, dicha prueba se considerará invalida sin ninguna responsabilidad para Grupo MPE.',
-                trigger: { at: new Date(año2, mes2, dia2, 17, 0), count: 9999  },
-              });
+              // this.localNotifications.schedule({
+              //   id: Math.round(Math.random() * 10000),
+              //   title: 'Recuerde: Prueba Médica Mantoux',
+              //   text: 'ALERTA: Le recordamos que pasado el plazo de 72 horas y no proceder a la realización de la fotografía para su diagnóstico, dicha prueba se considerará invalida sin ninguna responsabilidad para Grupo MPE.',
+              //   trigger: { at: new Date(año2, mes2, dia2, 17, 0), count: 9999  },
+              // });
 
             } else {
 

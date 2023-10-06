@@ -30,7 +30,7 @@ export class NotificacionesPage implements OnInit {
     private usuarioService: UsuarioService,
     private navController: NavController,
     private db: DatabaseService,
-    private notificacionesService: NotificacionesService
+    // private notificacionesService: NotificacionesService
   ) {}
 
 
@@ -79,7 +79,7 @@ export class NotificacionesPage implements OnInit {
     console.log('notificacion.Leido  === 0', notificacion.Leido  === 0);
     if( notificacion.Leido  === 0) {
 
-      this.notificacionesService.RestaUnaNotificaciones();
+      // this.notificacionesService.RestaUnaNotificaciones();
 
     }
     this.usuarioService.presentToast('Notificación eliminada correctamente.');
@@ -96,7 +96,7 @@ export class NotificacionesPage implements OnInit {
     await this.db.marcarTodasNotificacionesLeidasAPI(this.usuario.UserName, this.usuario.Password).then( async resp => {
       console.log('MARCAR TODAS API OK: ');
       await this.db.marcarTodasNotificacionLeidas();
-      this.notificacionesService.marcarNotificacionesTodasLeidas();
+      // this.notificacionesService.marcarNotificacionesTodasLeidas();
       this.usuarioService.presentToast('Todas las notificaciones han sido marcadas como leídas');
       this.modalCtrl.dismiss();
       this.usuarioService.dismiss();
@@ -128,7 +128,7 @@ export class NotificacionesPage implements OnInit {
       console.log('rutaMensaje ' + rutaMensaje);
       this.navController.navigateForward(rutaMensaje);
       this.modalCtrl.dismiss();
-      this.notificacionesService.marcarNotificacionesLeidas();
+      // this.notificacionesService.marcarNotificacionesLeidas();
     }).catch( error => {
 
       this.modalCtrl.dismiss();

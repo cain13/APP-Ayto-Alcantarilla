@@ -30,9 +30,8 @@
       </ion-segment-button>
     </ion-segment>
     
-    <div [ngSwitch]="authSegment">
+    <!-- <div [ngSwitch]="authSegment">
       <div *ngSwitchCase="'login'">
-        <!-- Login form -->
         <form [formGroup]="onLoginForm" class="list-form">
             <ion-item class="ion-no-padding animated fadeInUp">
               <ion-label position="floating">
@@ -101,7 +100,7 @@
       
           </div>
       
-          <!-- Other links -->
+          
           <div class="ion-text-center ion-margin-top">
             <span class="paz" tappable>
               <ion-text color="light">
@@ -111,7 +110,7 @@
           </div>
       </div>
       <div *ngSwitchCase="'register'">
-        <!-- Register form -->
+        
         <form [formGroup]="onRegisterForm" class="list-form">
             <ion-item class="ion-no-padding animated fadeInUp">
               <ion-label position="floating">
@@ -188,7 +187,6 @@
       
           </div>
       
-          <!-- Other links -->
           <div class="ion-text-center ion-margin-top">
             <span tappable>
               <ion-text color="light">
@@ -197,7 +195,7 @@
             </span>
           </div>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </ion-content>

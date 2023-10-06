@@ -15,7 +15,8 @@ export class BlancoPage implements OnInit {
 
   usuario: UsuarioLoginApi;
 
-  constructor(private databaseService: DatabaseService,
+  constructor(
+              private databaseService: DatabaseService,
               private usuarioService: UsuarioService,
               private navCtrl: NavController,
               private menuCtrl: MenuController,
@@ -28,14 +29,15 @@ export class BlancoPage implements OnInit {
 
 
     await this.usuarioService.dismiss();
-    this.databaseService.estadoBD().then( async () => {
+    await this.databaseService.estadoBD().then( async () => {
 
       console.log('BLANCO: Comprobamos si hay ultimo usuario...');
       await this.databaseService.obtenerUltimoUsuario().then( ultimoUsuario => {
 
         if (ultimoUsuario === null) {
-          console.log('No hay usuarios en la BD');
+          console.log('Blanco No hay usuarios en la BD');
           this.navCtrl.navigateRoot('/walkthrough');
+          // this.navCtrl.navigateRoot('/login');
 
         } else {
 

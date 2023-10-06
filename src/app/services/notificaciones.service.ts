@@ -12,7 +12,7 @@ import { UsuarioService } from './usuario.service';
 export class NotificacionesService {
 
 
-  numNotificaciones$ = new Subject<number>();
+  // numNotificaciones$ = new Subject<number>();
   numNot = 0;
   listaMensajes: Array<Notificacion> = [];
 
@@ -25,7 +25,7 @@ export class NotificacionesService {
   aumentarNotificaciones() {
     this.db.obtenerTodasSinLeerNotificacion().then( resp => {
       this.numNot = resp.length;
-      this.numNotificaciones$.next(this.numNot);
+      // this.numNotificaciones$.next(this.numNot);
       console.log('aumentarNot: ', this.numNot);
       console.log(' resp.length: ',  resp.length);
 
@@ -45,38 +45,38 @@ export class NotificacionesService {
 
     }
 
-    this.numNotificaciones$.next(this.numNot);
+    // this.numNotificaciones$.next(this.numNot);
   }
 
   marcarNotificacionesTodasLeidas() {
     this.numNot = 0;
-    this.numNotificaciones$.next(this.numNot);
+    // this.numNotificaciones$.next(this.numNot);
   }
 
   SumaUnaNotificaciones() {
       this.numNot = this.numNot + 1;
-      this.numNotificaciones$.next(this.numNot);
+      // this.numNotificaciones$.next(this.numNot);
       console.log('aumentarNot: ', this.numNot);
   }
 
   AcutalizaNumNotificaciones(numNotificaciones: number) {
     this.numNot = numNotificaciones;
-    this.numNotificaciones$.next(this.numNot);
+    // this.numNotificaciones$.next(this.numNot);
     console.log('aumentarNot: ', this.numNot);
 }
 
 
   RestaUnaNotificaciones() {
     this.numNot = this.numNot - 1;
-    this.numNotificaciones$.next(this.numNot);
+    // this.numNotificaciones$.next(this.numNot);
     console.log('aumentarNot: ', this.numNot);
   }
 
-  getNotifiaciones$(): Observable<number> {
-    console.log('this.numNotificaciones$.asObservable(): ', this.numNotificaciones$.asObservable());
-    return this.numNotificaciones$.asObservable();
+  // getNotifiaciones$(): Observable<number> {
+  //   console.log('this.numNotificaciones$.asObservable(): ', this.numNotificaciones$.asObservable());
+  //   return this.numNotificaciones$.asObservable();
 
-  }
+  // }
 
   async getNotificacion(id): Promise<Notificacion> {
     let notificacion: Notificacion;

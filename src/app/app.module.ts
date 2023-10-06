@@ -53,10 +53,10 @@ import { File } from '@ionic-native/file/ngx';
 
 // Para Notificaciones PUSH
 
-import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
+// import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 
 // Compartir APP
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+// import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 // Geolocalizacion
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -65,7 +65,7 @@ import { ComponentsModule } from './components/components.module';
 
 // Local Notification
 
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+// import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 
 
@@ -79,7 +79,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [AppComponent, NotificationsComponent],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
+        BrowserAnimationsModule,
     IonicModule.forRoot(environment.config),
     AppRoutingModule,
     HttpClientModule,
@@ -101,7 +101,7 @@ export function HttpLoaderFactory(http: HttpClient) {
      // apiKey: 'AIzaSyBnTnX1cVqp8AbMAL6TNL50WV8pKPI6t7Q'
     }),
     PipesModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [NotificationsComponent],
   providers: [
@@ -109,19 +109,19 @@ export function HttpLoaderFactory(http: HttpClient) {
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     TranslateProvider,
-    LocalNotifications,
+    // LocalNotifications,
     PropertyService,
     SQLitePorter,
     SQLite,
     FileOpener,
     File,
     FingerprintAIO,
-    FCM,
+    // FCM,
     FileChooser,
     FilePath,
     File,
     Camera,
-    SocialSharing,
+    // SocialSharing,
     Geolocation,
     ComponentsModule,
     

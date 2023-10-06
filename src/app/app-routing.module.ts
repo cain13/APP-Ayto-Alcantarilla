@@ -82,9 +82,10 @@ const routes: Routes = [
   {
     path: 'calendario',
     loadChildren: () => import('./pages/vistasMPE/calendario/calendario.module').then( m => m.CalendarioPageModule)
-  },  {
+  },
+  {
     path: 'ubicaciones',
-    loadChildren: () => import('./pages/ubicaciones/ubicaciones.module').then( m => m.UbicacionesPageModule)
+  loadChildren: () => import('./pages/ubicaciones/ubicaciones.module').then( m => m.UbicacionesPageModule)
   }
 
 

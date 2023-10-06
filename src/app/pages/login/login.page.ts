@@ -7,7 +7,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { UsuarioLoginApi } from 'src/app/interfaces/usuario-interfaces';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 
-import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
+// import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 import { ModalTerminosPage } from '../vistasMPE/modal-terminos/modal-terminos.page';
 
 
@@ -52,41 +52,44 @@ export class LoginPage implements OnInit {
     private faio: FingerprintAIO,
     private usuarioService: UsuarioService,
     public modalCtrl: ModalController,
-    private fcm: FCM,
+    // private fcm: FCM,
     private platform: Platform
 
   ) {}
 
 
   ngOnInit() {
+    
+    // this.fcm.getToken().then(token => {
+    //   console.log('TOKEN: ', token);
+    //   this.tokenAPI = token;
+    // });
 
-    this.fcm.getToken().then(token => {
-      console.log('TOKEN: ', token);
-      this.tokenAPI = token;
-    });
 
     this.usuario = this.usuarioService.getUsuario();
 
     if (this.usuario === null || this.usuario === undefined) {
-      this.onLoginForm = this.formBuilder.group({
-        usuario: [null, Validators.compose([
-          Validators.required
-        ])],
-        password: [null, Validators.compose([
-          Validators.required
-        ])]
-      });
+      console.log('Login sin usuario', this.usuario);
+      
+    this.onLoginForm = this.formBuilder.group({
+      usuario: [null, Validators.compose([
+        Validators.required
+      ])],
+      password: [null, Validators.compose([
+        Validators.required
+      ])]
+    });
 
     } else {
         this.onLoginForm = this.formBuilder.group({
-          usuario: [this.usuario.UserName, Validators.compose([
-            Validators.required
-          ])],
-          password: [this.usuario.Password, Validators.compose([
-            Validators.required
-          ])]
-        });
-      }
+    usuario: [this.usuario.UserName, Validators.compose([
+    Validators.required
+    ])],
+    password: [this.usuario.Password, Validators.compose([
+    Validators.required
+    ])]
+    });
+    }
 
       /* if (this.usuario.RememberMe.toString() === 'true' || this.usuario.RememberMe == null) {
 
