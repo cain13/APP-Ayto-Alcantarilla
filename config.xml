@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.abmcloudsolutions.alcantarillaayto" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.abmcloudsolutions.alcantarillaayto" version="1.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Gestión Ayto</name>
     <description>Ayto. Alcantarilla | Gestión</description>
     <author email="soporte@abmcloudsolutions.com" href="https://www.abmcloudsolutions.com/">ABM Cloud Solutions</author>
